@@ -14,27 +14,29 @@ const VerbList = () => {
 
   return (
     <div>
-      {Object.keys(verbs).map((verb) => (
-        <h5
-          key={verb}
-          onClick={() => {
-            setSelectedVerb(verb);
-          }}
-        >
-          {verb}
-        </h5>
-      ))}
-      {particles.map((particle) => (
-        <h5
-          key={particle}
-          onClick={() => {
-            setSelectedParticle(particle);
-          }}
-        >
-          {particle}
-          {Object.keys(verbs[selectedVerb]).includes(particle) || "-x"}
-        </h5>
-      ))}
+      {verbs &&
+        Object.keys(verbs).map((verb) => (
+          <h5
+            key={verb}
+            onClick={() => {
+              setSelectedVerb(verb);
+            }}
+          >
+            {verb}
+          </h5>
+        ))}
+      {particles &&
+        particles.map((particle) => (
+          <h5
+            key={particle}
+            onClick={() => {
+              setSelectedParticle(particle);
+            }}
+          >
+            {particle}
+            {Object.keys(verbs[selectedVerb]).includes(particle) || "-x"}
+          </h5>
+        ))}
       {/* {Object.keys(verbs).map((verb) => (
         <VerbItem verb={verb} particles={verbs[verb]} />
       ))} */}
