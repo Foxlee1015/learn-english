@@ -2,8 +2,8 @@ import { verbs, particles } from "../data";
 import { useState, useEffect } from "react";
 
 const VerbList = () => {
-  const [selectedVerb, setSelectedVerb] = useState(null);
-  const [selectedParticle, setSelectedParticle] = useState(null);
+  const [selectedVerb, setSelectedVerb] = useState("");
+  const [selectedParticle, setSelectedParticle] = useState("");
 
   useEffect(() => {
     if (selectedVerb) {
@@ -15,6 +15,7 @@ const VerbList = () => {
   return (
     <div>
       {verbs &&
+        Object.keys(verbs).lenght > 0 &&
         Object.keys(verbs).map((verb) => (
           <h5
             key={verb}
@@ -26,6 +27,7 @@ const VerbList = () => {
           </h5>
         ))}
       {particles &&
+        particles.length > 0 &&
         particles.map((particle) => (
           <h5
             key={particle}
@@ -34,7 +36,10 @@ const VerbList = () => {
             }}
           >
             {particle}
-            {Object.keys(verbs[selectedVerb]).includes(particle) || "-x"}
+            {(verbs &&
+              Object.keys(verbs).lenght > 0 &&
+              Object.keys(verbs[selectedVerb]).includes(particle)) ||
+              "-x"}
           </h5>
         ))}
       {/* {Object.keys(verbs).map((verb) => (
@@ -48,7 +53,9 @@ const VerbList = () => {
 export default VerbList;
 
 const randomParticle = function (obj) {
-  const keys = Object.keys(obj);
-  const res = keys[(keys.length * Math.random()) << 0];
-  return res;
+  if (obj && Object.keys(obj).lenght > 0) {
+    const keys = Object.keys(obj);
+    return keys[(keys.length * Math.random()) << 0];
+  }
+  return "";
 };
