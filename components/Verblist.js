@@ -2,20 +2,22 @@ import { verbs, particles } from "../data";
 import { useState, useEffect } from "react";
 
 const VerbList = () => {
+  const [verbList, setVerbList] = useState([]);
+  const [phrasalVerbs, setPhrasalVerbs] = useState([]);
+  const [particleList, setParticleList] = useState([]);
   const [selectedVerb, setSelectedVerb] = useState("");
   const [selectedParticle, setSelectedParticle] = useState("");
 
   useEffect(() => {
-    if (selectedVerb) {
-      const initParticle = randomParticle(verbs[selectedVerb]);
-      setSelectedParticle(initParticle);
-    }
-  }, [selectedVerb]);
+    setVerbList(Object.keys(verbs));
+    setPhrasalVerbs({ ...verbs });
+    setParticleList([...particles]);
+  }, []);
 
   return (
     <div>
-      {verbs &&
-        Object.keys(verbs).map((verb) => (
+      {verbList.length > 0 &&
+        verbList.map((verb) => (
           <h5
             key={verb}
             onClick={() => {
@@ -25,35 +27,32 @@ const VerbList = () => {
             {verb}
           </h5>
         ))}
-      {particles &&
-        particles.map((particle) => (
-          <h5
-            key={particle}
-            onClick={() => {
-              setSelectedParticle(particle);
-            }}
-          >
-            {particle}
-            {(verbs &&
-              Object.keys(verbs).lenght > 0 &&
-              Object.keys(verbs[selectedVerb]).includes(particle)) ||
-              "-x"}
-          </h5>
-        ))}
-      {/* {Object.keys(verbs).map((verb) => (
-        <VerbItem verb={verb} particles={verbs[verb]} />
-      ))} */}
-      {selectedVerb}-{selectedParticle}
+      {particleList.length > 0 &&
+        particleList.map((particle) => {
+          if (
+            phrasalVerbs &&
+            phrasalVerbs[selectedVerb] &&
+            !phrasalVerbs[selectedVerb][particle]
+          ) {
+            return <h5>{particle}</h5>;
+          } else {
+            return (
+              <h5
+                key={particle}
+                onClick={() => {
+                  setSelectedParticle(particle);
+                }}
+              >
+                {particle}
+              </h5>
+            );
+          }
+        })}
+      {selectedVerb &&
+        selectedParticle &&
+        `${selectedVerb} - ${selectedParticle}`}
     </div>
   );
 };
 
 export default VerbList;
-
-const randomParticle = function (obj) {
-  if (obj && Object.keys(obj).lenght > 0) {
-    const keys = Object.keys(obj);
-    return keys[(keys.length * Math.random()) << 0];
-  }
-  return "";
-};
