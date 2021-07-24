@@ -15,7 +15,6 @@ const VerbList = () => {
   return (
     <div>
       {verbs &&
-        Object.keys(verbs).lenght > 0 &&
         Object.keys(verbs).map((verb) => (
           <h5
             key={verb}
@@ -27,7 +26,6 @@ const VerbList = () => {
           </h5>
         ))}
       {particles &&
-        particles.length > 0 &&
         particles.map((particle) => (
           <h5
             key={particle}
