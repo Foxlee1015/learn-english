@@ -33,4 +33,4 @@ jobs:
           aws s3 cp \
             --recursive \
             --region ap-northeast-2 \
-            out s3://phrasal-verbs.foxlee.kr
+            ./out s3://phrasal-verbs.foxlee.kr
