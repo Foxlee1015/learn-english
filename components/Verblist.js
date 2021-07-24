@@ -16,6 +16,7 @@ const VerbList = () => {
     <div>
       {Object.keys(verbs).map((verb) => (
         <h5
+          key={verb}
           onClick={() => {
             setSelectedVerb(verb);
           }}
@@ -25,6 +26,7 @@ const VerbList = () => {
       ))}
       {particles.map((particle) => (
         <h5
+          key={particle}
           onClick={() => {
             setSelectedParticle(particle);
           }}
