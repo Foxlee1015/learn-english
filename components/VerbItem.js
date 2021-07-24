@@ -6,14 +6,6 @@ const VerbItem = ({ verb, particles }) => {
   return (
     <a className={verbStyles.card}>
       <h3>{verb}</h3>
-      {Object.keys(particles).map((particle) => (
-        <>
-          <p>{particle}</p>
-          {particles[particle].map((example) => (
-            <p>{example}</p>
-          ))}
-        </>
-      ))}
     </a>
   );
 };
