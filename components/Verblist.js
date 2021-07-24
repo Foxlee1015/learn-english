@@ -1,6 +1,3 @@
-import VerbItem from "./VerbItem";
-import verbStyles from "../styles/verb.module.css";
-
 import { verbs, particles } from "../data";
 import { useState, useEffect } from "react";
 
