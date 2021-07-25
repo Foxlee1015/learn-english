@@ -3,10 +3,10 @@ import VerbList from "../components/Verblist";
 
 const list = () => {
   return (
-    <div>
+    <>
       <Meta title="Phrasal Verb list" />
       <VerbList />
-    </div>
+    </>
   );
 };
 
