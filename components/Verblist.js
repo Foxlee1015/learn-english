@@ -49,7 +49,7 @@ const VerbList = () => {
       verbs.setItems([...verbList]);
     } else {
       const filteredVerbs = verbList.filter((verb) =>
-        verb.includes(searchText)
+        verb.includes(searchText.toLowerCase())
       );
       verbs.setItems([...filteredVerbs]);
     }
