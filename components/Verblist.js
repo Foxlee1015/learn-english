@@ -8,17 +8,8 @@ import * as Data from "../data";
 const VerbList = () => {
   const verbs = useSelectItem(Object.keys(Data.verbs));
   const particles = useSelectItem([...Data.particles]);
-  //   const [verbList, setVerbList] = useState([]);
-  //   const [particleList, setParticleList] = useState([]);
-  const [disableVerbList, setDisableVerbList] = useState([]);
   const [disableParticleList, setDisableParticleList] = useState([]);
-  //   const [selectedVerb, setSelectedVerb] = useState("");
-  //   const [selectedParticle, setSelectedParticle] = useState("");
-
-  //   useEffect(() => {
-  //     setVerbList(Object.keys(Data.verbs));
-  //     setParticleList([...Data.particles]);
-  //   }, []);
+  const [displayData, setDisplayData] = useState([]);
 
   useEffect(() => {
     if (verbs.selectedItem) {
@@ -31,35 +22,27 @@ const VerbList = () => {
   }, [verbs.selectedItem]);
 
   useEffect(() => {
-    if (particles.selectedItem) {
-      const disableVerbs = verbs.items.filter(
-        (verb) => !Data.verbs[verb][particles.selectedItem]
-      );
-      setDisableVerbList([...disableVerbs]);
+    if (verbs.selectedItem && particles.selectedItem) {
+      const curVerb = verbs.selectedItem;
+      const curParticle = particles.selectedItem;
+      setDisplayData(Data.verbs[curVerb][curParticle]);
     }
-  }, [particles.selectedItem]);
+  }, [verbs.selectedItem, particles.selectedItem]);
 
   return (
     <>
       <div className={styles.flex}>
-        <SelectItem
-          {...verbs}
-          //   items={verbList}
-          //   selectedItem={selectedVerb}
-          //   setSelectedItem={setSelectedVerb}
-          disableItems={disableVerbList}
-        />
-        <SelectItem
-          {...particles}
-          //   items={particleList}
-          //   selectedItem={selectedParticle}
-          //   setSelectedItem={setSelectedParticle}
-          disableItems={disableParticleList}
-        />
+        <SelectItem {...verbs} />
+        <SelectItem {...particles} disableItems={disableParticleList} />
       </div>
-      {/* {selectedVerb &&
-        selectedParticle &&
-        `${selectedVerb} - ${selectedParticle}`} */}
+      {displayData && displayData.length > 0 && (
+        <>
+          <div>{displayData[0]}</div>
+          {displayData[1].map((sentense) => (
+            <p key={sentense}>{sentense}</p>
+          ))}
+        </>
+      )}
     </>
   );
 };
