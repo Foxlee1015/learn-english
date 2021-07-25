@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import SelectItem from "./common/SelectItem";
+import Card from "./common/Card";
 import styles from "../styles/Verb.module.css";
 import useSelectItem from "../hooks/useSelectItem";
 
@@ -11,7 +12,7 @@ const verbList = Object.keys(verbResources);
 const VerbList = () => {
   const verbs = useSelectItem(verbList);
   const particles = useSelectItem([]);
-  const [displayData, setDisplayData] = useState([]);
+  const [cardData, setCardData] = useState({});
   const [searchText, setSearchText] = useState("");
 
   const resetParticles = () => {
@@ -32,11 +33,21 @@ const VerbList = () => {
   }, [updateParticles]);
 
   const setPhrasalVerbInfo = () => {
-    if (verbs.selectedItem !== "" && particles.selectedItem !== "") {
-      const curVerb = verbs.selectedItem;
-      const curParticle = particles.selectedItem;
-      setDisplayData(verbResources[curVerb][curParticle]);
+    const verb = verbs.selectedItem;
+    const particle = particles.selectedItem;
+    let definition = "";
+    let sentenses = [];
+
+    if (verb !== "" && particle !== "") {
+      [definition, sentenses] = verbResources[verb][particle];
     }
+
+    setCardData({
+      verb,
+      particle,
+      definition,
+      sentenses,
+    });
   };
 
   useEffect(() => {
@@ -49,7 +60,7 @@ const VerbList = () => {
       verbs.setItems([...verbList]);
     } else {
       const filteredVerbs = verbList.filter((verb) =>
-        verb.includes(searchText)
+        verb.includes(searchText.toLowerCase())
       );
       verbs.setItems([...filteredVerbs]);
     }
@@ -60,7 +71,7 @@ const VerbList = () => {
   }, [searchText, verbs.setItems]);
 
   return (
-    <>
+    <div className={styles.wrapper}>
       <input
         className={styles.input}
         placeholder="Type verb"
@@ -71,15 +82,9 @@ const VerbList = () => {
         {<SelectItem {...verbs} />}
         {<SelectItem {...particles} />}
       </div>
-      {displayData && displayData.length > 0 && (
-        <>
-          <div>{displayData[0]}</div>
-          {displayData[1].map((sentense) => (
-            <p key={sentense}>{sentense}</p>
-          ))}
-        </>
-      )}
-    </>
+
+      <Card {...cardData} />
+    </div>
   );
 };
 

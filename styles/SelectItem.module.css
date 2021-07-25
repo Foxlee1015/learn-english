@@ -41,11 +41,10 @@
 .scrollableContainer {
   border: 1px solid #eaeaea;
   border-radius: 10px;
-  width: 160px;
+  width: 50%;
   height: 160px;
   position: relative;
   overflow: hidden;
-  margin: auto;
 }
 .scrollable {
   height: 100%;
@@ -56,6 +55,22 @@
   font-size: 23px;
 }
 
+@media (min-width: 360px) {
+  .scrollableContainer {
+    width: 160px;
+  }
+}
+
+@media (min-width: 660px) {
+  .scrollableContainer {
+    width: 300px;
+  }
+}
+@media (min-width: 1000px) {
+  .scrollableContainer {
+    width: 400px;
+  }
+}
 /*IE*/
 @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
   .scrollable {
