@@ -54,7 +54,7 @@ export const verbs = {
       "To add something to your person or an object.",
       ["I always put on my backpack before leaving the house. "],
     ],
-    "up-with": [
+    "up with": [
       "To tolerate or condone.",
       ["Jeff put up with Janice’s cynical attitude."],
     ],

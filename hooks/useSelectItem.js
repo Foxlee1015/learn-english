@@ -10,6 +10,7 @@ const useSelectItem = (data) => {
 
   return {
     items,
+    setItems,
     selectedItem,
     setSelectedItem,
   };

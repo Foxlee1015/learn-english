@@ -5,37 +5,32 @@ const SelectItem = ({
   items,
   selectedItem,
   setSelectedItem,
-  disableItems = [],
   sort = "desc",
 }) => {
-  const [sortedItems, setSortedItems] = useState(items);
+  const [sortedItems, setSortedItems] = useState([]);
 
   useEffect(() => {
     setSortedItems([...items].sort());
-  }, [sort]);
+  }, [items]);
+
+  useEffect(() => {
+    if (sortedItems.length > 0) {
+      setSelectedItem(sortedItems[0]);
+    }
+  }, [sortedItems]);
 
   return (
     <div className={styles.scrollableContainer}>
       <div className={styles.scrollable}>
         {sortedItems.length > 0 &&
-          sortedItems
-            .filter((item) => !disableItems.includes(item))
-            .map((item) => (
-              <div className={styles.item} key={item}>
-                <button
-                  className={selectedItem === item && styles.bold}
-                  onClick={() => {
-                    setSelectedItem(item);
-                  }}
-                >
-                  {item}
-                </button>
-              </div>
-            ))}
-        {disableItems.length > 0 &&
-          disableItems.map((item) => (
+          sortedItems.map((item) => (
             <div className={styles.item} key={item}>
-              <button className={styles.text} disabled>
+              <button
+                className={selectedItem === item ? styles.bold : ""}
+                onClick={() => {
+                  setSelectedItem(item);
+                }}
+              >
                 {item}
               </button>
             </div>

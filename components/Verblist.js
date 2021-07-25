@@ -8,16 +8,12 @@ import * as Data from "../data";
 const VerbList = () => {
   const verbs = useSelectItem(Object.keys(Data.verbs));
   const particles = useSelectItem([...Data.particles]);
-  const [disableParticleList, setDisableParticleList] = useState([]);
   const [displayData, setDisplayData] = useState([]);
 
   useEffect(() => {
     if (verbs.selectedItem) {
       const curVerbParticles = Object.keys(Data.verbs[verbs.selectedItem]);
-      const disableParticles = particles.items.filter(
-        (particle) => !curVerbParticles.includes(particle)
-      );
-      setDisableParticleList([...disableParticles]);
+      particles.setItems(curVerbParticles);
     }
   }, [verbs.selectedItem]);
 
@@ -32,8 +28,10 @@ const VerbList = () => {
   return (
     <>
       <div className={styles.flex}>
-        <SelectItem {...verbs} />
-        <SelectItem {...particles} disableItems={disableParticleList} />
+        {verbs.items && verbs.items.length > 0 && <SelectItem {...verbs} />}
+        {particles.items && particles.items.length > 0 && (
+          <SelectItem {...particles} />
+        )}
       </div>
       {displayData && displayData.length > 0 && (
         <>
