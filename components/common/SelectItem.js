@@ -1,23 +1,35 @@
+import { useEffect, useState } from "react";
 import styles from "../../styles/SelectItem.module.css";
 
 const SelectItem = ({
   items,
   selectedItem,
   setSelectedItem,
-  disableItems = [],
+  sort = "desc",
 }) => {
+  const [sortedItems, setSortedItems] = useState([]);
+
+  useEffect(() => {
+    setSortedItems([...items].sort());
+  }, [items]);
+
+  useEffect(() => {
+    if (sortedItems.length > 0) {
+      setSelectedItem(sortedItems[0]);
+    }
+  }, [sortedItems]);
+
   return (
     <div className={styles.scrollableContainer}>
       <div className={styles.scrollable}>
-        {items.length > 0 &&
-          items.map((item) => (
+        {sortedItems.length > 0 &&
+          sortedItems.map((item) => (
             <div className={styles.item} key={item}>
               <button
-                className={selectedItem === item ? styles.bold : styles.text}
+                className={selectedItem === item ? styles.bold : ""}
                 onClick={() => {
                   setSelectedItem(item);
                 }}
-                disabled={disableItems.includes(item)}
               >
                 {item}
               </button>
