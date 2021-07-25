@@ -10,13 +10,13 @@ const SelectItem = ({
   const [sortedItems, setSortedItems] = useState([]);
 
   useEffect(() => {
-    if (items.length > 0) {
-      setSortedItems([...items].sort());
-    }
+    setSortedItems([...items].sort());
   }, [items]);
 
   useEffect(() => {
-    if (sortedItems.length > 0) {
+    if (sortedItems.length === 0) {
+      setSelectedItem("");
+    } else if (selectedItem === "") {
       setSelectedItem(sortedItems[0]);
     }
   }, [sortedItems, setSelectedItem]);
