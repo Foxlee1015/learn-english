@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Meta from "../components/Meta";
 import { randomProperty, replaceText } from "../utils/utils";
 
@@ -8,7 +8,7 @@ import * as Data from "../data";
 
 const verbResources = Data.verbs;
 
-const game = () => {
+const Game = () => {
   const [verb, setVerb] = useState("");
   const [particle, setParticle] = useState("");
   const [hint, setHint] = useState("");
@@ -19,7 +19,7 @@ const game = () => {
     setShowHint(false);
   };
 
-  const genProblem = () => {
+  const genProblem = useCallback(() => {
     resetProblem();
 
     // dont repeat past problems
@@ -27,17 +27,16 @@ const game = () => {
     const randomVerb = randomProperty(verbResources);
     const randomParticle = randomProperty(verbResources[randomVerb]);
     const [definition, examples] = verbResources[randomVerb][randomParticle];
-    console.log(randomVerb, randomParticle, definition, examples);
 
     setVerb(randomVerb);
     setParticle(randomParticle);
     setHint(definition);
     setSentenses(examples);
-  };
+  }, []);
 
   useEffect(() => {
     genProblem();
-  }, []);
+  }, [genProblem]);
 
   return (
     <div>
@@ -66,4 +65,4 @@ const game = () => {
   );
 };
 
-export default game;
+export default Game;

@@ -10,14 +10,16 @@ const SelectItem = ({
   const [sortedItems, setSortedItems] = useState([]);
 
   useEffect(() => {
-    setSortedItems([...items].sort());
+    if (items.length > 0) {
+      setSortedItems([...items].sort());
+    }
   }, [items]);
 
   useEffect(() => {
     if (sortedItems.length > 0) {
       setSelectedItem(sortedItems[0]);
     }
-  }, [sortedItems]);
+  }, [sortedItems, setSelectedItem]);
 
   return (
     <div className={styles.scrollableContainer}>

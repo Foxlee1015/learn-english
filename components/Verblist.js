@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import SelectItem from "./common/SelectItem";
 import styles from "../styles/Verb.module.css";
 import useSelectItem from "../hooks/useSelectItem";
@@ -20,7 +20,7 @@ const VerbList = () => {
       const curVerbParticles = Object.keys(verbResources[verbs.selectedItem]);
       particles.setItems(curVerbParticles);
     }
-  }, [verbs.selectedItem]);
+  }, [verbs.selectedItem, particles.setItems]);
 
   useEffect(() => {
     if (verbs.selectedItem && particles.selectedItem) {
@@ -33,13 +33,13 @@ const VerbList = () => {
   useEffect(() => {
     const filteredVerbs = verbList.filter((verb) => verb.includes(searchText));
     verbs.setItems(filteredVerbs);
-  }, [searchText]);
+  }, [searchText, verbs.setItems]);
 
   return (
     <>
       <input
-        placeholder="Type verb"
         className={styles.input}
+        placeholder="Type verb"
         type="text"
         onChange={(e) => setSearchText(e.target.value)}
       />
