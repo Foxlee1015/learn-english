@@ -1,12 +1,18 @@
 import { useCallback, useEffect, useState } from "react";
 import Meta from "../components/Meta";
-import { randomProperty, replaceText } from "../utils/utils";
+import {
+  randomProperty,
+  replaceText,
+  randomElement,
+  randomArrayShuffle,
+} from "../utils/utils";
 
 import styles from "../styles/Game.module.css";
 
 import * as Data from "../data";
 
 const verbResources = Data.verbs;
+const particleResources = Data.particles;
 
 const Game = () => {
   const [verb, setVerb] = useState("");
@@ -14,29 +20,53 @@ const Game = () => {
   const [hint, setHint] = useState("");
   const [showHint, setShowHint] = useState(false);
   const [sentenses, setSentenses] = useState([]);
+  const [answers, setAnswers] = useState([]);
 
   const resetProblem = () => {
     setShowHint(false);
   };
 
-  const genProblem = useCallback(() => {
+  const genProblem = () => {
     resetProblem();
 
     // dont repeat past problems
-
     const randomVerb = randomProperty(verbResources);
     const randomParticle = randomProperty(verbResources[randomVerb]);
     const [definition, examples] = verbResources[randomVerb][randomParticle];
+    const randomParticles = getRandomItems({
+      src: particleResources,
+      remove: randomParticle,
+      itemCount: 3,
+    }); // return Set
+
+    const shffledParticles = randomArrayShuffle(
+      Array.from(randomParticles.add(randomParticle))
+    ); // create array from set
 
     setVerb(randomVerb);
     setParticle(randomParticle);
     setHint(definition);
     setSentenses(examples);
-  }, []);
+    setAnswers([...shffledParticles]);
+  };
 
   useEffect(() => {
     genProblem();
-  }, [genProblem]);
+  }, []);
+
+  const getRandomItems = ({ src, remove, itemCount }) => {
+    const result = new Set();
+    const removeIndex = src.indexOf(remove);
+    if (removeIndex > -1) {
+      src.splice(removeIndex, 1);
+    }
+
+    while (result.size < itemCount) {
+      result.add(randomElement(src));
+    }
+
+    return result;
+  };
 
   return (
     <div>
@@ -54,6 +84,11 @@ const Game = () => {
       <div>
         {sentenses.map((sentense) => (
           <p key={sentense}>{replaceText(sentense, particle, "___")}</p>
+        ))}
+      </div>
+      <div>
+        {answers.map((answer) => (
+          <p key={answer}>{answer}</p>
         ))}
       </div>
       <div>
