@@ -35,19 +35,19 @@ const VerbList = () => {
   const setPhrasalVerbInfo = () => {
     const verb = verbs.selectedItem;
     const particle = particles.selectedItem;
-    let definition = "";
+    let definitions = [];
     let sentenses = [];
 
     if (verb !== "" && particle !== "") {
       if (verbResources[verb][particle]) {
-        [definition, sentenses] = verbResources[verb][particle];
+        [definitions, sentenses] = verbResources[verb][particle];
       }
     }
 
     setCardData({
-      verb,
-      particle,
-      definition,
+      title: verb,
+      subTitle: particle,
+      definitions,
       sentenses,
     });
   };
