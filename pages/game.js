@@ -21,8 +21,12 @@ const Game = () => {
   const [showHint, setShowHint] = useState(false);
   const [sentenses, setSentenses] = useState([]);
   const [answers, setAnswers] = useState([]);
+  const [clickedAnswers, setClickedAnswers] = useState([]);
+  const [showNextBtns, setShowNextBtns] = useState(false);
 
   const resetProblem = () => {
+    setClickedAnswers([]);
+    setShowNextBtns(false);
     setShowHint(false);
   };
 
@@ -64,8 +68,16 @@ const Game = () => {
     while (result.size < itemCount) {
       result.add(randomElement(src));
     }
-
     return result;
+  };
+
+  const checkAnswer = (clickedAnswer) => {
+    if (clickedAnswer === particle) {
+      setShowNextBtns(true);
+      setShowHint(true);
+    } else {
+      setClickedAnswers([...clickedAnswers, clickedAnswer]);
+    }
   };
 
   return (
@@ -86,15 +98,30 @@ const Game = () => {
           <p key={sentense}>{replaceText(sentense, particle, "___")}</p>
         ))}
       </div>
-      <div>
-        {answers.map((answer) => (
-          <p key={answer}>{answer}</p>
-        ))}
-      </div>
-      <div>
-        <button>Before</button>
-        <button>Next(Same verb)</button>
-        <button onClick={() => genProblem()}>Next(Different verb)</button>
+      <div className={styles.btnContainer}></div>
+      <div className={styles.btnContainer}>
+        {showNextBtns ? (
+          <>
+            <button className={styles.btn}>Before</button>
+            <button className={styles.btn}>Next(Same verb)</button>
+            <button className={styles.btn} onClick={() => genProblem()}>
+              Next(Different verb)
+            </button>
+          </>
+        ) : (
+          <>
+            {answers.map((answer) => (
+              <button
+                className={styles.btn}
+                disabled={clickedAnswers.includes(answer)}
+                key={answer}
+                onClick={(e) => checkAnswer(answer)}
+              >
+                {answer}
+              </button>
+            ))}
+          </>
+        )}
       </div>
     </div>
   );
