@@ -5,10 +5,23 @@ export const randomProperty = (obj) => {
 };
 
 export const randomElement = (array) => {
-  array[Math.floor(Math.random() * array.length)];
-  return array;
+  return array[Math.floor(Math.random() * array.length)];
 };
 
 export const replaceText = (srcText, target, replaceTo) => {
   return srcText.replace(target, replaceTo);
+};
+
+export const randomArrayShuffle = (array) => {
+  let currentIndex = array.length,
+    temporaryValue,
+    randomIndex;
+  while (0 !== currentIndex) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+  return array;
 };
