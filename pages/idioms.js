@@ -2,7 +2,7 @@ import Meta from "../components/Meta";
 import Header from "../components/Header";
 import IdiomList from "../components/IdiomList";
 
-const idiom = () => {
+const idioms = () => {
   return (
     <>
       <Meta title="Idiom list" />
@@ -12,4 +12,4 @@ const idiom = () => {
   );
 };
 
-export default idiom;
+export default idioms;

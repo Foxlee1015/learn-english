@@ -4,7 +4,7 @@ const Header = ({ title }) => {
   return (
     <div>
       <h1 className={headerStyles.title}>
-        Let&#39;s learn <span>{title} </span>
+        <span>{title}</span>
       </h1>
     </div>
   );
