@@ -39,7 +39,9 @@ const VerbList = () => {
     let sentenses = [];
 
     if (verb !== "" && particle !== "") {
-      [definition, sentenses] = verbResources[verb][particle];
+      if (verbResources[verb][particle]) {
+        [definition, sentenses] = verbResources[verb][particle];
+      }
     }
 
     setCardData({
