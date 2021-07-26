@@ -156,4 +156,153 @@ export const idioms = {
       "We'll have to leave at the crack of dawn.",
     ],
   },
+  "get on one's good side": {
+    definitions: ["To become the object of someone's favor", "To do something that causes someone to be pleased."],
+    sentenses: [
+      "Kate offered to walk the dog in order to get on her aunt's good side.",
+    ],
+  },
+  "turn somewhere upside down": {
+    definitions: ["To carefully examine or search a particular place"],
+    sentenses: [
+      "The police turned his apartment upside down looking for drugs",
+    ],
+  },
+  "the coast is clear": {
+    definitions: ["It is safe to do something or go somewhere because no one is watching or listening who would prevent you or catch you."],
+    sentenses: [
+      "You can come out now, the coast is clear.",
+    ],
+  },
+  "in hot water": {
+    definitions: ["In a difficult situation in which you are likely to be punished"],
+    sentenses: [
+      "You'll be in hot water if you are late for work again.",
+      "Emails that criticize others can land you in hot water, so be careful what you write."
+    ],
+  },
+  "get something off the ground": {
+    definitions: ["To start", "To get something started."],
+    sentenses: [
+      "We will never get our shop off the ground without more staff.",
+      "He and his friend tried to start a band but it never got off the ground.",
+      "When we get this event off the ground we can relax."
+    ],
+  },
+  "in the long run": {
+    definitions: ["Over a relatively long or extended length of time in the future."],
+    sentenses: [
+      "I know it's a lot of money to spend on a mattress, but trust me, it will be worth it in the long run.",
+      "It seems a lot of effort but I'm sure it's the best solution in the long run."
+    ],
+  },
+  "hit the roof": {
+    definitions: ["To become extremely angry or upset."],
+    sentenses: [
+      "My parents are going to hit the roof if they find out we had a party here!",
+      "Dad will hit the roof when he finds out I smoked."
+    ],
+  },
+  "in the red": {
+    definitions: ["In debt.", "Spending more money than you earn"],
+    sentenses: [
+      "The company has been in the red for the last three quarters.",
+      "Her account is in the red at the end of every month."
+    ],
+  },
+  "be dressed to the nines": {
+    definitions: ["To be very well-dressed and fashionable, typically for a formal event."],
+    sentenses: [
+      "I dont like parties where everyone is dressed to the nines",
+    ],
+  },
+  "live on a shoestring": {
+    definitions: ["To live within a very tight or limited financial budget."],
+    sentenses: [
+      "The young parents are living on a shoestring and can't afford to buy snacks.",
+    ],
+  },
+  "not have a penny to one's name": {
+    definitions: ["To be extremely poor"],
+    sentenses: [
+      "They used to be so well off, but the economy crashed and their business closed, and they don't have a penny to their name anymore.",
+    ],
+  },
+  "look like two peas in a pod": {
+    definitions: ["Two people or things are very similar to each other"],
+    sentenses: [
+      "My brother and I are two peas in a pod. We both like the same things.",
+      "The two girls must be sisters. they look like two peas in a pod."
+    ],
+  },
+  "spare no expense": {
+    definitions: ["Pay any amount of money in order to achieve something."],
+    sentenses: [
+      "He spared no expense in getting the company off the ground",
+      "Their parents threw a great dinner party. You could tell that they spared no expense."
+    ],
+  },
+  "pop the question": {
+    definitions: ["To ask someone to marry one"],
+    sentenses: [
+      "I'm planning on popping the question just before the fireworks start.",
+      "So did he pop the question?"
+    ],
+  },
+  "come clean": {
+    definitions: ["To be honest with somebody about something", "To tell the truth about something that you have been keeping secret."],
+    sentenses: [
+      "I want you to come clean with me about your financial status.",
+    ],
+  },
+  "in the cards": {
+    definitions: ["Very likely or certain to happen, occur, or take place."],
+    sentenses: [
+      "If you keep performing at this level, I think a promotion is in the cards.",
+      "Marriage isn't in the cards for me right now – I'm focused on my career."
+    ],
+  },
+  "in the know": {
+    definitions: ["Knowledgeable or having access to information about something, especially that which is exclusive or secret."],
+    sentenses: [
+      "When it comes to coding, Jenny is definitely in the know—she'll be able to answer your questions.",
+      "He takes crucial decisions without consulting people in the know. "
+    ],
+  },
+  // "": {
+  //   definitions: [""],
+  //   sentenses: [
+  //     "",
+  //   ],
+  // },
+  // "": {
+  //   definitions: [""],
+  //   sentenses: [
+  //     "",
+  //   ],
+  // },
+  // "": {
+  //   definitions: [""],
+  //   sentenses: [
+  //     "",
+  //   ],
+  // },
+  // "": {
+  //   definitions: [""],
+  //   sentenses: [
+  //     "",
+  //   ],
+  // },
+  // "": {
+  //   definitions: [""],
+  //   sentenses: [
+  //     "",
+  //   ],
+  // },
+  // "": {
+  //   definitions: [""],
+  //   sentenses: [
+  //     "",
+  //   ],
+  // },
 };
