@@ -28,16 +28,17 @@ const SelectItem = ({
       <div className={styles.scrollable}>
         {sortedItems.length > 0 &&
           sortedItems.map((item) => (
-            <div className={styles.item} key={item}>
-              <button
-                className={selectedItem === item ? styles.bold : ""}
-                onClick={() => {
-                  setSelectedItem(item);
-                }}
-              >
-                {item}
-              </button>
-            </div>
+            <button
+              className={`${styles.item} ${
+                selectedItem === item && styles.checked
+              }`}
+              key={item}
+              onClick={() => {
+                setSelectedItem(item);
+              }}
+            >
+              {item}
+            </button>
           ))}
       </div>
     </div>
