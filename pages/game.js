@@ -22,11 +22,11 @@ const Game = () => {
   const [sentenses, setSentenses] = useState([]);
   const [answers, setAnswers] = useState([]);
   const [clickedAnswers, setClickedAnswers] = useState([]);
-  const [showNextBtns, setShowNextBtns] = useState(false);
+  const [showAnswer, setShowAnswer] = useState(false);
 
   const resetProblem = () => {
     setClickedAnswers([]);
-    setShowNextBtns(false);
+    setShowAnswer(false);
     setShowHint(false);
   };
 
@@ -73,7 +73,7 @@ const Game = () => {
 
   const checkAnswer = (clickedAnswer) => {
     if (clickedAnswer === particle) {
-      setShowNextBtns(true);
+      setShowAnswer(true);
       setShowHint(true);
     } else {
       setClickedAnswers([...clickedAnswers, clickedAnswer]);
@@ -95,34 +95,34 @@ const Game = () => {
       </div>
       <div>
         {sentenses.map((sentense) => (
-          <p key={sentense}>{replaceText(sentense, particle, "___")}</p>
+          <p key={sentense}>
+            {showAnswer ? sentense : replaceText(sentense, particle, "___")}
+          </p>
         ))}
       </div>
-      <div className={styles.btnContainer}></div>
-      <div className={styles.btnContainer}>
-        {showNextBtns ? (
-          <>
-            <button className={styles.btn}>Before</button>
-            <button className={styles.btn}>Next(Same verb)</button>
-            <button className={styles.btn} onClick={() => genProblem()}>
-              Next(Different verb)
+      {showAnswer && (
+        <div className={`${styles.btnContainer} ${styles.nextBtns}`}>
+          <button className={styles.btn}>Before</button>
+          <button className={styles.btn}>Next(Same verb)</button>
+          <button className={styles.btn} onClick={() => genProblem()}>
+            Next(Different verb)
+          </button>
+        </div>
+      )}
+      {!showAnswer && (
+        <div className={styles.btnContainer}>
+          {answers.map((answer) => (
+            <button
+              className={styles.btn}
+              disabled={clickedAnswers.includes(answer)}
+              key={answer}
+              onClick={(e) => checkAnswer(answer)}
+            >
+              {answer}
             </button>
-          </>
-        ) : (
-          <>
-            {answers.map((answer) => (
-              <button
-                className={styles.btn}
-                disabled={clickedAnswers.includes(answer)}
-                key={answer}
-                onClick={(e) => checkAnswer(answer)}
-              >
-                {answer}
-              </button>
-            ))}
-          </>
-        )}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

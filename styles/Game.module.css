@@ -26,7 +26,7 @@
 }
 .btn {
   height: 32px;
-  padding: 4px 15px;
+  padding: 0px 15px;
   margin: 8px;
   color: #000000d9;
   background: #fff;
@@ -56,12 +56,17 @@
   color: #ff7875;
   background: #fff;
   border-color: #ff7875;
+  text-decoration: line-through;
 }
 
 .btnContainer {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.nextBtns {
+  flex-direction: column;
 }
 
 .active {
