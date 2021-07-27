@@ -7,7 +7,7 @@ import {
   randomArrayShuffle,
 } from "../utils/utils";
 
-import styles from "../styles/Game.module.css";
+import styles from "../styles/pages/Game.module.css";
 
 import * as Data from "../data";
 

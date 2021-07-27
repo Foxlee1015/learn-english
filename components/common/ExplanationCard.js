@@ -1,6 +1,6 @@
-import styles from "../../styles/Card.module.css";
+import styles from "../../styles/components/ExplanationCard.module.css";
 
-const Card = ({
+const ExplanationCard = ({
   title = "",
   subTitle = "",
   definitions = [],
@@ -21,4 +21,4 @@ const Card = ({
   );
 };
 
-export default Card;
+export default ExplanationCard;
