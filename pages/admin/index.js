@@ -1,7 +1,7 @@
 import Layout from "../../components/Layout";
 import AdminNav from "../../components/AdminNav"
 
-const Admin = ({}) => {
+const Index = ({}) => {
   return (
     <>
       <h2>admin</h2>
@@ -11,9 +11,9 @@ const Admin = ({}) => {
 };
 
 
-export default Admin;
+export default Index;
 
-Admin.getLayout = (page) => (
+Index.getLayout = (page) => (
     <Layout>
       <AdminNav />
       {page}
