@@ -20,11 +20,13 @@
 @media (min-width: 360px) {
   .main {
     width: 320px;
+    padding: 1rem 0;
   }
 }
 @media (min-width: 660px) {
   .main {
     width: 620px;
+    padding: 2.5rem 0;
   }
 }
 

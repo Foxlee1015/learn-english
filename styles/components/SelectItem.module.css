@@ -62,12 +62,12 @@
 
 @media (min-width: 660px) {
   .scrollableContainer {
-    width: 300px;
+    width: 310px;
   }
 }
 @media (min-width: 1000px) {
   .scrollableContainer {
-    width: 400px;
+    width: 480px;
   }
 }
 /*IE*/

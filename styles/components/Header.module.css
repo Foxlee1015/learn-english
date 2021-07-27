@@ -25,3 +25,20 @@
   line-height: 1.5;
   font-size: 1.5rem;
 }
+
+@media (min-width: 360px) {
+  .title {
+    font-size: 2rem;
+  }
+}
+@media (min-width: 660px) {
+  .title {
+    font-size: 3rem;
+  }
+}
+
+@media (min-width: 1000px) {
+  .title {
+    font-size: 4rem;
+  }
+}
