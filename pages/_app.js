@@ -1,6 +1,7 @@
 import Layout from "../components/Layout";
 import AdminNav from "../components/admin/AdminNav";
 import "../styles/globals.css";
+import "../styles/styles.css";
 
 import { useRouter } from "next/router";
 
