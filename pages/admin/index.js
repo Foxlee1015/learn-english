@@ -11,11 +11,13 @@ const Index = ({}) => {
 };
 
 
-export default Index;
-
+Index.displayName = 'admin';
 Index.getLayout = (page) => (
     <Layout>
       <AdminNav />
       {page}
     </Layout>
   )
+
+  
+export default Index;
