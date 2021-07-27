@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import SelectItem from "./common/SelectItem";
-import Card from "./common/Card";
-import styles from "../styles/Verb.module.css";
+import ExplanationCard from "./common/ExplanationCard";
+import styles from "../styles/pages/Verb.module.css";
 import useSelectItem from "../hooks/useSelectItem";
 
 import * as Data from "../data";
@@ -35,17 +35,19 @@ const VerbList = () => {
   const setPhrasalVerbInfo = () => {
     const verb = verbs.selectedItem;
     const particle = particles.selectedItem;
-    let definition = "";
+    let definitions = [];
     let sentenses = [];
 
     if (verb !== "" && particle !== "") {
-      [definition, sentenses] = verbResources[verb][particle];
+      if (verbResources[verb][particle]) {
+        [definitions, sentenses] = verbResources[verb][particle];
+      }
     }
 
     setCardData({
-      verb,
-      particle,
-      definition,
+      title: verb,
+      subTitle: particle,
+      definitions,
       sentenses,
     });
   };
@@ -83,7 +85,7 @@ const VerbList = () => {
         {<SelectItem {...particles} />}
       </div>
 
-      <Card {...cardData} />
+      <ExplanationCard {...cardData} />
     </div>
   );
 };

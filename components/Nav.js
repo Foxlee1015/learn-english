@@ -1,5 +1,5 @@
 import Link from "next/link";
-import navStyles from "../styles/Nav.module.css";
+import navStyles from "../styles/components/Nav.module.css";
 
 const Nav = () => {
   return (
@@ -9,7 +9,10 @@ const Nav = () => {
           <Link href="/">Home</Link>
         </li>
         <li>
-          <Link href="/list">List</Link>
+          <Link href="/phrasalVerbs">Phrasal verbs</Link>
+        </li>
+        <li>
+          <Link href="/idioms">Idioms</Link>
         </li>
         <li>
           <Link href="/game">Game</Link>
