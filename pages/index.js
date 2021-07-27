@@ -1,7 +1,8 @@
 import LinkCard from "../components/common/LinkCard";
 import Homestyles from "../styles/pages/Home.module.css";
+import Layout from "../components/Layout"
 
-export default function Home({}) {
+const Home = ({}) => {
   return (
     <div className={Homestyles.grid}>
       <LinkCard
@@ -34,3 +35,12 @@ export default function Home({}) {
     </div>
   );
 }
+
+
+Home.getLayout = (page) => (
+  <Layout>
+    {page}
+  </Layout>
+)
+
+export default Home;
