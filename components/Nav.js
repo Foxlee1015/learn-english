@@ -17,6 +17,9 @@ const Nav = () => {
         <li>
           <Link href="/game">Game</Link>
         </li>
+        <li>
+          <Link href="/admin">Admin</Link>
+        </li>
       </ul>
     </nav>
   );

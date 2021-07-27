@@ -1,7 +1,11 @@
+import IdiomForm from "../../components/admin/IdiomForm";
+import IdiomList from "../../components/admin/IdiomList";
+
 const Idioms = () => {
   return (
     <div>
-        idioms
+      <IdiomForm />
+      <IdiomList />
     </div>
   );
 };
