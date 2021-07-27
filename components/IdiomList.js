@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import SelectItem from "./common/SelectItem";
-import Card from "./common/Card";
+import ExplanationCard from "./common/ExplanationCard";
 import useSelectItem from "../hooks/useSelectItem";
-import styles from "../styles/Idiom.module.css";
+import styles from "../styles/pages/Idiom.module.css";
 
 import * as Data from "../data";
 
@@ -57,7 +57,7 @@ const IdiomList = () => {
         {<SelectItem {...idioms} />}
       </div>
 
-      <Card {...cardData} />
+      <ExplanationCard {...cardData} />
     </div>
   );
 };

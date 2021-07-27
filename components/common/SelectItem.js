@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import styles from "../../styles/SelectItem.module.css";
+import styles from "../../styles/components/SelectItem.module.css";
 import LoadingIndicator from "./LoadingIndicator";
 
 const SelectItem = ({

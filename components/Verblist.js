@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import SelectItem from "./common/SelectItem";
-import Card from "./common/Card";
-import styles from "../styles/Verb.module.css";
+import ExplanationCard from "./common/ExplanationCard";
+import styles from "../styles/pages/Verb.module.css";
 import useSelectItem from "../hooks/useSelectItem";
 
 import * as Data from "../data";
@@ -85,7 +85,7 @@ const VerbList = () => {
         {<SelectItem {...particles} />}
       </div>
 
-      <Card {...cardData} />
+      <ExplanationCard {...cardData} />
     </div>
   );
 };

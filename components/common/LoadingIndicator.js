@@ -1,4 +1,4 @@
-import LoadingIndicatorStyles from "../../styles/LoadingIndicator.module.css";
+import LoadingIndicatorStyles from "../../styles/components/LoadingIndicator.module.css";
 
 const LoadingIndicator = () => {
   return <div className={LoadingIndicatorStyles.block}></div>;
