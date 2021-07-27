@@ -1,6 +1,6 @@
 import Nav from "./Nav";
 import Meta from "./Meta";
-import styles from "../styles/Layout.module.css";
+import styles from "../styles/components/Layout.module.css";
 
 const Layout = ({ children }) => {
   return (
