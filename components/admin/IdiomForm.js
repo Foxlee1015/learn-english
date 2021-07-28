@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Form, Input, Switch, Button } from "antd";
 import { server } from "../../config";
 const layout = {
@@ -35,15 +36,14 @@ const addIdiom = async (values) => {
 
 const IdiomForm = () => {
   const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
 
   const onFinish = (values) => {
+    setLoading(true);
     console.log(values);
-    // addIdiom(values);
+    addIdiom(values);
     form.resetFields();
-  };
-
-  const onChange = (checked) => {
-    console.log(`switch to ${checked}`);
+    setLoading(false);
   };
 
   return (
@@ -89,7 +89,7 @@ const IdiomForm = () => {
         <Switch />
       </Form.Item>
       <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" htmlType="submit" loading={loading}>
           Submit
         </Button>
       </Form.Item>
