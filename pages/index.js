@@ -1,7 +1,7 @@
 import LinkCard from "../components/common/LinkCard";
 import Homestyles from "../styles/pages/Home.module.css";
 
-export default function Home({}) {
+const Home = ({}) => {
   return (
     <div className={Homestyles.grid}>
       <LinkCard
@@ -34,3 +34,5 @@ export default function Home({}) {
     </div>
   );
 }
+
+export default Home;
