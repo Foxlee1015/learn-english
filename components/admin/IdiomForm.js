@@ -1,4 +1,4 @@
-import { Form, Input, InputNumber, Button } from "antd";
+import { Form, Input, Switch, Button } from "antd";
 import { server } from "../../config";
 const layout = {
   labelCol: {
@@ -38,8 +38,12 @@ const IdiomForm = () => {
 
   const onFinish = (values) => {
     console.log(values);
-    addIdiom(values);
+    // addIdiom(values);
     form.resetFields();
+  };
+
+  const onChange = (checked) => {
+    console.log(`switch to ${checked}`);
   };
 
   return (
@@ -48,7 +52,12 @@ const IdiomForm = () => {
       {...layout}
       name="nest-messages"
       onFinish={onFinish}
-      initialValues={{ expression: "", definitions: "", sentences: "" }}
+      initialValues={{
+        expression: "",
+        definitions: "",
+        sentences: "",
+        reviewed: false,
+      }}
       validateMessages={validateMessages}
     >
       <Form.Item
@@ -75,6 +84,9 @@ const IdiomForm = () => {
       </Form.Item>
       <Form.Item name={["idiom", "sentences"]} label="Sentence">
         <Input />
+      </Form.Item>
+      <Form.Item label="Public" name={["idiom", "reviewed"]}>
+        <Switch />
       </Form.Item>
       <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
         <Button type="primary" htmlType="submit">
