@@ -10,14 +10,6 @@ const IdiomList = ({ data }) => {
   const [searchText, setSearchText] = useState("");
   const [selectedId, setSelectedId] = useState("");
 
-  const setIdiomInfo = () => {
-    setCardData(data.result.find((item) => item._id === selectedId));
-  };
-
-  useEffect(() => {
-    setIdiomInfo();
-  }, [selectedId, searchText]);
-
   const filterVerbList = () => {
     if (searchText === "") {
       idioms.setItems([...data.result]);
@@ -32,6 +24,14 @@ const IdiomList = ({ data }) => {
   useEffect(() => {
     filterVerbList();
   }, [searchText]);
+
+  const setIdiomInfo = () => {
+    setCardData(data.result.find((item) => item._id === selectedId));
+  };
+
+  useEffect(() => {
+    setIdiomInfo();
+  }, [selectedId, searchText]);
 
   return (
     <div className={styles.wrapper}>

@@ -2,6 +2,12 @@ import { useEffect, useState } from "react";
 import styles from "../../styles/components/SelectItem.module.css";
 import LoadingIndicator from "./LoadingIndicator";
 
+const stringSort = (a, b) => {
+  if (a[sortKey] < b[sortKey]) return -1;
+  if (a[sortKey] > b[sortKey]) return 1;
+  return 0;
+};
+
 const SelectItem = ({
   items,
   sort = "desc",
@@ -12,11 +18,7 @@ const SelectItem = ({
   const [sortedItems, setSortedItems] = useState([]);
 
   useEffect(() => {
-    const sorted = items.sort((a, b) => {
-      if (a[sortKey] < b[sortKey]) return -1;
-      if (a[sortKey] > b[sortKey]) return 1;
-      return 0;
-    });
+    const sorted = items.sort(stringSort);
     setSortedItems([...sorted]);
   }, [items]);
 
