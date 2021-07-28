@@ -4,38 +4,26 @@ import ExplanationCard from "./common/ExplanationCard";
 import useSelectItem from "../hooks/useSelectItem";
 import styles from "../styles/pages/Idiom.module.css";
 
-import * as Data from "../data";
-
-const idiomResources = Data.idioms;
-const idiombList = Object.keys(idiomResources);
-
-const IdiomList = () => {
-  const idioms = useSelectItem(idiombList);
+const IdiomList = ({ data }) => {
+  const idioms = useSelectItem(data);
   const [cardData, setCardData] = useState({});
   const [searchText, setSearchText] = useState("");
+  const [selectedId, setSelectedId] = useState("");
 
   const setIdiomInfo = () => {
-    if (idioms.selectedItem !== "") {
-      const { definitions, sentenses } = idiomResources[idioms.selectedItem];
-      setCardData({
-        title: idioms.selectedItem,
-        definitions,
-        sentenses,
-      });
-    }
+    setCardData(data.result.find((item) => item._id === selectedId));
   };
 
   useEffect(() => {
     setIdiomInfo();
-  }, [idioms.selectedItem]);
+  }, [selectedId, searchText]);
 
   const filterVerbList = () => {
-    idioms.setSelectedItem(""); // auto select after sorting in SelectItem component
     if (searchText === "") {
-      idioms.setItems([...idiombList]);
+      idioms.setItems([...data.result]);
     } else {
-      const filteredIdioms = idiombList.filter((idiom) =>
-        idiom.includes(searchText.toLowerCase())
+      const filteredIdioms = data.result.filter((idiom) =>
+        idiom.expression.includes(searchText.toLowerCase())
       );
       idioms.setItems([...filteredIdioms]);
     }
@@ -43,7 +31,7 @@ const IdiomList = () => {
 
   useEffect(() => {
     filterVerbList();
-  }, [searchText, idioms.setItems]);
+  }, [searchText]);
 
   return (
     <div className={styles.wrapper}>
@@ -54,7 +42,11 @@ const IdiomList = () => {
         onChange={(e) => setSearchText(e.target.value)}
       />
       <div className={[styles.strechChildBox]}>
-        {<SelectItem {...idioms} />}
+        <SelectItem
+          {...idioms}
+          selectedItem={selectedId}
+          setSelectedItem={setSelectedId}
+        />
       </div>
 
       <ExplanationCard {...cardData} />

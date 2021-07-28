@@ -1,4 +1,5 @@
 import { Form, Input, InputNumber, Button } from "antd";
+import { server } from "../../config";
 const layout = {
   labelCol: {
     span: 8,
@@ -19,16 +20,35 @@ const validateMessages = {
   },
 };
 
+const addIdiom = async (values) => {
+  const res = await fetch(`${server}/api/idioms/`, {
+    body: JSON.stringify(values.idiom),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "POST",
+  });
+
+  const result = await res.json();
+  console.log(result);
+};
+
 const IdiomForm = () => {
+  const [form] = Form.useForm();
+
   const onFinish = (values) => {
     console.log(values);
+    addIdiom(values);
+    form.resetFields();
   };
 
   return (
     <Form
+      form={form}
       {...layout}
       name="nest-messages"
       onFinish={onFinish}
+      initialValues={{ expression: "", definitions: "", sentences: "" }}
       validateMessages={validateMessages}
     >
       <Form.Item
@@ -53,12 +73,9 @@ const IdiomForm = () => {
       >
         <Input />
       </Form.Item>
-      <Form.Item name={["idiom", "sentenses"]} label="Sentense">
+      <Form.Item name={["idiom", "sentences"]} label="Sentence">
         <Input />
       </Form.Item>
-      {/* <Form.Item name={["user", "introduction"]} label="Introduction">
-        <Input.TextArea />
-      </Form.Item> */}
       <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
         <Button type="primary" htmlType="submit">
           Submit

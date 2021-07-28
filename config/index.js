@@ -1,3 +1,1 @@
-const dev = process.env.NODE_ENV !== "production";
-
-export const server = dev ? "http://localhost:3000" : "https://yourwebsite.com";
+export const server = "http://3.35.138.162:16981";

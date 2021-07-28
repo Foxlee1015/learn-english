@@ -4,23 +4,29 @@ import LoadingIndicator from "./LoadingIndicator";
 
 const SelectItem = ({
   items,
+  sort = "desc",
+  sortKey = "expression",
   selectedItem,
   setSelectedItem,
-  sort = "desc",
 }) => {
   const [sortedItems, setSortedItems] = useState([]);
 
   useEffect(() => {
-    setSortedItems([...items].sort());
+    const sorted = items.sort((a, b) => {
+      if (a[sortKey] < b[sortKey]) return -1;
+      if (a[sortKey] > b[sortKey]) return 1;
+      return 0;
+    });
+    setSortedItems([...sorted]);
   }, [items]);
 
   useEffect(() => {
     if (sortedItems.length === 0) {
       setSelectedItem("");
     } else if (selectedItem === "") {
-      setSelectedItem(sortedItems[0]);
+      setSelectedItem(sortedItems[0]._id);
     }
-  }, [sortedItems, setSelectedItem]);
+  }, [sortedItems]);
 
   return (
     <div className={styles.scrollableContainer}>
@@ -30,14 +36,14 @@ const SelectItem = ({
           sortedItems.map((item) => (
             <button
               className={`${styles.item} ${
-                selectedItem === item && styles.checked
+                item._id === selectedItem && styles.checked
               }`}
-              key={item}
+              key={item._id}
               onClick={() => {
-                setSelectedItem(item);
+                setSelectedItem(item._id);
               }}
             >
-              {item}
+              {item.expression}
             </button>
           ))}
       </div>
