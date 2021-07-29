@@ -2,23 +2,18 @@ import { useEffect, useState } from "react";
 import styles from "../../styles/components/SelectItem.module.css";
 import LoadingIndicator from "./LoadingIndicator";
 
-const stringSort = (a, b) => {
+const stringSort = (sortKey) => (a, b) => {
   if (a[sortKey] < b[sortKey]) return -1;
   if (a[sortKey] > b[sortKey]) return 1;
   return 0;
 };
 
-const SelectItem = ({
-  items,
-  sort = "desc",
-  sortKey = "expression",
-  selectedItem,
-  setSelectedItem,
-}) => {
+const SelectItem = ({ items, sortKey, selectedItem, setSelectedItem }) => {
   const [sortedItems, setSortedItems] = useState([]);
 
   useEffect(() => {
-    const sorted = items.sort(stringSort);
+    console.log("item : ", items);
+    const sorted = items.sort(stringSort(sortKey));
     setSortedItems([...sorted]);
   }, [items]);
 
@@ -45,7 +40,7 @@ const SelectItem = ({
                 setSelectedItem(item._id);
               }}
             >
-              {item.expression}
+              {item[sortKey]}
             </button>
           ))}
       </div>

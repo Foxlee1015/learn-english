@@ -5,10 +5,9 @@ import useSelectItem from "../hooks/useSelectItem";
 import styles from "../styles/pages/Idiom.module.css";
 
 const IdiomList = ({ data }) => {
-  const idioms = useSelectItem(data);
+  const idioms = useSelectItem(data, "expression");
   const [cardData, setCardData] = useState({});
   const [searchText, setSearchText] = useState("");
-  const [selectedId, setSelectedId] = useState("");
 
   const filterVerbList = () => {
     if (searchText === "") {
@@ -26,12 +25,12 @@ const IdiomList = ({ data }) => {
   }, [searchText]);
 
   const setIdiomInfo = () => {
-    setCardData(data.result.find((item) => item._id === selectedId));
+    setCardData(data.result.find((item) => item._id === idioms.selectedItem));
   };
 
   useEffect(() => {
     setIdiomInfo();
-  }, [selectedId, searchText]);
+  }, [idioms.selectedItem, searchText]);
 
   return (
     <div className={styles.wrapper}>
@@ -42,11 +41,7 @@ const IdiomList = ({ data }) => {
         onChange={(e) => setSearchText(e.target.value)}
       />
       <div className={[styles.strechChildBox]}>
-        <SelectItem
-          {...idioms}
-          selectedItem={selectedId}
-          setSelectedItem={setSelectedId}
-        />
+        <SelectItem {...idioms} />
       </div>
 
       <ExplanationCard {...cardData} />
