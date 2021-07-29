@@ -12,16 +12,24 @@ const SelectItem = ({ items, sortKey, selectedItem, setSelectedItem }) => {
   const [sortedItems, setSortedItems] = useState([]);
 
   useEffect(() => {
-    console.log("item : ", items);
     const sorted = items.sort(stringSort(sortKey));
     setSortedItems([...sorted]);
   }, [items]);
 
+  const selectFristElementIfNotExist = () => {
+    if (
+      selectedItem === "" ||
+      !sortedItems.find((item) => item._id == selectedItem)
+    ) {
+      setSelectedItem(sortedItems[0]._id);
+    }
+  };
+
   useEffect(() => {
     if (sortedItems.length === 0) {
       setSelectedItem("");
-    } else if (selectedItem === "") {
-      setSelectedItem(sortedItems[0]._id);
+    } else {
+      selectFristElementIfNotExist();
     }
   }, [sortedItems]);
 
