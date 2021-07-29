@@ -25,7 +25,7 @@ const IdiomList = ({ data }) => {
   }, [searchText]);
 
   const setIdiomInfo = () => {
-    setCardData(data.result.find((item) => item._id === idioms.selectedItem));
+    setCardData(data.result.find((item) => item["expression"] === idioms.selectedItem));
   };
 
   useEffect(() => {
