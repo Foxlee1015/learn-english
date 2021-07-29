@@ -11,9 +11,9 @@ const IdiomList = ({ data }) => {
 
   const filterVerbList = () => {
     if (searchText === "") {
-      idioms.setItems([...data.result]);
+      idioms.setItems([...data]);
     } else {
-      const filteredIdioms = data.result.filter((idiom) =>
+      const filteredIdioms = data.filter((idiom) =>
         idiom.expression.includes(searchText.toLowerCase())
       );
       idioms.setItems([...filteredIdioms]);
@@ -25,7 +25,21 @@ const IdiomList = ({ data }) => {
   }, [searchText]);
 
   const setIdiomInfo = () => {
-    setCardData(data.result.find((item) => item["expression"] === idioms.selectedItem));
+    let expression = "";
+    let definitions = [];
+    let sentences = [];
+
+    const selectedIdiom = data.find(
+      (item) => item["expression"] === idioms.selectedItem
+    );
+    if (selectedIdiom) {
+      ({ title: expression, definitions, sentences } = selectedIdiom);
+    }
+    setCardData({
+      title: expression,
+      definitions,
+      sentences,
+    });
   };
 
   useEffect(() => {

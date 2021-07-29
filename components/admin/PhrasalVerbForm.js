@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Form, Input, Button, InputNumber } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 
@@ -39,6 +39,27 @@ const PhrasalVerbForm = () => {
     setLoading(false);
   };
 
+  const getFormValues = () => {
+    const curValues = form.getFieldValue();
+    const { verb, particle } = curValues.phrasalVerb;
+    if (verb !== "" && particle !== "") {
+      console.log(verb, particle);
+      currentData = getCurrentVerbParticleData({ verb, particle });
+      console.log("currentData", currentData);
+    }
+  };
+
+  const getCurrentVerbParticleData = async ({ verb, particle }) => {
+    let params = { verb, particle };
+    let query = Object.keys(params)
+      .map((k) => encodeURIComponent(k) + "=" + encodeURIComponent(params[k]))
+      .join("&");
+
+    const res = await fetch(`${server}/api/phrasal-verbs/?${query}`);
+    const phrasalVerb = await res.json();
+    return phrasalVerb;
+  };
+
   return (
     <Form
       form={form}
@@ -61,14 +82,14 @@ const PhrasalVerbForm = () => {
         label="Verb"
         rules={[{ required: true }]}
       >
-        <Input />
+        <Input onBlur={() => getFormValues()} />
       </Form.Item>
       <Form.Item
         name={["phrasalVerb", "particle"]}
         label="Particle"
         rules={[{ required: true }]}
       >
-        <Input />
+        <Input onBlur={() => getFormValues()} />
       </Form.Item>
       <Form.List name="definitions">
         {(fields, { add, remove }, { errors }) => (
@@ -136,7 +157,7 @@ const PhrasalVerbForm = () => {
         <InputNumber />
       </Form.Item>
       <Form.Item>
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" htmlType="submit" loading={loading}>
           Submit
         </Button>
       </Form.Item>

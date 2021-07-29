@@ -16,7 +16,8 @@ const idioms = ({ idioms }) => {
 
 export const getStaticProps = async () => {
   const res = await fetch(`${server}/api/idioms`);
-  const idioms = await res.json();
+  const data = await res.json();
+  const idioms = data.result;
 
   return {
     props: {

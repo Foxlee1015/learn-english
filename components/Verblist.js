@@ -6,66 +6,67 @@ import useSelectItem from "../hooks/useSelectItem";
 
 const VerbList = ({ data }) => {
   const verbs = useSelectItem(data, "verb");
-  const particles = useSelectItem([]);
+  const particles = useSelectItem([], "particle");
   const [cardData, setCardData] = useState({});
   const [searchText, setSearchText] = useState("");
 
-  // const resetParticles = () => {
-  //   particles.setSelectedItem(""); // auto select after sorting in SelectItem component
-  //   particles.setItems([]); // reset particles when a selected verb is changed
-  // };
+  useEffect(() => {
+    const selectedVerb = verbs.items.find(
+      (item) => item.verb === verbs.selectedItem
+    );
 
-  // const updateParticles = useCallback(() => {
-  //   resetParticles();
-  //   if (verbs.selectedItem !== "") {
-  //     const curVerbParticles = Object.keys(verbResources[verbs.selectedItem]);
-  //     particles.setItems(curVerbParticles);
-  //   }
-  // }, [verbs.selectedItem]);
+    if (selectedVerb) {
+      const selectedVerbParticles = [];
+      for (const key in selectedVerb.particles) {
+        selectedVerbParticles.push({
+          ...selectedVerb.particles[key],
+          particle: key,
+        });
+      }
+      particles.setItems([...selectedVerbParticles]);
+    }
+  }, [verbs.selectedItem]);
 
-  // useEffect(() => {
-  //   updateParticles();
-  // }, [updateParticles]);
+  const setPhrasalVerbInfo = () => {
+    const selectedVerb = verbs.selectedItem;
+    const selectedVParticle = particles.selectedItem;
+    let definitions = [];
+    let sentenses = [];
 
-  // const setPhrasalVerbInfo = () => {
-  //   const verb = verbs.selectedItem;
-  //   const particle = particles.selectedItem;
-  //   let definitions = [];
-  //   let sentenses = [];
+    if (selectedVerb !== "" && selectedVParticle !== "") {
+      const phrasalVerbInfo = particles.items.find(
+        (item) => item.particle === selectedVParticle
+      );
+      ({ definitions, sentenses } = phrasalVerbInfo);
+    }
 
-  //   if (verb !== "" && particle !== "") {
-  //     if (verbResources[verb][particle]) {
-  //       [definitions, sentenses] = verbResources[verb][particle];
-  //     }
-  //   }
+    setCardData({
+      title: selectedVerb,
+      subTitle: selectedVParticle,
+      definitions,
+      sentenses,
+    });
+  };
 
-  //   setCardData({
-  //     title: verb,
-  //     subTitle: particle,
-  //     definitions,
-  //     sentenses,
-  //   });
-  // };
+  useEffect(() => {
+    setPhrasalVerbInfo();
+  }, [verbs.selectedItem, particles.selectedItem]);
 
-  // useEffect(() => {
-  //   setPhrasalVerbInfo();
-  // }, [verbs.selectedItem, particles.selectedItem]);
+  const filterVerbList = () => {
+    verbs.setSelectedItem(""); // auto select after sorting in SelectItem component
+    if (searchText === "") {
+      verbs.setItems([...data]);
+    } else {
+      const filteredVerbs = data.filter((item) =>
+        item.verb.includes(searchText.toLowerCase())
+      );
+      verbs.setItems([...filteredVerbs]);
+    }
+  };
 
-  // const filterVerbList = () => {
-  //   verbs.setSelectedItem(""); // auto select after sorting in SelectItem component
-  //   if (searchText === "") {
-  //     verbs.setItems([...verbList]);
-  //   } else {
-  //     const filteredVerbs = verbList.filter((verb) =>
-  //       verb.includes(searchText.toLowerCase())
-  //     );
-  //     verbs.setItems([...filteredVerbs]);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   filterVerbList();
-  // }, [searchText, verbs.setItems]);
+  useEffect(() => {
+    filterVerbList();
+  }, [searchText, verbs.setItems]);
 
   return (
     <div className={styles.wrapper}>
@@ -77,7 +78,7 @@ const VerbList = ({ data }) => {
       />
       <div className={styles.flex}>
         {<SelectItem {...verbs} />}
-        {/* {<SelectItem {...particles} />} */}
+        {<SelectItem {...particles} />}
       </div>
 
       <ExplanationCard {...cardData} />
