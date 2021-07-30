@@ -25,3 +25,9 @@ export const randomArrayShuffle = (array) => {
   }
   return array;
 };
+
+export const createQueryParams = (params) => {
+  return Object.keys(params)
+    .map((k) => encodeURIComponent(k) + "=" + encodeURIComponent(params[k]))
+    .join("&");
+};

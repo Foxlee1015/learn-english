@@ -31,20 +31,20 @@ const VerbList = ({ data }) => {
     const selectedVerb = verbs.selectedItem;
     const selectedVParticle = particles.selectedItem;
     let definitions = [];
-    let sentenses = [];
+    let sentences = [];
 
     if (selectedVerb !== "" && selectedVParticle !== "") {
       const phrasalVerbInfo = particles.items.find(
         (item) => item.particle === selectedVParticle
       );
-      ({ definitions, sentenses } = phrasalVerbInfo);
+      ({ definitions, sentences } = phrasalVerbInfo);
     }
 
     setCardData({
       title: selectedVerb,
       subTitle: selectedVParticle,
       definitions,
-      sentenses,
+      sentences,
     });
   };
 

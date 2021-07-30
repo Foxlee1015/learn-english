@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Form, Input, Button, InputNumber } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 
+import { createQueryParams } from "../../utils/utils";
 import { server } from "../../config";
 
 const validateMessages = {
@@ -30,34 +31,51 @@ const PhrasalVerbForm = () => {
   const [loading, setLoading] = useState(false);
 
   const onFinish = (values) => {
-    const { phrasalVerb, sentences, definitions } = values;
-    const { verb, particle, level = difficulty } = phrasalVerb;
+    const { phrasalVerb, sentences, definitions, difficulty } = values;
+    const { verb, particle } = phrasalVerb;
 
     setLoading(true);
-    addPhrasalVerb({ verb, particle, level, sentences, definitions });
+    addPhrasalVerb({
+      verb,
+      particle,
+      level: difficulty,
+      sentences,
+      definitions,
+    });
     form.resetFields();
     setLoading(false);
   };
 
-  const getFormValues = () => {
+  const updatePhrasalVerbDetailData = async () => {
     const curValues = form.getFieldValue();
     const { verb, particle } = curValues.phrasalVerb;
+    let definitions = [];
+    let sentences = [];
+
     if (verb !== "" && particle !== "") {
-      console.log(verb, particle);
-      currentData = getCurrentVerbParticleData({ verb, particle });
-      console.log("currentData", currentData);
+      const currentData = await getCurrentVerbParticleData({ verb, particle });
+      if (currentData && currentData.particles[particle]) {
+        ({ definitions, sentences } = currentData.particles[particle]);
+      }
     }
+
+    form.setFieldsValue({
+      ...curValues,
+      definitions,
+      sentences,
+    });
   };
 
-  const getCurrentVerbParticleData = async ({ verb, particle }) => {
-    let params = { verb, particle };
-    let query = Object.keys(params)
-      .map((k) => encodeURIComponent(k) + "=" + encodeURIComponent(params[k]))
-      .join("&");
+  const getCurrentVerbParticleData = async (params) => {
+    let query = createQueryParams(params);
 
     const res = await fetch(`${server}/api/phrasal-verbs/?${query}`);
-    const phrasalVerb = await res.json();
-    return phrasalVerb;
+    const data = await res.json();
+    if (data.result && data.result.length > 0) {
+      return data.result[0];
+    } else {
+      return null;
+    }
   };
 
   return (
@@ -73,7 +91,7 @@ const PhrasalVerbForm = () => {
         definitions: [],
         sentences: [],
         reviewed: false,
-        level: 1,
+        difficulty: 1,
       }}
       validateMessages={validateMessages}
     >
@@ -82,14 +100,14 @@ const PhrasalVerbForm = () => {
         label="Verb"
         rules={[{ required: true }]}
       >
-        <Input onBlur={() => getFormValues()} />
+        <Input onBlur={() => updatePhrasalVerbDetailData()} />
       </Form.Item>
       <Form.Item
         name={["phrasalVerb", "particle"]}
         label="Particle"
         rules={[{ required: true }]}
       >
-        <Input onBlur={() => getFormValues()} />
+        <Input onBlur={() => updatePhrasalVerbDetailData()} />
       </Form.Item>
       <Form.List name="definitions">
         {(fields, { add, remove }, { errors }) => (
@@ -150,7 +168,7 @@ const PhrasalVerbForm = () => {
         )}
       </Form.List>
       <Form.Item
-        name={["phrasalVerb", "level"]}
+        name={"difficulty"}
         label="Difficulty"
         rules={[{ type: "number", min: 1, max: 5 }]}
       >
