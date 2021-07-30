@@ -1,29 +1,25 @@
-import Link from "next/link";
 import { useState } from "react";
-import adminNavStyles from "../../styles/components/AdminNav.module.css";
+import { Menu } from 'antd';
+import Link from "next/link";
+
+import AdminNavStyle from "../../styles/components/AdminNav.module.css";
 
 const AdminNav = () => {
-  const [showDrawer, setShowDrawer] = useState(false);
-  return (
-    <div>
-      <nav>
-        <ul>
-          <li>
+  const [current, setCurrent] = useState("admin");
+    return (
+      <div className={AdminNavStyle.container}>
+        <Menu onClick={(e)=>setCurrent(e.key)} selectedKeys={[current]} mode="horizontal">
+          <Menu.Item key="admin">
             <Link href="/admin/">Admin</Link>
-          </li>
-          <li>
+          </Menu.Item>
+          <Menu.Item key="admin-phrasal-verbs">
             <Link href="/admin/phrasalVerbs">Phrasal verbs</Link>
-          </li>
-          <li>
+          </Menu.Item>
+          <Menu.Item key="admin-idioms">
             <Link href="/admin/idioms">Idioms</Link>
-          </li>
-          <li>
-            <Link href="/admin/prepositions">Prepositions</Link>
-          </li>
-        </ul>
-      </nav>
-    </div>
-  );
-};
-
-export default AdminNav;
+          </Menu.Item>
+        </Menu>
+      </div>
+    );
+  }
+  export default AdminNav;

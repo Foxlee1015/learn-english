@@ -1,43 +1,4 @@
-.modal {
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  z-index: -1;
-  position: fixed;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(0, 0, 0, 0.5);
-  -webkit-tap-highlight-color: transparent;
-}
-
-.paper {
-  top: 0;
-  right: 0;
-  flex: 1 0 auto;
-  height: 100%;
-  display: flex;
-  outline: 0;
-  z-index: 1200;
-  padding-top: 40px;
-  position: fixed;
-  overflow-y: auto;
-  flex-direction: column;
-  color: rgba(0, 0, 0, 0.87);
-  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-  background-color: #fff;
-  box-shadow: 0px 8px 10px -5px rgb(0 0 0 / 20%),
-    0px 16px 24px 2px rgb(0 0 0 / 14%), 0px 6px 30px 5px rgb(0 0 0 / 12%);
-}
-
-.paper ul {
-  list-style: none;
-  padding: 10px;
-}
-
-.paper ul li {
-  margin: 5px;
-
-  z-index: 1300;
+.container {
+  width: 100%;
+  margin-bottom: 60px;
 }

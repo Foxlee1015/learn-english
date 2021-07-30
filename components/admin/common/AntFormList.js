@@ -1,7 +1,7 @@
 import { Form, Input, Button, InputNumber } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 
-import AdminPhrasalVerbStyle from "../../../styles/pages/admin/AdminPhrasalVerb.module.css"
+import AdminStyle from "../../../styles/pages/admin/Admin.module.css"
 
 const AntFormList = ({name}) => {
     return (
@@ -22,7 +22,7 @@ const AntFormList = ({name}) => {
               </Form.Item>
             ))}
             <Form.Item>
-                <div className={AdminPhrasalVerbStyle.formItemSub}>
+                <div className={AdminStyle.formItemSub}>
                     <Button
                         type="dashed"
                         onClick={() => add()}

@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { Form, Input, Switch, Button } from "antd";
 import { server } from "../../config";
-const layout = {
-  labelCol: {
-    span: 8,
-  },
-  wrapperCol: {
-    span: 16,
-  },
-};
+import AntFormList from "./common/AntFormList"
+
+import AdminStyle from "../../styles/pages/admin/Admin.module.css"
+
+const initialValues = {
+  expression: "",
+  definitions: [],
+  sentences: [],
+  reviewed: false,
+}
 
 const validateMessages = {
   required: "${label} is required!",
@@ -16,7 +18,7 @@ const validateMessages = {
 
 const addIdiom = async (values) => {
   const res = await fetch(`${server}/api/idioms/`, {
-    body: JSON.stringify(values.idiom),
+    body: JSON.stringify(values),
     headers: {
       "Content-Type": "application/json",
     },
@@ -33,7 +35,6 @@ const IdiomForm = () => {
 
   const onFinish = (values) => {
     setLoading(true);
-    console.log(values);
     addIdiom(values);
     form.resetFields();
     setLoading(false);
@@ -42,40 +43,29 @@ const IdiomForm = () => {
   return (
     <Form
       form={form}
-      {...layout}
       name="nest-messages"
       onFinish={onFinish}
-      initialValues={{
-        expression: "",
-        definitions: [],
-        sentences: [],
-        reviewed: false,
-      }}
+      initialValues={initialValues}
       validateMessages={validateMessages}
     >
       <Form.Item
-        name={["idiom", "expression"]}
+        name={"expression"}
         label="Expression"
         rules={[{required: true}]}>
         <Input />
       </Form.Item>
-      <Form.Item
-        name={["idiom", "definitions"]}
-        label="Definition"
-        rules={[{required: true}]}
-      >
-        <Input />
-      </Form.Item>
-      <Form.Item name={["idiom", "sentences"]} label="Sentence">
-        <Input />
-      </Form.Item>
-      <Form.Item label="Public" name={["idiom", "reviewed"]}>
+      <AntFormList name="definitions" />
+      <AntFormList name="sentences" />
+      
+      <Form.Item label="Public" name={"reviewed"}>
         <Switch />
       </Form.Item>
-      <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
+      <Form.Item>
+      <div className={AdminStyle.formItemSub}>
         <Button type="primary" htmlType="submit" loading={loading}>
           Submit
         </Button>
+        </div>
       </Form.Item>
     </Form>
   );

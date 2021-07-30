@@ -5,7 +5,7 @@ import { createQueryParams } from "../../utils/utils";
 import { server } from "../../config";
 import AntFormList from "./common/AntFormList"
 
-import AdminPhrasalVerbStyle from "../../styles/pages/admin/AdminPhrasalVerb.module.css"
+import AdminStyle from "../../styles/pages/admin/Admin.module.css"
 
 const initialValues = {
   verb: "",
@@ -116,7 +116,7 @@ const PhrasalVerbForm = () => {
       <AntFormList name="definitions" />
       <AntFormList name="sentences" />
       <Form.Item>
-        <div className={AdminPhrasalVerbStyle.formItemSub}>
+        <div className={AdminStyle.formItemSub}>
         <Button type="primary" htmlType="submit" loading={loading}>
           Submit
         </Button>

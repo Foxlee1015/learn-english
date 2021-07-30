@@ -12,10 +12,10 @@ const ExplanationCard = ({
       <h3 className={styles.head}>{subTitle}</h3>
       <p>Definition</p>
 
-      {definitions.length > 0 &&
+      {definitions && definitions.length > 0 &&
         definitions.map((definition) => <p key={definition}>{definition}</p>)}
       <p>Examples</p>
-      {sentences.length > 0 &&
+      {sentences && sentences.length > 0 &&
         sentences.map((sentence) => <p key={sentence}>{sentence}</p>)}
     </div>
   );
