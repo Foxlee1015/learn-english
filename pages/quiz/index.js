@@ -13,6 +13,7 @@ const Quiz = ({}) => {
     <div className={quizStyle.container}>
       {btnLinks.map((btnLink) => (
         <button
+          key={btnLink.url}
           type="button"
           onClick={() => router.push(btnLink.url)}
           className={quizStyle.linkBtn}
