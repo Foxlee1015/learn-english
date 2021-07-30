@@ -21,13 +21,13 @@ const VerbList = ({ data }) => {
       }
     }
     particles.setItems([...selectedVerbParticles]);
-  }
+  };
 
   useEffect(() => {
     const selectedVerb = verbs.items.find(
       (item) => item.verb === verbs.selectedItem
     );
-    updateParticleList(selectedVerb)
+    updateParticleList(selectedVerb);
   }, [verbs.selectedItem]);
 
   const setPhrasalVerbInfo = () => {
@@ -40,7 +40,9 @@ const VerbList = ({ data }) => {
       const phrasalVerbInfo = particles.items.find(
         (item) => item.particle === selectedVParticle
       );
-      ({ definitions, sentences } = phrasalVerbInfo);
+      if (phrasalVerbInfo) {
+        ({ definitions, sentences } = phrasalVerbInfo);
+      }
     }
 
     setCardData({
