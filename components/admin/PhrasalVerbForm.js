@@ -3,9 +3,9 @@ import { Form, Input, Button, InputNumber } from "antd";
 
 import { createQueryParams } from "../../utils/utils";
 import { server } from "../../config";
-import AntFormList from "./common/AntFormList"
+import AntFormList from "./common/AntFormList";
 
-import AdminStyle from "../../styles/pages/admin/Admin.module.css"
+import AdminStyle from "../../styles/pages/admin/Admin.module.css";
 
 const initialValues = {
   verb: "",
@@ -14,10 +14,10 @@ const initialValues = {
   sentences: [],
   reviewed: false,
   difficulty: 1,
-}
+};
 
 const validateMessages = {
-  required: "${label} is required!"
+  required: "${label} is required!",
 };
 
 const addPhrasalVerb = async (data) => {
@@ -34,6 +34,7 @@ const addPhrasalVerb = async (data) => {
 const PhrasalVerbForm = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
+  const [verbData, setVerbData] = useState({});
 
   const onFinish = (values) => {
     const { verb, particle, sentences, definitions, difficulty } = values;
@@ -50,36 +51,41 @@ const PhrasalVerbForm = () => {
     setLoading(false);
   };
 
-  const updatePhrasalVerbDetailData = async () => {
-    const curValues = form.getFieldValue();
-    const { verb, particle } = curValues;
+  const getVerbData = async (e) => {
+    const verb = e.target.value;
+    setVerbData({});
+
+    if (verb !== "") {
+      const currentVerbData = await getCurrentVerbParticleData(verb);
+      if (currentVerbData) {
+        console.log(currentVerbData);
+        setVerbData({ ...currentVerbData });
+      }
+    }
+  };
+
+  const updateFields = (e) => {
+    const particle = e.target.value;
     let definitions = [];
     let sentences = [];
 
-    if (verb !== "" && particle !== "") {
-      const currentData = await getCurrentVerbParticleData({ verb, particle });
-      if (currentData && currentData.particles[particle]) {
-        ({ definitions, sentences } = currentData.particles[particle]);
+    if (particle !== "") {
+      if (verbData && verbData.particles && verbData.particles[particle]) {
+        ({ definitions, sentences } = verbData.particles[particle]);
       }
     }
 
     form.setFieldsValue({
-      ...curValues,
+      ...form.getFieldValue(),
       definitions,
       sentences,
     });
   };
 
-  const getCurrentVerbParticleData = async (params) => {
-    let query = createQueryParams(params);
-
-    const res = await fetch(`${server}/api/phrasal-verbs/?${query}`);
+  const getCurrentVerbParticleData = async (verb) => {
+    const res = await fetch(`${server}/api/phrasal-verbs/${verb}`);
     const data = await res.json();
-    if (data.result && data.result.length > 0) {
-      return data.result[0];
-    } else {
-      return null;
-    }
+    return data.result;
   };
 
   return (
@@ -96,7 +102,7 @@ const PhrasalVerbForm = () => {
         rules={[{ required: true }]}
         labelAlign="left"
       >
-        <Input onBlur={() => updatePhrasalVerbDetailData()} />
+        <Input onBlur={(e) => getVerbData(e)} />
       </Form.Item>
       <Form.Item
         name={"particle"}
@@ -104,7 +110,7 @@ const PhrasalVerbForm = () => {
         labelAlign="left"
         rules={[{ required: true }]}
       >
-        <Input onBlur={() => updatePhrasalVerbDetailData()} />
+        <Input onBlur={(e) => updateFields(e)} />
       </Form.Item>
       <Form.Item
         name={"difficulty"}
@@ -117,9 +123,9 @@ const PhrasalVerbForm = () => {
       <AntFormList name="sentences" />
       <Form.Item>
         <div className={AdminStyle.formItemSub}>
-        <Button type="primary" htmlType="submit" loading={loading}>
-          Submit
-        </Button>
+          <Button type="primary" htmlType="submit" loading={loading}>
+            Submit
+          </Button>
         </div>
       </Form.Item>
     </Form>
