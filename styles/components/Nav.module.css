@@ -1,5 +1,5 @@
 .nav {
-  height: 50px;
+  height: 80px;
   padding: 0 10px;
   background: #000;
   color: #fff;
@@ -19,19 +19,25 @@
 
 .linkText {
   margin: 0 10px;
-  font-size: 1rem;
-}
-
-@media (max-width: 460px) {
-  .linkText {
-    font-size: 0.4rem;
-    margin: 0 4px;
-  }
+  font-size: 1.2rem;
 }
 
 @media (max-width: 860px) {
+  .nav {
+    height: 70px;
+  }
+  .linkText {
+    font-size: 1rem;
+    margin: 0 8px;
+  }
+}
+
+@media (max-width: 460px) {
+  .nav {
+    height: 60px;
+  }
   .linkText {
     font-size: 0.8rem;
-    margin: 0 8px;
+    margin: 0 6px;
   }
 }
