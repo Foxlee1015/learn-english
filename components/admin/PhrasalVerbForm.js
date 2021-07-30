@@ -5,6 +5,9 @@ import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { createQueryParams } from "../../utils/utils";
 import { server } from "../../config";
 
+
+import AdminPhrasalVerbStyle from "../../styles/pages/admin/AdminPhrasalVerb.module.css"
+
 const validateMessages = {
   required: "${label} is required!",
   number: {
@@ -99,15 +102,24 @@ const PhrasalVerbForm = () => {
         name={["phrasalVerb", "verb"]}
         label="Verb"
         rules={[{ required: true }]}
+        labelAlign="left"
       >
         <Input onBlur={() => updatePhrasalVerbDetailData()} />
       </Form.Item>
       <Form.Item
         name={["phrasalVerb", "particle"]}
         label="Particle"
+        labelAlign="left"
         rules={[{ required: true }]}
       >
         <Input onBlur={() => updatePhrasalVerbDetailData()} />
+      </Form.Item>
+      <Form.Item
+        name={"difficulty"}
+        label="Difficulty"
+        rules={[{ type: "number", min: 1, max: 5 }]}
+      >
+        <InputNumber />
       </Form.Item>
       <Form.List name="definitions">
         {(fields, { add, remove }, { errors }) => (
@@ -126,6 +138,8 @@ const PhrasalVerbForm = () => {
               </Form.Item>
             ))}
             <Form.Item>
+              
+        <div className={AdminPhrasalVerbStyle.formItemSub}>
               <Button
                 type="dashed"
                 onClick={() => add()}
@@ -134,6 +148,8 @@ const PhrasalVerbForm = () => {
                 Definitions
               </Button>
               <Form.ErrorList errors={errors} />
+
+        </div>
             </Form.Item>
           </>
         )}
@@ -155,6 +171,8 @@ const PhrasalVerbForm = () => {
               </Form.Item>
             ))}
             <Form.Item>
+              
+        <div className={AdminPhrasalVerbStyle.formItemSub}>
               <Button
                 type="dashed"
                 onClick={() => add()}
@@ -163,21 +181,17 @@ const PhrasalVerbForm = () => {
                 Sentences
               </Button>
               <Form.ErrorList errors={errors} />
+        </div>
             </Form.Item>
           </>
         )}
       </Form.List>
-      <Form.Item
-        name={"difficulty"}
-        label="Difficulty"
-        rules={[{ type: "number", min: 1, max: 5 }]}
-      >
-        <InputNumber />
-      </Form.Item>
       <Form.Item>
+        <div className={AdminPhrasalVerbStyle.formItemSub}>
         <Button type="primary" htmlType="submit" loading={loading}>
           Submit
         </Button>
+        </div>
       </Form.Item>
     </Form>
   );
