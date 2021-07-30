@@ -29,10 +29,10 @@ const Home = ({}) => {
       <LinkCard
         title={"Quiz"}
         desc={"Prasal verbs / quiz ~~~"}
-        href={"/game"}
+        href={"/quiz"}
       />
     </div>
   );
-}
+};
 
 export default Home;
