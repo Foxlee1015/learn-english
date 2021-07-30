@@ -10,21 +10,24 @@ const VerbList = ({ data }) => {
   const [cardData, setCardData] = useState({});
   const [searchText, setSearchText] = useState("");
 
-  useEffect(() => {
-    const selectedVerb = verbs.items.find(
-      (item) => item.verb === verbs.selectedItem
-    );
-
+  const updateParticleList = (selectedVerb) => {
+    const selectedVerbParticles = [];
     if (selectedVerb) {
-      const selectedVerbParticles = [];
       for (const key in selectedVerb.particles) {
         selectedVerbParticles.push({
           ...selectedVerb.particles[key],
           particle: key,
         });
       }
-      particles.setItems([...selectedVerbParticles]);
     }
+    particles.setItems([...selectedVerbParticles]);
+  }
+
+  useEffect(() => {
+    const selectedVerb = verbs.items.find(
+      (item) => item.verb === verbs.selectedItem
+    );
+    updateParticleList(selectedVerb)
   }, [verbs.selectedItem]);
 
   const setPhrasalVerbInfo = () => {

@@ -29,12 +29,14 @@ const IdiomList = ({ data }) => {
     let definitions = [];
     let sentences = [];
 
+    print(data)
     const selectedIdiom = data.find(
       (item) => item["expression"] === idioms.selectedItem
     );
     if (selectedIdiom) {
       ({ title: expression, definitions, sentences } = selectedIdiom);
     }
+    print(expression)
     setCardData({
       title: expression,
       definitions,

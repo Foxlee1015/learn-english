@@ -1,32 +1,34 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Form, Input, Button, InputNumber } from "antd";
-import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 
 import { createQueryParams } from "../../utils/utils";
 import { server } from "../../config";
-
+import AntFormList from "./common/AntFormList"
 
 import AdminPhrasalVerbStyle from "../../styles/pages/admin/AdminPhrasalVerb.module.css"
 
+const initialValues = {
+  verb: "",
+  particle: "",
+  definitions: [],
+  sentences: [],
+  reviewed: false,
+  difficulty: 1,
+}
+
 const validateMessages = {
-  required: "${label} is required!",
-  number: {
-    range: "${label} must be between ${min} and ${max}",
-  },
+  required: "${label} is required!"
 };
 
 const addPhrasalVerb = async (data) => {
-  console.log(data);
-  const res = await fetch(`${"http://localhost:8002"}/api/phrasal-verbs/`, {
+  const res = await fetch(`${server}/api/phrasal-verbs/`, {
     body: JSON.stringify(data),
     headers: {
       "Content-Type": "application/json",
     },
     method: "POST",
   });
-
   const result = await res.json();
-  console.log(result);
 };
 
 const PhrasalVerbForm = () => {
@@ -34,8 +36,7 @@ const PhrasalVerbForm = () => {
   const [loading, setLoading] = useState(false);
 
   const onFinish = (values) => {
-    const { phrasalVerb, sentences, definitions, difficulty } = values;
-    const { verb, particle } = phrasalVerb;
+    const { verb, particle, sentences, definitions, difficulty } = values;
 
     setLoading(true);
     addPhrasalVerb({
@@ -51,7 +52,7 @@ const PhrasalVerbForm = () => {
 
   const updatePhrasalVerbDetailData = async () => {
     const curValues = form.getFieldValue();
-    const { verb, particle } = curValues.phrasalVerb;
+    const { verb, particle } = curValues;
     let definitions = [];
     let sentences = [];
 
@@ -86,20 +87,11 @@ const PhrasalVerbForm = () => {
       form={form}
       name="dynamic_form_item"
       onFinish={onFinish}
-      initialValues={{
-        phrasalVerb: {
-          verb: "",
-          particle: "",
-        },
-        definitions: [],
-        sentences: [],
-        reviewed: false,
-        difficulty: 1,
-      }}
+      initialValues={initialValues}
       validateMessages={validateMessages}
     >
       <Form.Item
-        name={["phrasalVerb", "verb"]}
+        name={"verb"}
         label="Verb"
         rules={[{ required: true }]}
         labelAlign="left"
@@ -107,7 +99,7 @@ const PhrasalVerbForm = () => {
         <Input onBlur={() => updatePhrasalVerbDetailData()} />
       </Form.Item>
       <Form.Item
-        name={["phrasalVerb", "particle"]}
+        name={"particle"}
         label="Particle"
         labelAlign="left"
         rules={[{ required: true }]}
@@ -121,71 +113,8 @@ const PhrasalVerbForm = () => {
       >
         <InputNumber />
       </Form.Item>
-      <Form.List name="definitions">
-        {(fields, { add, remove }, { errors }) => (
-          <>
-            {fields.map((field, index) => (
-              <Form.Item label={"definitions"} required={false} key={field.key}>
-                <Form.Item {...field} noStyle>
-                  <Input placeholder="definition" style={{ width: "90%" }} />
-                </Form.Item>
-                {fields.length > 1 ? (
-                  <MinusCircleOutlined
-                    className="dynamic-delete-button"
-                    onClick={() => remove(field.name)}
-                  />
-                ) : null}
-              </Form.Item>
-            ))}
-            <Form.Item>
-              
-        <div className={AdminPhrasalVerbStyle.formItemSub}>
-              <Button
-                type="dashed"
-                onClick={() => add()}
-                icon={<PlusOutlined />}
-              >
-                Definitions
-              </Button>
-              <Form.ErrorList errors={errors} />
-
-        </div>
-            </Form.Item>
-          </>
-        )}
-      </Form.List>
-      <Form.List name="sentences">
-        {(fields, { add, remove }, { errors }) => (
-          <>
-            {fields.map((field, index) => (
-              <Form.Item label={"sentences"} required={false} key={field.key}>
-                <Form.Item {...field} noStyle>
-                  <Input placeholder="sentence" style={{ width: "90%" }} />
-                </Form.Item>
-                {fields.length > 1 ? (
-                  <MinusCircleOutlined
-                    className="dynamic-delete-button"
-                    onClick={() => remove(field.name)}
-                  />
-                ) : null}
-              </Form.Item>
-            ))}
-            <Form.Item>
-              
-        <div className={AdminPhrasalVerbStyle.formItemSub}>
-              <Button
-                type="dashed"
-                onClick={() => add()}
-                icon={<PlusOutlined />}
-              >
-                Sentences
-              </Button>
-              <Form.ErrorList errors={errors} />
-        </div>
-            </Form.Item>
-          </>
-        )}
-      </Form.List>
+      <AntFormList name="definitions" />
+      <AntFormList name="sentences" />
       <Form.Item>
         <div className={AdminPhrasalVerbStyle.formItemSub}>
         <Button type="primary" htmlType="submit" loading={loading}>

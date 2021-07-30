@@ -47,8 +47,8 @@ const IdiomForm = () => {
       onFinish={onFinish}
       initialValues={{
         expression: "",
-        definitions: "",
-        sentences: "",
+        definitions: [],
+        sentences: [],
         reviewed: false,
       }}
       validateMessages={validateMessages}
@@ -56,22 +56,13 @@ const IdiomForm = () => {
       <Form.Item
         name={["idiom", "expression"]}
         label="Expression"
-        rules={[
-          {
-            required: true,
-          },
-        ]}
-      >
+        rules={[{required: true}]}>
         <Input />
       </Form.Item>
       <Form.Item
         name={["idiom", "definitions"]}
         label="Definition"
-        rules={[
-          {
-            required: true,
-          },
-        ]}
+        rules={[{required: true}]}
       >
         <Input />
       </Form.Item>
