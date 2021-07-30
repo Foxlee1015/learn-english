@@ -1,6 +1,6 @@
 .nav {
   height: 50px;
-  padding: 10px;
+  padding: 0 10px;
   background: #000;
   color: #fff;
   display: flex;
@@ -9,12 +9,29 @@
 }
 
 .nav ul {
+  padding: 0;
+  margin: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   list-style: none;
 }
 
-.nav ul li a {
-  margin: 5px 15px;
+.linkText {
+  margin: 0 10px;
+  font-size: 1rem;
+}
+
+@media (max-width: 460px) {
+  .linkText {
+    font-size: 0.4rem;
+    margin: 0 4px;
+  }
+}
+
+@media (max-width: 860px) {
+  .linkText {
+    font-size: 0.8rem;
+    margin: 0 8px;
+  }
 }

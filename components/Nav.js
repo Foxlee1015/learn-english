@@ -1,25 +1,23 @@
 import Link from "next/link";
 import navStyles from "../styles/components/Nav.module.css";
 
+const routes = [
+  { href: "/", text: "Home" },
+  { href: "/phrasalVerbs", text: "Phrasal verbs" },
+  { href: "/idioms", text: "Idioms" },
+  { href: "/quiz", text: "Quiz" },
+  { href: "/admin", text: "Admin" },
+];
+
 const Nav = () => {
   return (
     <nav className={navStyles.nav}>
       <ul>
-        <li>
-          <Link href="/">Home</Link>
-        </li>
-        <li>
-          <Link href="/phrasalVerbs">Phrasal verbs</Link>
-        </li>
-        <li>
-          <Link href="/idioms">Idioms</Link>
-        </li>
-        <li>
-          <Link href="/quiz">Quiz</Link>
-        </li>
-        <li>
-          <Link href="/admin">Admin</Link>
-        </li>
+        {routes.map((route) => (
+          <li className={navStyles.linkText}>
+            <Link href={route.href}>{route.text}</Link>
+          </li>
+        ))}
       </ul>
     </nav>
   );
