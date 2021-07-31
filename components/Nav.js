@@ -6,7 +6,7 @@ const routes = [
   { href: "/phrasalVerbs", text: "Phrasal verbs" },
   { href: "/idioms", text: "Idioms" },
   { href: "/quiz", text: "Quiz" },
-  { href: "/admin", text: "Admin" },
+  // { href: "/admin", text: "Admin" },
 ];
 
 const Nav = () => {
