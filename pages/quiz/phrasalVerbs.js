@@ -6,6 +6,7 @@ import {
   randomElement,
   randomArrayShuffle,
 } from "../../utils/utils";
+import Modal from "../../components/common/Modal";
 
 import styles from "../../styles/pages/Game.module.css";
 
@@ -17,18 +18,18 @@ import * as Data from "../../data";
 const particleResources = Data.particles;
 
 const PhrasalVerbs = () => {
-  const [verb, setVerb] = useState({});
+  const [verbData, setVerbData] = useState({});
   const [particle, setParticle] = useState("");
   const [definitions, setDefinitions] = useState("");
   const [showHint, setShowHint] = useState(false);
   const [sentenses, setSentenses] = useState([]);
   const [answers, setAnswers] = useState([]);
   const [clickedAnswers, setClickedAnswers] = useState([]);
-  const [showAnswer, setShowAnswer] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const nextQuiz = () => {
     setClickedAnswers([]);
-    setShowAnswer(false);
+    setShowModal(false);
     setShowHint(false);
     getRandomVerb();
   };
@@ -41,13 +42,14 @@ const PhrasalVerbs = () => {
     const params = createQueryParams({ random_verb_count: 1 });
     const res = await fetch(`${server}/api/phrasal-verbs/?${params}`);
     const data = await res.json();
-    setVerb({ ...data.result[0] });
+    setVerbData({ ...data.result[0] });
   };
 
   useEffect(() => {
-    if (Object.keys(verb).length !== 0) {
-      const randomParticle = randomProperty(verb.particles);
-      const { definitions, sentences } = verb.particles[randomParticle];
+    console.log(verbData, particle)
+    if (Object.keys(verbData).length !== 0) {
+      const randomParticle = randomProperty(verbData.particles);
+      const { definitions, sentences } = verbData.particles[randomParticle];
       const randomParticles = getRandomItems({
         src: particleResources,
         remove: randomParticle,
@@ -63,7 +65,7 @@ const PhrasalVerbs = () => {
       setSentenses(sentences);
       setAnswers([...shffledParticles]);
     }
-  }, [verb]);
+  }, [verbData]);
 
   const getRandomItems = ({ src, remove, itemCount }) => {
     const result = new Set();
@@ -80,7 +82,7 @@ const PhrasalVerbs = () => {
 
   const checkAnswer = (clickedAnswer) => {
     if (clickedAnswer === particle) {
-      setShowAnswer(true);
+      setShowModal(true);
       setShowHint(true);
     } else {
       setClickedAnswers([...clickedAnswers, clickedAnswer]);
@@ -106,21 +108,11 @@ const PhrasalVerbs = () => {
       <div>
         {sentenses.map((sentense) => (
           <p key={sentense}>
-            {showAnswer ? sentense : replaceText(sentense, particle, "___")}
+            {replaceText(sentense, particle, "___")}
           </p>
         ))}
       </div>
-      {showAnswer && (
-        <div className={`${styles.btnContainer} ${styles.nextBtns}`}>
-          <button className={styles.btn}>Before</button>
-          <button className={styles.btn}>Next(Same verb)</button>
-          <button className={styles.btn} onClick={() => nextQuiz()}>
-            Next(Different verb)
-          </button>
-        </div>
-      )}
-      {!showAnswer && (
-        <div className={styles.btnContainer}>
+      <div className={styles.btnContainer}>
           {answers.map((answer) => (
             <button
               className={styles.btn}
@@ -132,7 +124,18 @@ const PhrasalVerbs = () => {
             </button>
           ))}
         </div>
-      )}
+      {showModal && <Modal 
+        header={`${verbData.verb}-${particle}`}
+        main={sentenses.map((sentense) => (
+          <p key={sentense}>
+            {sentense}
+          </p>
+        ))}
+        buttons={[
+          {onClick:nextQuiz, text:"Next"}
+        ]}
+        />}
+        
     </div>
   );
 };
