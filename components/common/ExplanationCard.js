@@ -1,22 +1,22 @@
-import styles from "../../styles/components/ExplanationCard.module.css";
+import CardStyle from "../../styles/components/ExplanationCard.module.css";
 
 const ExplanationCard = ({
   title = "",
   subTitle = "",
   definitions = [],
-  sentenses = [],
+  sentences = [],
 }) => {
   return (
-    <div className={styles.container}>
-      <h3 className={styles.head}>{title}</h3>
-      <h3 className={styles.head}>{subTitle}</h3>
-      <p>Definition</p>
+    <div className={CardStyle.container}>
+      <h3 className={CardStyle.head}>{title.toUpperCase()}</h3>
+      <h3 className={CardStyle.headSub}>{subTitle}</h3>
+      <p className={CardStyle.tag}>Definition</p>
 
-      {definitions.length > 0 &&
-        definitions.map((definition) => <p key={definition}>{definition}</p>)}
-      <p>Examples</p>
-      {sentenses.length > 0 &&
-        sentenses.map((sentense) => <p key={sentense}>{sentense}</p>)}
+      {definitions && definitions.length > 0 &&
+        definitions.map((definition) => <p className={CardStyle.text} key={definition}>{definition}</p>)}
+      <p className={CardStyle.tag}>Examples</p>
+      {sentences && sentences.length > 0 &&
+        sentences.map((sentence) => <p className={CardStyle.text} key={sentence}>{sentence}</p>)}
     </div>
   );
 };

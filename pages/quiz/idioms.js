@@ -1,20 +1,20 @@
 import { useCallback, useEffect, useState } from "react";
-import Meta from "../components/Meta";
+import Meta from "../../components/Meta";
 import {
   randomProperty,
   replaceText,
   randomElement,
   randomArrayShuffle,
-} from "../utils/utils";
+} from "../../utils/utils";
 
-import styles from "../styles/pages/Game.module.css";
+import styles from "../../styles/pages/Game.module.css";
 
-import * as Data from "../data";
+import * as Data from "../../data";
 
 const verbResources = Data.verbs;
 const particleResources = Data.particles;
 
-const Game = () => {
+const Idioms = () => {
   const [verb, setVerb] = useState("");
   const [particle, setParticle] = useState("");
   const [hint, setHint] = useState("");
@@ -82,8 +82,8 @@ const Game = () => {
 
   return (
     <div>
-      <Meta title="Phrasal Verb game" />
-      <h5>Phrasal Verb game</h5>
+      <Meta title="Idiom Quiz" />
+      <h5>Idiom Quiz</h5>
       <div className={styles.header}>
         <h6>{verb}</h6>
         <div className={styles.tagBox}>
@@ -127,4 +127,4 @@ const Game = () => {
   );
 };
 
-export default Game;
+export default Idioms;
