@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Form, Input, Button, InputNumber } from "antd";
 
 import { createQueryParams } from "../../utils/utils";
@@ -35,6 +35,7 @@ const PhrasalVerbForm = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [verbData, setVerbData] = useState({});
+  const [showFormList, setShowFormList] = useState(false);
 
   const onFinish = (values) => {
     const { verb, particle, sentences, definitions, difficulty } = values;
@@ -51,21 +52,33 @@ const PhrasalVerbForm = () => {
     setLoading(false);
   };
 
-  const getVerbData = async (e) => {
-    const verb = e.target.value;
+  useEffect(()=>{
+    const {verb} = form.getFieldValue()
+    if (verb !== "") {
+      getVerbData(verb)
+    }
+
+  }, [form.getFieldValue().verb])
+
+  const getVerbData = async (verb) => {
     setVerbData({});
 
     if (verb !== "") {
       const currentVerbData = await getCurrentVerbParticleData(verb);
       if (currentVerbData) {
-        console.log(currentVerbData);
         setVerbData({ ...currentVerbData });
       }
     }
   };
 
-  const updateFields = (e) => {
-    const particle = e.target.value;
+  useEffect(()=>{
+    const {particle} = form.getFieldValue()
+    updateFormList(particle)
+
+  },[verbData])
+
+  const updateFormList = (particle) => {
+    setShowFormList(false)
     let definitions = [];
     let sentences = [];
 
@@ -80,6 +93,8 @@ const PhrasalVerbForm = () => {
       definitions,
       sentences,
     });
+    
+    setShowFormList(true)
   };
 
   const getCurrentVerbParticleData = async (verb) => {
@@ -102,7 +117,7 @@ const PhrasalVerbForm = () => {
         rules={[{ required: true }]}
         labelAlign="left"
       >
-        <Input onBlur={(e) => getVerbData(e)} />
+        <Input onBlur={(e) => getVerbData(e.target.value)} />
       </Form.Item>
       <Form.Item
         name={"particle"}
@@ -110,7 +125,7 @@ const PhrasalVerbForm = () => {
         labelAlign="left"
         rules={[{ required: true }]}
       >
-        <Input onBlur={(e) => updateFields(e)} />
+        <Input onBlur={(e) => updateFormList(e.target.value)} />
       </Form.Item>
       <Form.Item
         name={"difficulty"}
@@ -119,8 +134,12 @@ const PhrasalVerbForm = () => {
       >
         <InputNumber />
       </Form.Item>
-      <AntFormList name="definitions" />
-      <AntFormList name="sentences" />
+      {showFormList && (
+        <>
+          <AntFormList name="definitions" />
+          <AntFormList name="sentences" />
+        </>
+      )}
       <Form.Item>
         <div className={AdminStyle.formItemSub}>
           <Button type="primary" htmlType="submit" loading={loading}>
