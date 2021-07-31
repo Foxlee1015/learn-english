@@ -4,51 +4,52 @@ import ExplanationCard from "./common/ExplanationCard";
 import styles from "../styles/pages/Verb.module.css";
 import useSelectItem from "../hooks/useSelectItem";
 
-import * as Data from "../data";
-
-const verbResources = Data.verbs;
-const verbList = Object.keys(verbResources);
-
-const VerbList = () => {
-  const verbs = useSelectItem(verbList);
-  const particles = useSelectItem([]);
+const VerbList = ({ data }) => {
+  const verbs = useSelectItem(data, "verb");
+  const particles = useSelectItem([], "particle");
   const [cardData, setCardData] = useState({});
   const [searchText, setSearchText] = useState("");
 
-  const resetParticles = () => {
-    particles.setSelectedItem(""); // auto select after sorting in SelectItem component
-    particles.setItems([]); // reset particles when a selected verb is changed
+  const updateParticleList = (selectedVerb) => {
+    const selectedVerbParticles = [];
+    if (selectedVerb) {
+      for (const key in selectedVerb.particles) {
+        selectedVerbParticles.push({
+          ...selectedVerb.particles[key],
+          particle: key,
+        });
+      }
+    }
+    particles.setItems([...selectedVerbParticles]);
   };
 
-  const updateParticles = useCallback(() => {
-    resetParticles();
-    if (verbs.selectedItem !== "") {
-      const curVerbParticles = Object.keys(verbResources[verbs.selectedItem]);
-      particles.setItems(curVerbParticles);
-    }
+  useEffect(() => {
+    const selectedVerb = verbs.items.find(
+      (item) => item.verb === verbs.selectedItem
+    );
+    updateParticleList(selectedVerb);
   }, [verbs.selectedItem]);
 
-  useEffect(() => {
-    updateParticles();
-  }, [updateParticles]);
-
   const setPhrasalVerbInfo = () => {
-    const verb = verbs.selectedItem;
-    const particle = particles.selectedItem;
+    const selectedVerb = verbs.selectedItem;
+    const selectedVParticle = particles.selectedItem;
     let definitions = [];
-    let sentenses = [];
+    let sentences = [];
 
-    if (verb !== "" && particle !== "") {
-      if (verbResources[verb][particle]) {
-        [definitions, sentenses] = verbResources[verb][particle];
+    if (selectedVerb !== "" && selectedVParticle !== "") {
+      const phrasalVerbInfo = particles.items.find(
+        (item) => item.particle === selectedVParticle
+      );
+      if (phrasalVerbInfo) {
+        ({ definitions, sentences } = phrasalVerbInfo);
       }
     }
 
     setCardData({
-      title: verb,
-      subTitle: particle,
+      title: selectedVerb,
+      subTitle: selectedVParticle,
       definitions,
-      sentenses,
+      sentences,
     });
   };
 
@@ -59,10 +60,10 @@ const VerbList = () => {
   const filterVerbList = () => {
     verbs.setSelectedItem(""); // auto select after sorting in SelectItem component
     if (searchText === "") {
-      verbs.setItems([...verbList]);
+      verbs.setItems([...data]);
     } else {
-      const filteredVerbs = verbList.filter((verb) =>
-        verb.includes(searchText.toLowerCase())
+      const filteredVerbs = data.filter((item) =>
+        item.verb.includes(searchText.toLowerCase())
       );
       verbs.setItems([...filteredVerbs]);
     }

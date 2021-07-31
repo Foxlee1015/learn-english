@@ -2,25 +2,36 @@ import { useEffect, useState } from "react";
 import styles from "../../styles/components/SelectItem.module.css";
 import LoadingIndicator from "./LoadingIndicator";
 
-const SelectItem = ({
-  items,
-  selectedItem,
-  setSelectedItem,
-  sort = "desc",
-}) => {
+const stringSort = (sortKey) => (a, b) => {
+  if (a[sortKey] < b[sortKey]) return -1;
+  if (a[sortKey] > b[sortKey]) return 1;
+  return 0;
+};
+
+const SelectItem = ({ items, sortKey, selectedItem, setSelectedItem }) => {
   const [sortedItems, setSortedItems] = useState([]);
 
   useEffect(() => {
-    setSortedItems([...items].sort());
+    const sorted = items.sort(stringSort(sortKey));
+    setSortedItems([...sorted]);
   }, [items]);
+
+  const selectFristElementIfNotExist = () => {
+    if (
+      selectedItem === "" ||
+      !sortedItems.find((item) => item[sortKey] == selectedItem)
+    ) {
+      setSelectedItem(sortedItems[0][sortKey]);
+    }
+  };
 
   useEffect(() => {
     if (sortedItems.length === 0) {
       setSelectedItem("");
-    } else if (selectedItem === "") {
-      setSelectedItem(sortedItems[0]);
+    } else {
+      selectFristElementIfNotExist();
     }
-  }, [sortedItems, setSelectedItem]);
+  }, [sortedItems]);
 
   return (
     <div className={styles.scrollableContainer}>
@@ -30,14 +41,14 @@ const SelectItem = ({
           sortedItems.map((item) => (
             <button
               className={`${styles.item} ${
-                selectedItem === item && styles.checked
+                item[sortKey] === selectedItem && styles.checked
               }`}
-              key={item}
+              key={item[sortKey]}
               onClick={() => {
-                setSelectedItem(item);
+                setSelectedItem(item[[sortKey]]);
               }}
             >
-              {item}
+              {item[sortKey]}
             </button>
           ))}
       </div>

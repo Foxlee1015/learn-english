@@ -1,21 +1,49 @@
 .container {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
   color: #000000d9;
   font-size: 14px;
-  font-variant: tabular-nums;
-  line-height: 1.5715;
-  list-style: none;
-  font-feature-settings: "tnum";
   position: relative;
-  background: #fff;
   border-radius: 2px;
+  box-sizing: border-box;
+  padding: 10px;
+  margin: 10px
 }
 
 .head {
   color: #000000d9;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1.5715;
+}
+
+
+.headSub {
+  color: #000000d9;
   font-weight: 500;
   font-size: 16px;
   line-height: 1.5715;
+}
+
+
+.text {
+  color: #000000d9;
+  font-weight: 500;
+  font-size: 124x;
+  padding-left: 10px;
+}
+
+.tag {
+  width: 80px;
+  text-align: center;
+  color: #c41d7f;
+  background: #fff0f6;
+  border-color: #ffadd2;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+  padding: 0 7px;
+  font-size: 12px;
+  border: 1px solid #d9d9d9;
+  border-radius: 2px;
+  opacity: 0.9;
+  transition: all .3s;
 }
