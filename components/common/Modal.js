@@ -12,7 +12,7 @@ const Modal = ({header="", main="", buttons=[]}) => {
         </div>
         <div className={ModalStyles.btnContainer}>
             {buttons.map(button=>(
-                <button key={button} type="button" onClick={()=>button.onClick()}>{button.text}</button>
+                <button className={ModalStyles.btn} key={button} type="button" onClick={()=>button.onClick()}>{button.text}</button>
             ))}
         </div>
       </div>
