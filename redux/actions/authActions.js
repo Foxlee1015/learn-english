@@ -18,44 +18,44 @@ export const authenticate = (user) => (dispatch) => {
           path: "/",
           maxAge: 60 * 60 * 24,
         });
-        dispatch({ type: AUTHENTICATE});
+        dispatch({ type: AUTHENTICATE });
       }
     });
 };
 
-export const reauthenticate = ()  => (dispatch)=> {
+export const reauthenticate = () => (dispatch) => {
   const cookies = new Cookies();
-  const session = cookies.get("EID_SES")
+  const session = cookies.get("EID_SES");
   if (session) {
     fetch(`${server}/api/sessions/validate`, {
       headers: {
         "Content-Type": "application/json",
-        "Authorization": session
-      }
+        Authorization: session,
+      },
     })
       .then((response) => {
-          dispatch({ type: AUTHENTICATE});
+        dispatch({ type: AUTHENTICATE });
       })
-      .catch(()=>{
-        dispatch({ type: DEAUTHENTICATE})
+      .catch(() => {
+        dispatch({ type: DEAUTHENTICATE });
       });
   } else {
-    dispatch({ type: DEAUTHENTICATE})
+    dispatch({ type: DEAUTHENTICATE });
   }
 };
 
-export const deauthenticate = ()  => (dispatch) => {
+export const deauthenticate = () => (dispatch) => {
+  console.log("dde");
   const cookies = new Cookies();
-  const session = cookies.get("EID_SES")
+  const session = cookies.get("EID_SES");
+  cookies.remove("EID_SES", { path: "/" });
   fetch(`${server}/api/sessions/`, {
     headers: {
       "Content-Type": "application/json",
-      "Authorization": session
+      Authorization: session,
     },
     method: "DELETE",
-  })
-    .then((response) => {
-        cookies.remove("EID_SES")
-        dispatch({ type: DEAUTHENTICATE});
-    });
+  }).then((response) => {
+    dispatch({ type: DEAUTHENTICATE });
+  });
 };
