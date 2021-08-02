@@ -5,6 +5,7 @@ import {
   replaceText,
   randomElement,
   randomArrayShuffle,
+  getRandomItems,
 } from "../../utils/utils";
 import Modal from "../../components/common/Modal";
 
@@ -45,40 +46,30 @@ const PhrasalVerbs = () => {
     setVerbData({ ...data.result[0] });
   };
 
+  const setQuiz = () => {
+    const randomParticle = randomProperty(verbData.particles);
+    const { definitions, sentences } = verbData.particles[randomParticle];
+    const randomParticles = getRandomItems({
+      src: particleResources,
+      remove: randomParticle,
+      itemCount: 3,
+    });
+
+    const shffledParticles = randomArrayShuffle(
+      Array.from(randomParticles.add(randomParticle))
+    );
+
+    setParticle(randomParticle);
+    setDefinitions(definitions);
+    setSentenses(sentences);
+    setAnswers([...shffledParticles]);
+  };
+
   useEffect(() => {
-    console.log(verbData, particle)
     if (Object.keys(verbData).length !== 0) {
-      const randomParticle = randomProperty(verbData.particles);
-      const { definitions, sentences } = verbData.particles[randomParticle];
-      const randomParticles = getRandomItems({
-        src: particleResources,
-        remove: randomParticle,
-        itemCount: 3,
-      });
-
-      const shffledParticles = randomArrayShuffle(
-        Array.from(randomParticles.add(randomParticle))
-      );
-
-      setParticle(randomParticle);
-      setDefinitions(definitions);
-      setSentenses(sentences);
-      setAnswers([...shffledParticles]);
+      setQuiz();
     }
   }, [verbData]);
-
-  const getRandomItems = ({ src, remove, itemCount }) => {
-    const result = new Set();
-    const removeIndex = src.indexOf(remove);
-    if (removeIndex > -1) {
-      src.splice(removeIndex, 1);
-    }
-
-    while (result.size < itemCount) {
-      result.add(randomElement(src));
-    }
-    return result;
-  };
 
   const checkAnswer = (clickedAnswer) => {
     if (clickedAnswer === particle) {
@@ -107,35 +98,30 @@ const PhrasalVerbs = () => {
       </div>
       <div>
         {sentenses.map((sentense) => (
-          <p key={sentense}>
-            {replaceText(sentense, particle, "___")}
-          </p>
+          <p key={sentense}>{replaceText(sentense, particle, "___")}</p>
         ))}
       </div>
       <div className={styles.btnContainer}>
-          {answers.map((answer) => (
-            <button
-              className={styles.btn}
-              disabled={clickedAnswers.includes(answer)}
-              key={answer}
-              onClick={(e) => checkAnswer(answer)}
-            >
-              {answer}
-            </button>
-          ))}
-        </div>
-      {showModal && <Modal 
-        header={`${verbData.verb}-${particle}`}
-        main={sentenses.map((sentense) => (
-          <p key={sentense}>
-            {sentense}
-          </p>
+        {answers.map((answer) => (
+          <button
+            className={styles.btn}
+            disabled={clickedAnswers.includes(answer)}
+            key={answer}
+            onClick={(e) => checkAnswer(answer)}
+          >
+            {answer}
+          </button>
         ))}
-        buttons={[
-          {onClick:nextQuiz, text:"Next"}
-        ]}
-        />}
-        
+      </div>
+      {showModal && (
+        <Modal
+          header={`${verbData.verb}-${particle}`}
+          main={sentenses.map((sentense) => (
+            <p key={sentense}>{sentense}</p>
+          ))}
+          buttons={[{ onClick: nextQuiz, text: "Next" }]}
+        />
+      )}
     </div>
   );
 };

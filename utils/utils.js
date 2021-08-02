@@ -31,3 +31,16 @@ export const createQueryParams = (params) => {
     .map((k) => encodeURIComponent(k) + "=" + encodeURIComponent(params[k]))
     .join("&");
 };
+
+export const getRandomItems = ({ src, remove, itemCount }) => {
+  const result = new Set();
+  const removeIndex = src.indexOf(remove);
+  if (removeIndex > -1) {
+    src.splice(removeIndex, 1);
+  }
+
+  while (result.size < itemCount) {
+    result.add(randomElement(src));
+  }
+  return result;
+};
