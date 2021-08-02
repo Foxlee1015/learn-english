@@ -1,5 +1,8 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import navStyles from "../styles/components/Nav.module.css";
+import { useSelector, useDispatch } from "react-redux";
+import { deauthenticate } from "../redux/actions/authActions";
 
 const routes = [
   { href: "/", text: "Home" },
@@ -10,6 +13,15 @@ const routes = [
 ];
 
 const Nav = () => {
+  const auth = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    dispatch(deauthenticate());
+    router.push("/");
+  };
+
   return (
     <nav className={navStyles.nav}>
       <ul>
@@ -19,6 +31,15 @@ const Nav = () => {
           </li>
         ))}
       </ul>
+      {auth.loggedIn ? (
+        <button className={navStyles.linkText} onClick={() => handleLogout()}>
+          Logout
+        </button>
+      ) : (
+        <button className={navStyles.linkText}>
+          <Link href={"/member/signin"}>Signin</Link>
+        </button>
+      )}
     </nav>
   );
 };

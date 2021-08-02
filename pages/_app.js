@@ -1,19 +1,18 @@
+import { Provider } from "react-redux";
+import { useStore } from "../redux";
+
 import Layout from "../components/Layout";
-import AdminNav from "../components/admin/AdminNav";
 import "../styles/globals.css";
 import "../styles/styles.css";
 
-import { useRouter } from "next/router";
-
-function MyApp({ Component, pageProps }) {
-  const { asPath } = useRouter();
+export default function MyApp({ Component, pageProps }) {
+  const store = useStore(pageProps.initialReduxState);
 
   return (
-    <Layout>
-      {asPath.includes("/admin") && <AdminNav />}
-      <Component {...pageProps} />
-    </Layout>
+    <Provider store={store}>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    </Provider>
   );
 }
-
-export default MyApp;
