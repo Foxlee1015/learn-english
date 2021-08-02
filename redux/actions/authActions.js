@@ -1,8 +1,8 @@
 import { server } from "../../config";
 import { AUTHENTICATE, DEAUTHENTICATE } from "../actionTypes";
+import Cookies from "universal-cookie";
 
 export const authenticate = (user) => (dispatch) => {
-  console.log(user);
   fetch(`${server}/api/sessions/`, {
     body: JSON.stringify(user),
     headers: {
@@ -18,22 +18,36 @@ export const authenticate = (user) => (dispatch) => {
           path: "/",
           maxAge: 60 * 60 * 24,
         });
-        dispatch({ type: AUTHENTICATE, payload: true });
+        dispatch({ type: AUTHENTICATE});
       }
     });
 };
 
-// gets the token from the cookie and saves it in the store
-export const reauthenticate = (token) => {
-  return (dispatch) => {
-    dispatch({ type: AUTHENTICATE, payload: token });
-  };
+export const reauthenticate = ()  => (dispatch)=> {
+  const cookies = new Cookies();
+  fetch(`${server}/api/sessions/validate`, {
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": cookies.get("EID_SES")
+    }
+  })
+    .then((response) => {
+        dispatch({ type: AUTHENTICATE});
+    });
 };
 
-export const deauthenticate = () => {
-  return (dispatch) => {
-    removeCookie("token");
-    Router.push("/");
-    dispatch({ type: DEAUTHENTICATE });
-  };
+export const deauthenticate = ()  => (dispatch) => {
+  const cookies = new Cookies();
+  const session = cookies.get("EID_SES")
+  cookies.remove("EID_SES")
+  fetch(`${server}/api/sessions/`, {
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": session
+    },
+    method: "DELETE",
+  })
+    .then((response) => {
+        dispatch({ type: DEAUTHENTICATE});
+    });
 };

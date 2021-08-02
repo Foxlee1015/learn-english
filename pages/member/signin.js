@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
-import { connect } from "react-redux";
-// import Cookies from "universal-cookie";
-import { authenticate } from "../../redux/actions/authActions";
-// import { server } from "../../config";
 import { useRouter } from "next/router";
+
+import { useSelector, useDispatch } from 'react-redux'
+import { authenticate } from '../../redux/actions/authActions'
 
 const initialValues = {
   username: "",
@@ -13,6 +12,8 @@ const initialValues = {
 const Signin = ({}) => {
   const router = useRouter();
   const [values, setValues] = useState(initialValues);
+  const auth = useSelector((state) => state.auth)
+  const dispatch = useDispatch()
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,9 +23,15 @@ const Signin = ({}) => {
     });
   };
 
+  useEffect(()=>{
+    if (auth.loggedIn) {
+      router.push("/");
+    }
+  },[auth])
+
   const submit = () => {
     if (values.username !== "" && values.password !== "") {
-      authenticate(values);
+      dispatch(authenticate(values));
     }
   };
 
@@ -33,26 +40,6 @@ const Signin = ({}) => {
       submit();
     }
   };
-
-  // const userLogin = async (values) => {
-  //   const res = await fetch(`${server}/api/sessions/`, {
-  //     body: JSON.stringify(values),
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     method: "POST",
-  //   });
-
-  //   const response = await res.json();
-  //   if (response && response.result) {
-  //     const cookies = new Cookies();
-  //     cookies.set("EID_SES", response.result, {
-  //       path: "/",
-  //       maxAge: 60 * 60 * 24,
-  //     });
-  //     router.push("/");
-  //   }
-  // };
 
   return (
     <>
@@ -77,4 +64,4 @@ const Signin = ({}) => {
   );
 };
 
-export default connect((state) => state, { authenticate })(Signin);
+export default Signin;
