@@ -1,6 +1,6 @@
 import { AUTHENTICATE, DEAUTHENTICATE } from "../actionTypes";
 
-const authReducer = (state = { loggedIn: false }, action) => {
+const authReducer = (state = { loggedIn: null }, action) => {
   switch (action.type) {
     case AUTHENTICATE:
       return { ...state, loggedIn: true };

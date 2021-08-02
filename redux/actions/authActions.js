@@ -25,21 +25,28 @@ export const authenticate = (user) => (dispatch) => {
 
 export const reauthenticate = ()  => (dispatch)=> {
   const cookies = new Cookies();
-  fetch(`${server}/api/sessions/validate`, {
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": cookies.get("EID_SES")
-    }
-  })
-    .then((response) => {
-        dispatch({ type: AUTHENTICATE});
-    });
+  const session = cookies.get("EID_SES")
+  if (session) {
+    fetch(`${server}/api/sessions/validate`, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": session
+      }
+    })
+      .then((response) => {
+          dispatch({ type: AUTHENTICATE});
+      })
+      .catch(()=>{
+        dispatch({ type: DEAUTHENTICATE})
+      });
+  } else {
+    dispatch({ type: DEAUTHENTICATE})
+  }
 };
 
 export const deauthenticate = ()  => (dispatch) => {
   const cookies = new Cookies();
   const session = cookies.get("EID_SES")
-  cookies.remove("EID_SES")
   fetch(`${server}/api/sessions/`, {
     headers: {
       "Content-Type": "application/json",
@@ -48,6 +55,7 @@ export const deauthenticate = ()  => (dispatch) => {
     method: "DELETE",
   })
     .then((response) => {
+        cookies.remove("EID_SES")
         dispatch({ type: DEAUTHENTICATE});
     });
 };
