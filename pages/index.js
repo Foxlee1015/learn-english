@@ -12,13 +12,13 @@ const cards = [
     desc: "An idiom is a phrase, saying, or a group of words with a metaphorical (not literal) meaning.",
     href: "/idioms",
   },
+  { title: "Quiz", desc: "Prasal verbs / Idioms quiz", href: "/quiz" },
   {
     title: "Prepositions",
     desc: "A preposition is a word or group of words used before a noun, pronoun, or noun phrase to show direction, time, place, location, spatial relationships, or to introduce an object.",
     href: "/prepositions",
     disabled: true,
   },
-  { title: "Quiz", desc: "Prasal verbs / Idioms quiz", href: "/quiz" },
 ];
 
 const Home = ({}) => {
