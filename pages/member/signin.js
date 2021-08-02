@@ -1,37 +1,40 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import { useSelector, useDispatch } from "react-redux";
 
-import { useSelector, useDispatch } from 'react-redux'
-import { authenticate } from '../../redux/actions/authActions'
+import { authenticate } from "../../redux/actions/authActions";
+import useInput from "../../hooks/useInput";
 
-const initialValues = {
-  username: "",
-  password: "",
-};
+import signinStyles from "../../styles/components/Signin.module.css";
 
 const Signin = ({}) => {
   const router = useRouter();
-  const [values, setValues] = useState(initialValues);
-  const auth = useSelector((state) => state.auth)
-  const dispatch = useDispatch()
+  const username = useInput("username", "username", "text");
+  const password = useInput("password", "password", "password");
+  const [errMsg, setErrMsg] = useState("");
+  const [openSubmit, setOpenSubmit] = useState(false);
+  const dispatch = useDispatch();
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setValues({
-      ...values,
-      [name]: value,
-    });
-  };
-
-  useEffect(()=>{
-    if (auth.loggedIn) {
-      router.push("/");
+  useEffect(() => {
+    if (username.value !== "" && password.value !== "") {
+      setOpenSubmit(true);
+    } else {
+      setOpenSubmit(false);
     }
-  },[auth])
+  }, [username.value, password.value]);
 
   const submit = () => {
-    if (values.username !== "" && values.password !== "") {
-      dispatch(authenticate(values));
+    if (username.value !== "" && password.value !== "") {
+      dispatch(
+        authenticate(
+          {
+            username: username.value,
+            password: password.value,
+          },
+          () => router.push("/"),
+          (err) => setErrMsg(err)
+        )
+      );
     }
   };
 
@@ -44,22 +47,21 @@ const Signin = ({}) => {
   return (
     <>
       <h2>Signin</h2>
+      <input {...username} className={signinStyles.input}></input>
       <input
-        name="username"
-        placeholder="username"
-        type="text"
-        onChange={handleChange}
-      ></input>
-      <input
-        name="password"
-        placeholder="password"
-        type="password"
-        onChange={handleChange}
+        {...password}
+        className={signinStyles.input}
         onKeyDown={handleKeyDown}
       ></input>
-      <button type="button" onClick={(e) => submit(e)}>
+      <button
+        type="button"
+        className={signinStyles.btn}
+        disabled={!openSubmit}
+        onClick={(e) => submit(e)}
+      >
         Submit
       </button>
+      {errMsg}
     </>
   );
 };
