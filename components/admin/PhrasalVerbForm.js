@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Form, Input, Button, InputNumber } from "antd";
-
-import { createQueryParams } from "../../utils/utils";
+import Cookies from "universal-cookie";
 import { server } from "../../config";
 import AntFormList from "./common/AntFormList";
 
@@ -21,10 +20,13 @@ const validateMessages = {
 };
 
 const addPhrasalVerb = async (data) => {
+  const cookies = new Cookies();
+  const session = cookies.get("EID_SES");
   const res = await fetch(`${server}/api/phrasal-verbs/`, {
     body: JSON.stringify(data),
     headers: {
       "Content-Type": "application/json",
+      Authorization: session,
     },
     method: "POST",
   });
@@ -52,13 +54,12 @@ const PhrasalVerbForm = () => {
     setLoading(false);
   };
 
-  useEffect(()=>{
-    const {verb} = form.getFieldValue()
+  useEffect(() => {
+    const { verb } = form.getFieldValue();
     if (verb !== "") {
-      getVerbData(verb)
+      getVerbData(verb);
     }
-
-  }, [form.getFieldValue().verb])
+  }, [form.getFieldValue().verb]);
 
   const getVerbData = async (verb) => {
     setVerbData({});
@@ -71,14 +72,13 @@ const PhrasalVerbForm = () => {
     }
   };
 
-  useEffect(()=>{
-    const {particle} = form.getFieldValue()
-    updateFormList(particle)
-
-  },[verbData])
+  useEffect(() => {
+    const { particle } = form.getFieldValue();
+    updateFormList(particle);
+  }, [verbData]);
 
   const updateFormList = (particle) => {
-    setShowFormList(false)
+    setShowFormList(false);
     let definitions = [];
     let sentences = [];
 
@@ -93,8 +93,8 @@ const PhrasalVerbForm = () => {
       definitions,
       sentences,
     });
-    
-    setShowFormList(true)
+
+    setShowFormList(true);
   };
 
   const getCurrentVerbParticleData = async (verb) => {
