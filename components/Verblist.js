@@ -11,6 +11,7 @@ const VerbList = ({ data }) => {
   const particles = useSelectItem([], "particle");
   const [cardData, setCardData] = useState({});
   const [searchText, setSearchText] = useState("");
+  const [searchFullText, setSearchFullText] = useState(false);
 
   const updateParticleList = (selectedVerb) => {
     const selectedVerbParticles = [];
@@ -56,14 +57,37 @@ const VerbList = ({ data }) => {
   };
 
   useEffect(() => {
+    getPhrasalVerbList();
+  }, []);
+
+  useEffect(() => {
     setPhrasalVerbInfo();
   }, [verbs.selectedItem, particles.selectedItem]);
 
+  const getPhrasalVerbList = async () => {
+    try {
+      const params = createQueryParams({
+        only_verb: 1,
+      });
+      const res = await fetch(
+        `${"http://localhost:8002"}/api/phrasal-verbs/?${params}`
+      );
+      const data = await res.json();
+      verbs.setItems([...data.result]);
+    } catch {}
+  };
+
   const getPhrasalVerbs = async () => {
     if (searchText !== "") {
+      const fullSearch = searchFullText ? 1 : 0;
       try {
-        const params = createQueryParams({ search_key: searchText });
-        const res = await fetch(`${server}/api/phrasal-verbs/?${params}`);
+        const params = createQueryParams({
+          search_key: searchText,
+          full_search: fullSearch,
+        });
+        const res = await fetch(
+          `${"http://localhost:8002"}/api/phrasal-verbs/?${params}`
+        );
         const data = await res.json();
         verbs.setItems([...data.result]);
       } catch {}
@@ -95,6 +119,15 @@ const VerbList = ({ data }) => {
         onBlur={() => getPhrasalVerbs()}
         onChange={(e) => setSearchText(e.target.value)}
       />
+      <div>
+        <input
+          type="checkbox"
+          className={styles.checkbox}
+          checked={searchFullText}
+          onClick={() => setSearchFullText(!searchFullText)}
+        ></input>
+      </div>
+
       <div className={styles.flex}>
         {<SelectItem {...verbs} />}
         {<SelectItem {...particles} />}
