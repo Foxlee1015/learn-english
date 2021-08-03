@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { deauthenticate } from "../../redux/actions/authActions";
 import { Menu } from "antd";
 import AdminNavStyle from "../../styles/components/AdminNav.module.css";
@@ -21,6 +21,8 @@ const routes = [
 const AdminNav = () => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+
   const [current, setCurrent] = useState("");
 
   useEffect(() => {
@@ -44,9 +46,11 @@ const AdminNav = () => {
             <Link href={route.href}>{route.text}</Link>
           </Menu.Item>
         ))}
-        <Menu.Item key="logout" style={{ marginLeft: "auto" }}>
-          <button onClick={() => handleLogout()}>Logout</button>
-        </Menu.Item>
+        {auth.loggedIn && (
+          <Menu.Item key="logout" style={{ marginLeft: "auto" }}>
+            <button onClick={() => handleLogout()}>Logout</button>
+          </Menu.Item>
+        )}
       </Menu>
     </div>
   );

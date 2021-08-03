@@ -1,5 +1,6 @@
 import PhrasalVerbForm from "../../components/admin/PhrasalVerbForm";
 import PhrasalVerbList from "../../components/admin/PhrasalVerbList";
+import ProtectedRoute from "../../HOC/ProtectedRoute";
 
 import AdminStyle from "../../styles/pages/admin/Admin.module.css";
 
@@ -12,4 +13,4 @@ const PhrasalVerbs = () => {
   );
 };
 
-export default PhrasalVerbs;
+export default ProtectedRoute(PhrasalVerbs);

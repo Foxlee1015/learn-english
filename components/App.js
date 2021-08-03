@@ -4,16 +4,10 @@ import { reauthenticate } from "../redux/actions/authActions";
 
 const App = ({ children }) => {
   const dispatch = useDispatch();
-  const auth = useSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(reauthenticate());
-    console.log("test");
   }, []);
-
-  useEffect(() => {
-    console.log(auth);
-  }, [auth]);
 
   return children;
 };
