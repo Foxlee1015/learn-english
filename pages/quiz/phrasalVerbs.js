@@ -21,8 +21,7 @@ const particleResources = Data.particles;
 const PhrasalVerbs = () => {
   const [verbData, setVerbData] = useState({});
   const [particle, setParticle] = useState("");
-  const [definitions, setDefinitions] = useState("");
-  const [showHint, setShowHint] = useState(false);
+  const [definitions, setDefinitions] = useState([]);
   const [sentenses, setSentenses] = useState([]);
   const [answers, setAnswers] = useState([]);
   const [clickedAnswers, setClickedAnswers] = useState([]);
@@ -31,7 +30,6 @@ const PhrasalVerbs = () => {
   const nextQuiz = () => {
     setClickedAnswers([]);
     setShowModal(false);
-    setShowHint(false);
     getRandomVerb();
   };
 
@@ -47,21 +45,19 @@ const PhrasalVerbs = () => {
   };
 
   const setQuiz = () => {
-    const randomParticle = randomProperty(verbData.particles);
-    const { definitions, sentences } = verbData.particles[randomParticle];
     const randomParticles = getRandomItems({
       src: particleResources,
-      remove: randomParticle,
+      remove: verbData.particle,
       itemCount: 3,
     });
 
     const shffledParticles = randomArrayShuffle(
-      Array.from(randomParticles.add(randomParticle))
+      Array.from(randomParticles.add(verbData.particle))
     );
 
-    setParticle(randomParticle);
-    setDefinitions(definitions);
-    setSentenses(sentences);
+    setParticle(verbData.particle);
+    setDefinitions([...verbData.definitions]);
+    setSentenses([...verbData.sentences]);
     setAnswers([...shffledParticles]);
   };
 
@@ -74,7 +70,6 @@ const PhrasalVerbs = () => {
   const checkAnswer = (clickedAnswer) => {
     if (clickedAnswer === particle) {
       setShowModal(true);
-      setShowHint(true);
     } else {
       setClickedAnswers([...clickedAnswers, clickedAnswer]);
     }
@@ -87,12 +82,8 @@ const PhrasalVerbs = () => {
       <div className={styles.header}>
         <h6></h6>
         <div className={styles.tagBox}>
-          <button className={styles.tag} onClick={() => setShowHint(true)}>
-            Hint
-          </button>
-          {showHint &&
-            definitions.map((definition) => (
-              <p key={definition}>{definition}</p>
+          {definitions.map((definition) => (
+            <p key={definition}>{definition}</p>
             ))}
         </div>
       </div>
