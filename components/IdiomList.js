@@ -92,8 +92,7 @@ const IdiomList = ({ data }) => {
       <div className={[styles.strechChildBox]}>
         <SelectItem {...idioms} />
       </div>
-
-      <ExplanationCard {...cardData} />
+        <ExplanationCard {...cardData} />
     </div>
   );
 };
