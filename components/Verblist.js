@@ -3,6 +3,8 @@ import SelectItem from "./common/SelectItem";
 import ExplanationCard from "./common/ExplanationCard";
 import styles from "../styles/pages/Verb.module.css";
 import useSelectItem from "../hooks/useSelectItem";
+import { createQueryParams } from "../utils/utils";
+import { server } from "../config";
 
 const VerbList = ({ data }) => {
   const verbs = useSelectItem(data, "verb");
@@ -57,6 +59,17 @@ const VerbList = ({ data }) => {
     setPhrasalVerbInfo();
   }, [verbs.selectedItem, particles.selectedItem]);
 
+  const getPhrasalVerbs = async () => {
+    if (searchText !== "") {
+      try {
+        const params = createQueryParams({ search_key: searchText });
+        const res = await fetch(`${server}/api/phrasal-verbs/?${params}`);
+        const data = await res.json();
+        verbs.setItems([...data.result]);
+      } catch {}
+    }
+  };
+
   const filterVerbList = () => {
     verbs.setSelectedItem(""); // auto select after sorting in SelectItem component
     if (searchText === "") {
@@ -79,6 +92,7 @@ const VerbList = ({ data }) => {
         className={styles.input}
         placeholder="Type verb"
         type="text"
+        onBlur={() => getPhrasalVerbs()}
         onChange={(e) => setSearchText(e.target.value)}
       />
       <div className={styles.flex}>

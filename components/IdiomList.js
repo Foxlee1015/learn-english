@@ -3,6 +3,8 @@ import SelectItem from "./common/SelectItem";
 import ExplanationCard from "./common/ExplanationCard";
 import useSelectItem from "../hooks/useSelectItem";
 import styles from "../styles/pages/Idiom.module.css";
+import { createQueryParams } from "../utils/utils";
+import { server } from "../config";
 
 const IdiomList = ({ data }) => {
   const idioms = useSelectItem(data, "expression");
@@ -20,6 +22,18 @@ const IdiomList = ({ data }) => {
     }
   };
 
+  const getIdioms = async () => {
+    if (searchText !== "") {
+      try {
+        const params = createQueryParams({ search_key: searchText });
+        const res = await fetch(`${server}/api/idioms/?${params}`);
+        const data = await res.json();
+        idioms.setItems([...data.result]);
+        idioms.setSelectedItem(data.result[0]["expression"]);
+      } catch {}
+    }
+  };
+
   useEffect(() => {
     filterVerbList();
   }, [searchText]);
@@ -29,10 +43,9 @@ const IdiomList = ({ data }) => {
     let definitions = [];
     let sentences = [];
 
-    const selectedIdiom = data.find(
+    const selectedIdiom = idioms.items.find(
       (item) => item["expression"] === idioms.selectedItem
     );
-    console.log(selectedIdiom)
     if (selectedIdiom) {
       ({ expression, definitions, sentences } = selectedIdiom);
     }
@@ -53,6 +66,7 @@ const IdiomList = ({ data }) => {
         className={styles.input}
         placeholder="Find idioms"
         type="text"
+        onBlur={() => getIdioms()}
         onChange={(e) => setSearchText(e.target.value)}
       />
       <div className={[styles.strechChildBox]}>
