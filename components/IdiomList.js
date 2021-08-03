@@ -10,6 +10,7 @@ const IdiomList = ({ data }) => {
   const idioms = useSelectItem(data, "expression");
   const [cardData, setCardData] = useState({});
   const [searchText, setSearchText] = useState("");
+  const [searchFullText, setSearchFullText] = useState(false);
 
   const filterVerbList = () => {
     if (searchText === "") {
@@ -24,8 +25,12 @@ const IdiomList = ({ data }) => {
 
   const getIdioms = async () => {
     if (searchText !== "") {
+      const fullSearch = searchFullText ? 1 : 0;
       try {
-        const params = createQueryParams({ search_key: searchText });
+        const params = createQueryParams({
+          search_key: searchText,
+          full_search: fullSearch,
+        });
         const res = await fetch(`${server}/api/idioms/?${params}`);
         const data = await res.json();
         idioms.setItems([...data.result]);
@@ -69,6 +74,15 @@ const IdiomList = ({ data }) => {
         onBlur={() => getIdioms()}
         onChange={(e) => setSearchText(e.target.value)}
       />
+
+      <div>
+        <input
+          type="checkbox"
+          className={styles.checkbox}
+          checked={searchFullText}
+          onClick={() => setSearchFullText(!searchFullText)}
+        ></input>
+      </div>
       <div className={[styles.strechChildBox]}>
         <SelectItem {...idioms} />
       </div>
