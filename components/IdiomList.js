@@ -80,7 +80,7 @@ const IdiomList = ({ data }) => {
           type="checkbox"
           className={styles.checkbox}
           checked={searchFullText}
-          onClick={() => setSearchFullText(!searchFullText)}
+          onChange={(e) => setSearchFullText(e.target.checked)}
         ></input>
       </div>
       <div className={[styles.strechChildBox]}>

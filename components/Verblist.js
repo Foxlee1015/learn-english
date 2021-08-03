@@ -70,7 +70,7 @@ const VerbList = ({ data }) => {
         only_verb: 1,
       });
       const res = await fetch(
-        `${"http://localhost:8002"}/api/phrasal-verbs/?${params}`
+        `${server}/api/phrasal-verbs/?${params}`
       );
       const data = await res.json();
       verbs.setItems([...data.result]);
@@ -86,7 +86,7 @@ const VerbList = ({ data }) => {
           full_search: fullSearch,
         });
         const res = await fetch(
-          `${"http://localhost:8002"}/api/phrasal-verbs/?${params}`
+          `${server}/api/phrasal-verbs/?${params}`
         );
         const data = await res.json();
         verbs.setItems([...data.result]);
@@ -124,7 +124,7 @@ const VerbList = ({ data }) => {
           type="checkbox"
           className={styles.checkbox}
           checked={searchFullText}
-          onClick={() => setSearchFullText(!searchFullText)}
+          onChange={(e) => setSearchFullText(e.target.checked)}
         ></input>
       </div>
 
