@@ -83,6 +83,12 @@ const IdiomList = ({ data }) => {
           onChange={(e) => setSearchFullText(e.target.checked)}
         ></input>
       </div>
+      
+      <button
+        type="button"
+        onClick={() => getIdioms()}>
+        Search
+      </button>
       <div className={[styles.strechChildBox]}>
         <SelectItem {...idioms} />
       </div>

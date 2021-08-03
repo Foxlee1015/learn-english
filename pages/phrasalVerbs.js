@@ -2,6 +2,7 @@ import Meta from "../components/Meta";
 import VerbList from "../components/Verblist";
 import Header from "../components/Header";
 import { server } from "../config";
+import { createQueryParams } from "../utils/utils";
 
 const phrasalVerbs = ({ phrasalVerbs }) => {
   return (
@@ -14,9 +15,13 @@ const phrasalVerbs = ({ phrasalVerbs }) => {
 };
 
 export const getStaticProps = async () => {
-  const res = await fetch(`${server}/api/phrasal-verbs/`);
+  const params = createQueryParams({
+    only_verb: 1,
+  });
+  const res = await fetch(`${server}/api/phrasal-verbs/?${params}`);
   const data = await res.json();
-  const phrasalVerbs = data.result;
+  const phrasalVerbs = data.result.map(verb=>({"verb":verb}));
+
 
   return {
     props: {
