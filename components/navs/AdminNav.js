@@ -36,22 +36,24 @@ const AdminNav = () => {
 
   return (
     <div className={AdminNavStyle.container}>
-      <Menu
-        onClick={(e) => setCurrent(e.key)}
-        selectedKeys={[current]}
-        mode="horizontal"
-      >
-        {routes.map((route) => (
-          <Menu.Item key={route.key}>
-            <Link href={route.href}>{route.text}</Link>
-          </Menu.Item>
-        ))}
-        {auth.loggedIn && (
+      {auth.loggedIn ? (
+        <Menu
+          onClick={(e) => setCurrent(e.key)}
+          selectedKeys={[current]}
+          mode="horizontal"
+        >
+          {routes.map((route) => (
+            <Menu.Item key={route.key}>
+              <Link href={route.href}>{route.text}</Link>
+            </Menu.Item>
+          ))}
           <Menu.Item key="logout" style={{ marginLeft: "auto" }}>
             <button onClick={() => handleLogout()}>Logout</button>
           </Menu.Item>
-        )}
-      </Menu>
+        </Menu>
+      ) : (
+        <p>authenticating...</p>
+      )}
     </div>
   );
 };
