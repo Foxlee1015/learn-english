@@ -13,32 +13,40 @@ const VerbList = ({ data }) => {
   const [searchText, setSearchText] = useState("");
   const [searchFullText, setSearchFullText] = useState(false);
 
-  useEffect(()=>{
-    updateParticleList()
-  }, [verbs.items, verbs.selectedItem])
+  useEffect(() => {
+    updateParticleList();
+  }, [verbs.items, verbs.selectedItem]);
+
+  useEffect(() => {
+    setPhrasalVerbInfo();
+  }, [verbs.selectedItem, particles.selectedItem]);
+
+  useEffect(() => {
+    getPhrasalVerbs();
+  }, [searchText, searchFullText]);
 
   const updateParticleList = async () => {
+    console.log(verbs.items, verbs.selectedItem);
     if (verbs.items.length > 0 && verbs.items[0].particle) {
-      particles.setItems([...verbs.items])
-    } else if (verbs.items.length === 0 ||verbs.selectedItem === "") {
-      particles.setItems([])
-      particles.setSelectedItem("")
+      particles.setItems([...verbs.items]);
+    } else if (verbs.items.length === 0 || verbs.selectedItem === "") {
+      particles.setItems([]); // todo
+      particles.setSelectedItem("");
     } else {
       const data = await getParticles();
-      particles.setItems([...data])
+      particles.setItems([...data]);
     }
-  }
-  
+  };
+
   const getParticles = async () => {
-    // TODO: TOO MANY CALLS
     try {
       const res = await fetch(
         `${server}/api/phrasal-verbs/${verbs.selectedItem}`
       );
       const data = await res.json();
-      return data.result
+      return data.result;
     } catch {
-      return []
+      return [];
     }
   };
 
@@ -63,10 +71,6 @@ const VerbList = ({ data }) => {
     });
   };
 
-  useEffect(() => {
-    setPhrasalVerbInfo();
-  }, [verbs.selectedItem, particles.selectedItem]);
-
   const getPhrasalVerbs = async () => {
     if (searchText !== "") {
       const fullSearch = searchFullText ? 1 : 0;
@@ -75,24 +79,29 @@ const VerbList = ({ data }) => {
           search_key: searchText,
           full_search: fullSearch,
         });
-        const res = await fetch(
-          `${server}/api/phrasal-verbs/?${params}`
-        );
+        const res = await fetch(`${server}/api/phrasal-verbs/?${params}`);
         const data = await res.json();
-        verbs.setItems([...data.result]);
+        const selectVerbs = new Set();
+        for (const verbData of data.result) {
+          selectVerbs.add(verbData.verb);
+        }
+        const selectVerbsObject = Array.from(selectVerbs).map((item) => {
+          return { verb: item };
+        });
+        verbs.setItems([...selectVerbsObject]);
       } catch {}
     }
   };
 
   const filterVerbList = () => {
     verbs.setSelectedItem(""); // auto select after sorting in SelectItem component
-    if (searchText !== "")  {
+    if (searchText !== "") {
       const filteredVerbs = data.filter((item) =>
         item.verb.includes(searchText.toLowerCase())
       );
       verbs.setItems([...filteredVerbs]);
     } else {
-      verbs.setItems([...data])
+      verbs.setItems([...data]);
     }
   };
 
@@ -106,7 +115,6 @@ const VerbList = ({ data }) => {
         className={styles.input}
         placeholder="Type verb"
         type="text"
-        onBlur={() => getPhrasalVerbs()}
         onChange={(e) => setSearchText(e.target.value)}
       />
       <div>
@@ -117,12 +125,6 @@ const VerbList = ({ data }) => {
           onChange={(e) => setSearchFullText(e.target.checked)}
         ></input>
       </div>
-      <button
-        type="button"
-        onClick={() => getPhrasalVerbs()}>
-        Search
-      </button>
-
       <div className={styles.flex}>
         {<SelectItem {...verbs} />}
         {<SelectItem {...particles} />}
