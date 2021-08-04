@@ -48,7 +48,6 @@ export const reauthenticate = () => (dispatch) => {
     })
       .then((res) => {
         if (res.status === 200) {
-          console.log(res.status);
           return res.json();
         }
       })

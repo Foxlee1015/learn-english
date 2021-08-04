@@ -78,7 +78,6 @@ const VerbList = ({ data }) => {
           `${server}/api/phrasal-verbs/?${params}`
         );
         const data = await res.json();
-        console.log(data.result)
         verbs.setItems([...data.result]);
       } catch {}
     }
