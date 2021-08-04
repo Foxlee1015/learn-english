@@ -12,7 +12,7 @@ import AccountLayout from "../components/layouts/AccountLayout";
 export default function MyApp({ Component, pageProps, router: { route } }) {
   const store = useStore(pageProps.initialReduxState);
 
-  const getDefaultLayout = function getLayout(page) {
+  const getLayout = (page) => {
     let LayoutComponent = Layout;
     if (route.includes("admin")) {
       LayoutComponent = ProtectedRoute(AdminLayout);
@@ -22,7 +22,7 @@ export default function MyApp({ Component, pageProps, router: { route } }) {
     return <LayoutComponent>{page}</LayoutComponent>;
   };
 
-  const getLayout = getDefaultLayout || ((page) => page);
+  // const getLayout = getDefaultLayout || ((page) => page);
 
   return (
     <Provider store={store}>

@@ -26,8 +26,8 @@ const cards = [
 const Home = ({}) => {
   return (
     <>
-      <Meta title="Learn Enlish! idioms, phrasal verbs" />
-      <Header title="Learn Enlish" />
+      <Meta title="Learn English! idioms, phrasal verbs" />
+      <Header title="Learn English" />
       <div className={Homestyles.grid}>
         {cards.map(({ title, desc, href, disabled }) => (
           <LinkCard
