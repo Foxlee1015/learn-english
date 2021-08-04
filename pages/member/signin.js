@@ -32,8 +32,7 @@ const Signin = ({}) => {
             password: password.value,
           },
           () => {
-            router.push("/");    
-            dispatch(reauthenticate());
+            router.push("/");
         },
           (err) => setErrMsg(err)
         )

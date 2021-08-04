@@ -23,12 +23,12 @@ export const authenticate =
       .then((response) => {
         if (response && response.result) {
           const cookies = new Cookies();
-          cookies.set("EID_SES", response.result, {
+          const {session, name, is_admin} = response.result
+          cookies.set("EID_SES", session, {
             path: "/",
             maxAge: 60 * 60 * 24,
           });
-          dispatch({ type: AUTHENTICATE });
-          // dispatch({ type: AUTHENTICATE, payload: response.result }); change after updating server response
+          dispatch({ type: AUTHENTICATE, payload: {name, is_admin} });
           successCallback();
         }
       })

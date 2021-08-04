@@ -10,7 +10,6 @@ const initialState = {
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case AUTHENTICATE:
-      return { ...state, loggedIn: true };
     case REAUTHENTICATE:
       return { loggedIn: true, ...action.payload };
     case DEAUTHENTICATE:
