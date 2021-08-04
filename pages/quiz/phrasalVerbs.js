@@ -83,7 +83,7 @@ const PhrasalVerbs = () => {
       <Meta title="Phrasal Verb quiz" />
       <Header title="Phrasal Verb quiz" />
       <div className={quizStyles.header}>
-        <h4>Question</h4>
+        <h4>Pick a preposition or adverb for the blank</h4>
       </div>
       <div className={quizStyles.tagBox}>
         {definitions.map((definition) => (

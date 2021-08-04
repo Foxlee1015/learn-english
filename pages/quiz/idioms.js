@@ -81,7 +81,7 @@ const Idioms = () => {
       <Meta title="Idioms quiz" />
       <Header title="Idioms quiz" />
       <div className={quizStyles.header}>
-        <h4>Question</h4>
+        <h4>Pick an idiom meaning:</h4>
       </div>
       <div>
         {definitions.map((definition) => (
