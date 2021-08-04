@@ -28,6 +28,7 @@ export const authenticate =
             maxAge: 60 * 60 * 24,
           });
           dispatch({ type: AUTHENTICATE });
+          // dispatch({ type: AUTHENTICATE, payload: response.result }); change after updating server response
           successCallback();
         }
       })

@@ -10,7 +10,7 @@ const initialValues = {
   expression: "",
   definitions: [],
   sentences: [],
-  reviewed: false,
+  isPublic: false,
 };
 
 const validateMessages = {
@@ -18,6 +18,8 @@ const validateMessages = {
 };
 
 const addIdiom = async (values) => {
+  values.is_public = values.isPublic;
+  delete values.isPublic;
   const cookies = new Cookies();
   const session = cookies.get("EID_SES");
   const res = await fetch(`${server}/api/idioms/`, {
@@ -60,7 +62,7 @@ const IdiomForm = () => {
       <AntFormList name="definitions" />
       <AntFormList name="sentences" />
 
-      <Form.Item label="Public" name={"reviewed"}>
+      <Form.Item label="Public" name={"isPublic"}>
         <Switch />
       </Form.Item>
       <Form.Item>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Form, Input, Button, InputNumber } from "antd";
+import { Form, Input, Button, InputNumber, Switch } from "antd";
 import Cookies from "universal-cookie";
 import { server } from "../../config";
 import AntFormList from "./common/AntFormList";
@@ -11,7 +11,7 @@ const initialValues = {
   particle: "",
   definitions: [],
   sentences: [],
-  reviewed: false,
+  isPublic: false,
   difficulty: 1,
 };
 
@@ -20,6 +20,8 @@ const validateMessages = {
 };
 
 const addPhrasalVerb = async (data) => {
+  data.is_public = data.isPublic;
+  delete data.isPublic;
   const cookies = new Cookies();
   const session = cookies.get("EID_SES");
   const res = await fetch(`${server}/api/phrasal-verbs/`, {
@@ -36,7 +38,7 @@ const addPhrasalVerb = async (data) => {
 const PhrasalVerbForm = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const [verbData, setVerbData] = useState({});
+  const [verbData, setVerbData] = useState([]);
   const [showFormList, setShowFormList] = useState(false);
 
   const onFinish = (values) => {
@@ -62,12 +64,12 @@ const PhrasalVerbForm = () => {
   }, [form.getFieldValue().verb]);
 
   const getVerbData = async (verb) => {
-    setVerbData({});
+    setVerbData([]);
 
     if (verb !== "") {
       const currentVerbData = await getCurrentVerbParticleData(verb);
       if (currentVerbData) {
-        setVerbData({ ...currentVerbData });
+        setVerbData([...currentVerbData]);
       }
     }
   };
@@ -83,8 +85,9 @@ const PhrasalVerbForm = () => {
     let sentences = [];
 
     if (particle !== "") {
-      if (verbData && verbData.particles && verbData.particles[particle]) {
-        ({ definitions, sentences } = verbData.particles[particle]);
+      const phrasalVerb = verbData.find(verb=>verb.particle===particle)
+      if (phrasalVerb) {
+        ({ definitions, sentences } = phrasalVerb);
       }
     }
 
@@ -141,6 +144,10 @@ const PhrasalVerbForm = () => {
         </>
       )}
       <Form.Item>
+        
+      <Form.Item label="Public" name={"isPublic"}>
+        <Switch />
+      </Form.Item>
         <div className={AdminStyle.formItemSub}>
           <Button type="primary" htmlType="submit" loading={loading}>
             Submit
