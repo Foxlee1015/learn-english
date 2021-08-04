@@ -1,15 +1,17 @@
 import { useState } from "react";
-import { Form, Input, Switch, Button } from "antd";
+import { Form, Input, Switch, Button, InputNumber } from "antd";
 import { server } from "../../config";
 import AntFormList from "./common/AntFormList";
 import Cookies from "universal-cookie";
 
+import {renameObjectKey} from "../../utils/utils"
 import AdminStyle from "../../styles/pages/admin/Admin.module.css";
 
 const initialValues = {
   expression: "",
   definitions: [],
   sentences: [],
+  difficulty: 1,
   isPublic: false,
 };
 
@@ -18,8 +20,7 @@ const validateMessages = {
 };
 
 const addIdiom = async (values) => {
-  values.is_public = values.isPublic;
-  delete values.isPublic;
+  renameObjectKey({src:values, oldKey:"isPublic", newKey:"is_public"})
   const cookies = new Cookies();
   const session = cookies.get("EID_SES");
   const res = await fetch(`${server}/api/idioms/`, {
@@ -59,12 +60,20 @@ const IdiomForm = () => {
       >
         <Input />
       </Form.Item>
+      <div className={AdminStyle.formSubContainer}>
+        <Form.Item
+          name={"difficulty"}
+          label="Difficulty"
+          rules={[{ type: "number", min: 1, max: 5 }]}
+        >
+          <InputNumber />
+        </Form.Item>
+        <Form.Item label="Public" name={"isPublic"} valuePropName="checked">
+          <Switch />
+        </Form.Item>
+      </div>
       <AntFormList name="definitions" />
       <AntFormList name="sentences" />
-
-      <Form.Item label="Public" name={"isPublic"}>
-        <Switch />
-      </Form.Item>
       <Form.Item>
         <div className={AdminStyle.formItemSub}>
           <Button type="primary" htmlType="submit" loading={loading}>

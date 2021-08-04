@@ -4,6 +4,7 @@ import Cookies from "universal-cookie";
 import { server } from "../../config";
 import AntFormList from "./common/AntFormList";
 
+import {renameObjectKey} from "../../utils/utils"
 import AdminStyle from "../../styles/pages/admin/Admin.module.css";
 
 const initialValues = {
@@ -11,8 +12,8 @@ const initialValues = {
   particle: "",
   definitions: [],
   sentences: [],
-  isPublic: false,
   difficulty: 1,
+  isPublic: false,
 };
 
 const validateMessages = {
@@ -20,8 +21,7 @@ const validateMessages = {
 };
 
 const addPhrasalVerb = async (data) => {
-  data.is_public = data.isPublic;
-  delete data.isPublic;
+  renameObjectKey({src:data, oldKey:"isPublic", newKey:"is_public"})
   const cookies = new Cookies();
   const session = cookies.get("EID_SES");
   const res = await fetch(`${server}/api/phrasal-verbs/`, {
@@ -42,15 +42,9 @@ const PhrasalVerbForm = () => {
   const [showFormList, setShowFormList] = useState(false);
 
   const onFinish = (values) => {
-    const { verb, particle, sentences, definitions, difficulty } = values;
-
     setLoading(true);
     addPhrasalVerb({
-      verb,
-      particle,
-      level: difficulty,
-      sentences,
-      definitions,
+      ...values
     });
     form.resetFields();
     setLoading(false);
@@ -83,11 +77,14 @@ const PhrasalVerbForm = () => {
     setShowFormList(false);
     let definitions = [];
     let sentences = [];
+    let difficulty = 1
+    let isPublic = false
 
     if (particle !== "") {
       const phrasalVerb = verbData.find(verb=>verb.particle===particle)
       if (phrasalVerb) {
-        ({ definitions, sentences } = phrasalVerb);
+        ({ definitions, sentences, difficulty} = phrasalVerb);
+        isPublic = phrasalVerb["is_public"] === 1 ? true : false
       }
     }
 
@@ -95,6 +92,8 @@ const PhrasalVerbForm = () => {
       ...form.getFieldValue(),
       definitions,
       sentences,
+      difficulty,
+      isPublic
     });
 
     setShowFormList(true);
@@ -130,13 +129,18 @@ const PhrasalVerbForm = () => {
       >
         <Input onBlur={(e) => updateFormList(e.target.value)} />
       </Form.Item>
-      <Form.Item
-        name={"difficulty"}
-        label="Difficulty"
-        rules={[{ type: "number", min: 1, max: 5 }]}
-      >
-        <InputNumber />
-      </Form.Item>
+      <div className={AdminStyle.formSubContainer}>
+        <Form.Item
+          name={"difficulty"}
+          label="Difficulty"
+          rules={[{ type: "number", min: 1, max: 5 }]}
+        >
+          <InputNumber />
+        </Form.Item>
+        <Form.Item label="Public" name={"isPublic"} valuePropName="checked">
+          <Switch />
+        </Form.Item>
+      </div>
       {showFormList && (
         <>
           <AntFormList name="definitions" />
@@ -144,10 +148,6 @@ const PhrasalVerbForm = () => {
         </>
       )}
       <Form.Item>
-        
-      <Form.Item label="Public" name={"isPublic"}>
-        <Switch />
-      </Form.Item>
         <div className={AdminStyle.formItemSub}>
           <Button type="primary" htmlType="submit" loading={loading}>
             Submit
