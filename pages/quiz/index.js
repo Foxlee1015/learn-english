@@ -1,4 +1,4 @@
-import quizStyle from "../../styles/pages/quiz/QuizHome.module.css";
+import quizHomeStyle from "../../styles/pages/quiz/QuizHome.module.css";
 import { useRouter } from "next/router";
 
 const btnLinks = [
@@ -10,13 +10,13 @@ const Quiz = ({}) => {
   const router = useRouter();
 
   return (
-    <div className={quizStyle.container}>
+    <div className={quizHomeStyle.container}>
       {btnLinks.map((btnLink) => (
         <button
           key={btnLink.url}
           type="button"
           onClick={() => router.push(btnLink.url)}
-          className={quizStyle.linkBtn}
+          className={quizHomeStyle.linkBtn}
         >
           {btnLink.text}
         </button>

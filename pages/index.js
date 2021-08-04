@@ -1,3 +1,5 @@
+import Meta from "../components/Meta";
+import Header from "../components/Header";
 import LinkCard from "../components/common/LinkCard";
 import Homestyles from "../styles/pages/Home.module.css";
 
@@ -23,17 +25,21 @@ const cards = [
 
 const Home = ({}) => {
   return (
-    <div className={Homestyles.grid}>
-      {cards.map(({ title, desc, href, disabled }) => (
-        <LinkCard
-          key={title}
-          title={title}
-          desc={desc}
-          href={href}
-          disabled={disabled}
-        />
-      ))}
-    </div>
+    <>
+      <Meta title="Learn Enlish! idioms, phrasal verbs" />
+      <Header title="Learn Enlish" />
+      <div className={Homestyles.grid}>
+        {cards.map(({ title, desc, href, disabled }) => (
+          <LinkCard
+            key={title}
+            title={title}
+            desc={desc}
+            href={href}
+            disabled={disabled}
+          />
+        ))}
+      </div>
+    </>
   );
 };
 

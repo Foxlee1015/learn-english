@@ -1,15 +1,14 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Meta from "../../components/Meta";
+import Header from "../../components/Header";
 import {
-  randomProperty,
   replaceText,
-  randomElement,
   randomArrayShuffle,
   getRandomItems,
 } from "../../utils/utils";
 import Modal from "../../components/common/Modal";
 
-import styles from "../../styles/pages/Game.module.css";
+import quizStyles from "../../styles/pages/Quiz.module.css";
 
 import { server } from "../../config";
 import { createQueryParams } from "../../utils/utils";
@@ -27,6 +26,10 @@ const PhrasalVerbs = () => {
   const [clickedAnswers, setClickedAnswers] = useState([]);
   const [showModal, setShowModal] = useState(false);
 
+  useEffect(() => {
+    getRandomVerb();
+  }, []);
+
   const nextQuiz = () => {
     setClickedAnswers([]);
     setShowModal(false);
@@ -34,14 +37,20 @@ const PhrasalVerbs = () => {
   };
 
   useEffect(() => {
-    getRandomVerb();
-  }, []);
+    if (Object.keys(verbData).length !== 0) {
+      setQuiz();
+    }
+  }, [verbData]);
 
   const getRandomVerb = async () => {
-    const params = createQueryParams({ random_verb_count: 1 });
-    const res = await fetch(`${server}/api/phrasal-verbs/?${params}`);
-    const data = await res.json();
-    setVerbData({ ...data.result[0] });
+    try {
+      const params = createQueryParams({ random_verb_count: 1 });
+      const res = await fetch(`${server}/api/phrasal-verbs/?${params}`);
+      const data = await res.json();
+      setVerbData({ ...data.result[0] });
+    } catch {
+      setVerbData({});
+    }
   };
 
   const setQuiz = () => {
@@ -61,12 +70,6 @@ const PhrasalVerbs = () => {
     setAnswers([...shffledParticles]);
   };
 
-  useEffect(() => {
-    if (Object.keys(verbData).length !== 0) {
-      setQuiz();
-    }
-  }, [verbData]);
-
   const checkAnswer = (clickedAnswer) => {
     if (clickedAnswer === particle) {
       setShowModal(true);
@@ -78,24 +81,24 @@ const PhrasalVerbs = () => {
   return (
     <div>
       <Meta title="Phrasal Verb quiz" />
-      <h5>Phrasal Verb quiz</h5>
-      <div className={styles.header}>
-        <h6></h6>
-        <div className={styles.tagBox}>
-          {definitions.map((definition) => (
-            <p key={definition}>{definition}</p>
-            ))}
-        </div>
+      <Header title="Phrasal Verb quiz" />
+      <div className={quizStyles.header}>
+        <h4>Question</h4>
+      </div>
+      <div className={quizStyles.tagBox}>
+        {definitions.map((definition) => (
+          <p key={definition}>{definition}</p>
+        ))}
       </div>
       <div>
         {sentenses.map((sentense) => (
           <p key={sentense}>{replaceText(sentense, particle, "___")}</p>
         ))}
       </div>
-      <div className={styles.btnContainer}>
+      <div className={quizStyles.btnContainer}>
         {answers.map((answer) => (
           <button
-            className={styles.btn}
+            className={quizStyles.btn}
             disabled={clickedAnswers.includes(answer)}
             key={answer}
             onClick={(e) => checkAnswer(answer)}

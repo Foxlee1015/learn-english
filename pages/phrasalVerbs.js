@@ -15,19 +15,26 @@ const phrasalVerbs = ({ phrasalVerbs }) => {
 };
 
 export const getStaticProps = async () => {
-  const params = createQueryParams({
-    only_verb: 1,
-  });
-  const res = await fetch(`${server}/api/phrasal-verbs/?${params}`);
-  const data = await res.json();
-  const phrasalVerbs = data.result.map(verb=>({"verb":verb}));
+  try {
+    const params = createQueryParams({
+      only_verb: 1,
+    });
+    const res = await fetch(`${server}/api/phrasal-verbs/?${params}`);
+    const data = await res.json();
+    const phrasalVerbs = data.result.map((verb) => ({ verb }));
 
-
-  return {
-    props: {
-      phrasalVerbs,
-    },
-  };
+    return {
+      props: {
+        phrasalVerbs,
+      },
+    };
+  } catch {
+    return {
+      props: {
+        phrasalVerbs: [],
+      },
+    };
+  }
 };
 
 export default phrasalVerbs;
