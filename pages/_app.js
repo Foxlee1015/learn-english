@@ -1,13 +1,14 @@
 import { Provider } from "react-redux";
 import { useStore } from "../redux";
 
-import Layout from "../components/layouts/Layout";
-import "../styles/globals.css";
-import "../styles/styles.css";
 import ProtectedRoute from "../HOC/ProtectedRoute"
 import App from "../components/App";
+import Layout from "../components/layouts/Layout";
 import AdminLayout from "../components/layouts/AdminLayout";
 import AccountLayout from "../components/layouts/AccountLayout";
+
+import "../styles/globals.css";
+import "../styles/styles.css";
 
 export default function MyApp({ Component, pageProps, router: { route } }) {
   const store = useStore(pageProps.initialReduxState);
@@ -21,8 +22,6 @@ export default function MyApp({ Component, pageProps, router: { route } }) {
     }
     return <LayoutComponent>{page}</LayoutComponent>;
   };
-
-  // const getLayout = getDefaultLayout || ((page) => page);
 
   return (
     <Provider store={store}>

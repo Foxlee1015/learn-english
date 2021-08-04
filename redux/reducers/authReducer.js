@@ -1,14 +1,20 @@
 import { AUTHENTICATE, DEAUTHENTICATE, REAUTHENTICATE } from "../actionTypes";
 
-const authReducer = (state = { loggedIn: null }, action) => {
-  console.log(action);
+const initialState = {
+  loggedIn: false,
+  name: null,
+  is_admin: 0,
+}
+
+
+const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case AUTHENTICATE:
       return { ...state, loggedIn: true };
     case REAUTHENTICATE:
-      return { ...state, ...action.payload, loggedIn: true };
+      return { loggedIn: true, ...action.payload };
     case DEAUTHENTICATE:
-      return { ...state, loggedIn: false };
+      return { ...initialState };
     default:
       return state;
   }

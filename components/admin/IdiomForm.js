@@ -28,9 +28,7 @@ const addIdiom = async (values) => {
     },
     method: "POST",
   });
-
   const result = await res.json();
-  console.log(result);
 };
 
 const IdiomForm = () => {

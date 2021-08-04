@@ -31,6 +31,11 @@ const Nav = () => {
         ))}
       </ul>
       <div className={navStyles.buttons}>
+        {auth.is_admin === 1 && (
+          <button className={navStyles.linkText}>
+          <Link href={"/admin"}>Admin</Link>
+        </button>
+        )}
         {auth.loggedIn ? (
           <>
             <button className={navStyles.linkText}>
