@@ -30,6 +30,7 @@ const VerbList = ({ data }) => {
   }
   
   const getParticles = async () => {
+    // TODO: TOO MANY CALLS
     try {
       const res = await fetch(
         `${server}/api/phrasal-verbs/${verbs.selectedItem}`
