@@ -9,15 +9,18 @@ const ProtectedRoute = (ProtectedComponent) => {
     if (typeof window !== "undefined") {
       const Router = useRouter();
       const auth = useSelector((state) => state.auth);
-      console.log(auth, Router);
       if (auth.loggedIn === null) {
         return <DynamicComponent />;
       }
-      if (Router.pathname.includes("admin") && auth.is_admin !== 1) {
-        Router.replace("/");
-        return null;
-      }
       if (auth.loggedIn) {
+        if (Router.pathname.includes("admin")) {
+          if (auth.is_admin === 1) {
+            return <ProtectedComponent {...props} />;
+          } else {
+            Router.replace("/");
+            return null;
+          }
+        }
         return <ProtectedComponent {...props} />;
       } else {
         Router.replace("/");

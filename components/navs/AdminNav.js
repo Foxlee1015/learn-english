@@ -36,7 +36,7 @@ const AdminNav = () => {
 
   return (
     <div className={AdminNavStyle.container}>
-      {auth.loggedIn ? (
+      {auth.is_admin === 1 ? (
         <Menu
           onClick={(e) => setCurrent(e.key)}
           selectedKeys={[current]}
