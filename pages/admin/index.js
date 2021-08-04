@@ -1,5 +1,3 @@
-import ProtectedRoute from "../../HOC/ProtectedRoute";
-
 const Admin = ({}) => {
   return (
     <>
@@ -8,4 +6,4 @@ const Admin = ({}) => {
   );
 };
 
-export default ProtectedRoute(Admin);
+export default Admin

@@ -4,6 +4,7 @@ import { useStore } from "../redux";
 import Layout from "../components/layouts/Layout";
 import "../styles/globals.css";
 import "../styles/styles.css";
+import ProtectedRoute from "../HOC/ProtectedRoute"
 import App from "../components/App";
 import AdminLayout from "../components/layouts/AdminLayout";
 import AccountLayout from "../components/layouts/AccountLayout";
@@ -14,9 +15,9 @@ export default function MyApp({ Component, pageProps, router: { route } }) {
   const getDefaultLayout = function getLayout(page) {
     let LayoutComponent = Layout;
     if (route.includes("admin")) {
-      LayoutComponent = AdminLayout;
+      LayoutComponent = ProtectedRoute(AdminLayout);
     } else if (route.includes("account")) {
-      LayoutComponent = AccountLayout;
+      LayoutComponent = ProtectedRoute(AccountLayout);
     }
     return <LayoutComponent>{page}</LayoutComponent>;
   };
