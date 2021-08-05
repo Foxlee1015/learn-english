@@ -5,13 +5,14 @@ import useSelectItem from "../hooks/useSelectItem";
 import styles from "../styles/pages/Idiom.module.css";
 import { createQueryParams } from "../utils/utils";
 import { server } from "../config";
+import useInputSearch from "../hooks/useInputSearch"
+
 
 const IdiomList = ({ originData }) => {
   const idioms = useSelectItem(originData, "expression");
+  const [inputSearch, setInputSearchPlaceholder] = useInputSearch();
   const [cardData, setCardData] = useState({});
-  const [searchText, setSearchText] = useState("");
   const [searchFullText, setSearchFullText] = useState(false);
-  const [placeholder, setPlaceholder] = useState("");
   
   useEffect(()=>{
     if (originData && originData.length === 0) {
@@ -21,18 +22,18 @@ const IdiomList = ({ originData }) => {
 
   useEffect(() => {
     setIdiomInfo();
-  }, [idioms.selectedItem, searchText]);
+  }, [idioms.selectedItem, inputSearch.value,]);
   
   useEffect(() => {
     resetItems()
     updateIdiomList();
-  }, [searchText, searchFullText]);
+  }, [inputSearch.value,, searchFullText]);
   
   useEffect(() => {
     if (searchFullText) {
-      setPlaceholder("Find idioms in definitions and sentences")
+      setInputSearchPlaceholder("Find idioms in definitions and sentences")
     } else {
-      setPlaceholder("Search.....")
+      setInputSearchPlaceholder("Search.....")
     }
   }, [searchFullText]);
 
@@ -47,10 +48,10 @@ const IdiomList = ({ originData }) => {
 };
 
   const getSearchIdioms = async () => {
-    const fullSearch = searchText !== "" && searchFullText ? 1 : 0;
+    const fullSearch = inputSearch.value !== "" && searchFullText ? 1 : 0;
     try {
       const params = createQueryParams({
-        search_key: searchText,
+        search_key: inputSearch.value,
         full_search: fullSearch,
       });
       const res = await fetch(`${server}/api/idioms/?${params}`);
@@ -82,10 +83,8 @@ const IdiomList = ({ originData }) => {
   return (
     <div className={styles.wrapper}>
       <input
-        className={styles.input}
-        placeholder={placeholder}
-        type="text"
-        onChange={(e) => setSearchText(e.target.value)}
+        {...inputSearch}
+        className={styles.input}  
       />
       <div>
         <input

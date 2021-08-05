@@ -5,7 +5,7 @@ import styles from "../styles/pages/Verb.module.css";
 import useSelectItem from "../hooks/useSelectItem";
 import { createQueryParams } from "../utils/utils";
 import { server } from "../config";
-import IdiomList from "./IdiomList";
+import useInputSearch from "../hooks/useInputSearch"
 
 
 const setUniqueVerbList = (items) => {
@@ -25,9 +25,9 @@ const setUniqueVerbList = (items) => {
 
 const VerbList = ({ originData }) => {
   const verbs = useSelectItem(originData, "verb");
+  const [inputSearch, setInputSearchPlaceholder] = useInputSearch();
   const particles = useSelectItem([], "particle");
   const [cardData, setCardData] = useState({});
-  const [searchText, setSearchText] = useState("");
   const [searchFullText, setSearchFullText] = useState(false);
 
   useEffect(()=>{
@@ -35,6 +35,14 @@ const VerbList = ({ originData }) => {
       updateVerbList();
     }
   },[])
+
+  useEffect(() => {
+    if (searchFullText) {
+      setInputSearchPlaceholder("Find phrasal verbs in definitions and sentences")
+    } else {
+      setInputSearchPlaceholder("Search.....")
+    }
+  }, [searchFullText]);
 
   useEffect(() => {
     updateParticleList();
@@ -47,7 +55,7 @@ const VerbList = ({ originData }) => {
   useEffect(() => {
     resetItems()
     updateVerbList();
-  }, [searchText, searchFullText]);
+  }, [inputSearch.value, searchFullText]);
 
   const updateVerbList = async () => {
       const searchVerbs = await getSearchVerbs()
@@ -59,12 +67,10 @@ const VerbList = ({ originData }) => {
     verbs.setSelectedItem("")
   }
 
-  
   const resetParticles = () => {
     particles.setItems([])
     particles.setSelectedItem("")
   }
-
 
   const resetItems = () => {
     resetVerbs()
@@ -115,9 +121,9 @@ const VerbList = ({ originData }) => {
 
  const getSearchVerbs = async () => {
   try {
-    const fullSearch = searchFullText ? 1 : 0;
+    const fullSearch = inputSearch.value !== "" && searchFullText ? 1 : 0;
     const params = createQueryParams({
-      search_key: searchText,
+      search_key: inputSearch.value,
       full_search: fullSearch,
     });
     const res = await fetch(`${server}/api/phrasal-verbs/?${params}`);
@@ -132,10 +138,8 @@ const VerbList = ({ originData }) => {
   return (
     <div className={styles.wrapper}>
       <input
+        {...inputSearch}
         className={styles.input}
-        placeholder="Type verb"
-        type="text"
-        onChange={(e) => setSearchText(e.target.value)}
       />
       <div>
         <input
