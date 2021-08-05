@@ -4,12 +4,11 @@ const useSelectItem = (data, sortKey) => {
   const [items, setItems] = useState([]);
   const [selectedItem, setSelectedItem] = useState("");
 
-  // useEffect(() => {
-  //   console.log(data)
-  //   if (data && data.length > 0) {
-  //     setItems([...data]);
-  //   }
-  // }, [data]);
+  useEffect(() => {
+    if (data && data.length > 0) {
+      setItems([...data]);
+    }
+  }, []);
 
   return {
     items,

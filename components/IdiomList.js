@@ -6,42 +6,48 @@ import styles from "../styles/pages/Idiom.module.css";
 import { createQueryParams } from "../utils/utils";
 import { server } from "../config";
 
-const IdiomList = ({ data }) => {
-  const idioms = useSelectItem(data, "expression");
+const IdiomList = ({ originData }) => {
+  const idioms = useSelectItem(originData, "expression");
   const [cardData, setCardData] = useState({});
   const [searchText, setSearchText] = useState("");
   const [searchFullText, setSearchFullText] = useState(false);
-
-  const filterVerbList = () => {
-    if (searchText === "") {
-      idioms.setItems([...data]);
-    } else {
-      const filteredIdioms = data.filter((idiom) =>
-        idiom.expression.includes(searchText.toLowerCase())
-      );
-      idioms.setItems([...filteredIdioms]);
+  
+  useEffect(()=>{
+    if (originData && originData.length === 0) {
+      updateIdiomList();
     }
-  };
-
-  const getIdioms = async () => {
-    if (searchText !== "") {
-      const fullSearch = searchFullText ? 1 : 0;
-      try {
-        const params = createQueryParams({
-          search_key: searchText,
-          full_search: fullSearch,
-        });
-        const res = await fetch(`${server}/api/idioms/?${params}`);
-        const data = await res.json();
-        idioms.setItems([...data.result]);
-        idioms.setSelectedItem(data.result[0]["expression"]);
-      } catch {}
-    }
-  };
-
+  },[])
+  
   useEffect(() => {
-    filterVerbList();
-  }, [searchText]);
+    resetItems()
+    updateIdiomList();
+  }, [searchText, searchFullText]);
+
+  const resetItems = () => {
+    idioms.setItems([])
+    idioms.setSelectedItem("")
+  }
+
+  const updateIdiomList = async () => {
+    const searchIdioms = await getSearchIdioms()
+    console.log(searchIdioms)
+    idioms.setItems([...searchIdioms]);   
+};
+
+  const getSearchIdioms = async () => {
+    const fullSearch = searchFullText ? 1 : 0;
+    try {
+      const params = createQueryParams({
+        search_key: searchText,
+        full_search: fullSearch,
+      });
+      const res = await fetch(`${server}/api/idioms/?${params}`);
+      const data = await res.json();
+      return data.result
+      } catch {
+      return []
+    }
+  };
 
   const setIdiomInfo = () => {
     let expression = "";
@@ -71,10 +77,8 @@ const IdiomList = ({ data }) => {
         className={styles.input}
         placeholder="Find idioms"
         type="text"
-        onBlur={() => getIdioms()}
         onChange={(e) => setSearchText(e.target.value)}
       />
-
       <div>
         <input
           type="checkbox"
@@ -83,12 +87,6 @@ const IdiomList = ({ data }) => {
           onChange={(e) => setSearchFullText(e.target.checked)}
         ></input>
       </div>
-      
-      <button
-        type="button"
-        onClick={() => getIdioms()}>
-        Search
-      </button>
       <div className={[styles.strechChildBox]}>
         <SelectItem {...idioms} />
       </div>

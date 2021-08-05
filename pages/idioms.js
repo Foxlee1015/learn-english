@@ -21,13 +21,13 @@ export const getStaticProps = async () => {
 
     return {
       props: {
-        idioms,
+        originData: idioms,
       },
     };
   } catch {
     return {
       props: {
-        idioms: [],
+        originData: [],
       },
     };
   }
