@@ -6,12 +6,34 @@ import useSelectItem from "../hooks/useSelectItem";
 import { createQueryParams } from "../utils/utils";
 import { server } from "../config";
 
-const VerbList = ({ data }) => {
-  const verbs = useSelectItem(data, "verb");
+
+const setUniqueVerbList = (items) => {
+  try {
+    const uniqueVerbs = new Set();
+    for (const item of items) {
+      uniqueVerbs.add(item.verb)
+    }
+
+    return Array.from(uniqueVerbs).map(item=>{
+      return {verb:item}});
+  } catch {
+    return []
+  }
+}
+
+
+const VerbList = ({ originData }) => {
+  const verbs = useSelectItem(originData, "verb");
   const particles = useSelectItem([], "particle");
   const [cardData, setCardData] = useState({});
   const [searchText, setSearchText] = useState("");
   const [searchFullText, setSearchFullText] = useState(false);
+
+  useEffect(()=>{
+    if (originData && originData.length === 0) {
+      updateVerbList();
+    }
+  },[])
 
   useEffect(() => {
     updateParticleList();
@@ -22,16 +44,20 @@ const VerbList = ({ data }) => {
   }, [verbs.selectedItem, particles.selectedItem]);
 
   useEffect(() => {
-    getPhrasalVerbs();
+    resetItems()
+    updateVerbList();
   }, [searchText, searchFullText]);
 
+  const resetItems = () => {
+    verbs.setItems([])
+    verbs.setSelectedItem("")
+    particles.setItems([])
+    particles.setSelectedItem("")
+  }
+
   const updateParticleList = async () => {
-    console.log(verbs.items, verbs.selectedItem);
-    if (verbs.items.length > 0 && verbs.items[0].particle) {
-      particles.setItems([...verbs.items]);
-    } else if (verbs.items.length === 0 || verbs.selectedItem === "") {
-      particles.setItems([]); // todo
-      particles.setSelectedItem("");
+    if (verbs.items.length === 0 || verbs.selectedItem === "") {
+      particles.setItems([])
     } else {
       const data = await getParticles();
       particles.setItems([...data]);
@@ -40,11 +66,13 @@ const VerbList = ({ data }) => {
 
   const getParticles = async () => {
     try {
-      const res = await fetch(
-        `${server}/api/phrasal-verbs/${verbs.selectedItem}`
-      );
-      const data = await res.json();
-      return data.result;
+      if (verbs.selectedItem !== "") {
+        const res = await fetch(
+          `${server}/api/phrasal-verbs/${verbs.selectedItem}`
+        );
+        const data = await res.json();
+        return data.result;
+      }
     } catch {
       return [];
     }
@@ -71,43 +99,27 @@ const VerbList = ({ data }) => {
     });
   };
 
-  const getPhrasalVerbs = async () => {
-    if (searchText !== "") {
-      const fullSearch = searchFullText ? 1 : 0;
-      try {
-        const params = createQueryParams({
-          search_key: searchText,
-          full_search: fullSearch,
-        });
-        const res = await fetch(`${server}/api/phrasal-verbs/?${params}`);
-        const data = await res.json();
-        const selectVerbs = new Set();
-        for (const verbData of data.result) {
-          selectVerbs.add(verbData.verb);
-        }
-        const selectVerbsObject = Array.from(selectVerbs).map((item) => {
-          return { verb: item };
-        });
-        verbs.setItems([...selectVerbsObject]);
-      } catch {}
-    }
-  };
 
-  const filterVerbList = () => {
-    verbs.setSelectedItem(""); // auto select after sorting in SelectItem component
-    if (searchText !== "") {
-      const filteredVerbs = data.filter((item) =>
-        item.verb.includes(searchText.toLowerCase())
-      );
-      verbs.setItems([...filteredVerbs]);
-    } else {
-      verbs.setItems([...data]);
-    }
-  };
+ const getSearchVerbs = async () => {
+  try {
+    const fullSearch = searchFullText ? 1 : 0;
+    const params = createQueryParams({
+      search_key: searchText,
+      full_search: fullSearch,
+    });
+    const res = await fetch(`${server}/api/phrasal-verbs/?${params}`);
+    const data = await res.json();
+    const uniqueVerbs = setUniqueVerbList(data.result)
+    return uniqueVerbs
+  } catch {
+    return []
+  }
+ }
 
-  useEffect(() => {
-    filterVerbList();
-  }, [searchText, verbs.setItems]);
+  const updateVerbList = async () => {
+      const searchVerbs = await getSearchVerbs()
+      verbs.setItems([...searchVerbs]);
+  };
 
   return (
     <div className={styles.wrapper}>

@@ -22,16 +22,17 @@ export const getStaticProps = async () => {
     const res = await fetch(`${server}/api/phrasal-verbs/?${params}`);
     const data = await res.json();
     const phrasalVerbs = data.result.map((verb) => ({ verb }));
+    console.log(phrasalVerbs)
 
     return {
       props: {
-        phrasalVerbs,
+        originData: phrasalVerbs,
       },
     };
   } catch {
     return {
       props: {
-        phrasalVerbs: [],
+        originData: [],
       },
     };
   }
