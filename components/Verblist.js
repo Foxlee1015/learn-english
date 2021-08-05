@@ -5,6 +5,7 @@ import styles from "../styles/pages/Verb.module.css";
 import useSelectItem from "../hooks/useSelectItem";
 import { createQueryParams } from "../utils/utils";
 import { server } from "../config";
+import IdiomList from "./IdiomList";
 
 
 const setUniqueVerbList = (items) => {
@@ -48,16 +49,31 @@ const VerbList = ({ originData }) => {
     updateVerbList();
   }, [searchText, searchFullText]);
 
-  const resetItems = () => {
+  const updateVerbList = async () => {
+      const searchVerbs = await getSearchVerbs()
+      verbs.setItems([...searchVerbs]);
+  };
+
+  const resetVerbs = () => {
     verbs.setItems([])
     verbs.setSelectedItem("")
+  }
+
+  
+  const resetParticles = () => {
     particles.setItems([])
     particles.setSelectedItem("")
   }
 
+
+  const resetItems = () => {
+    resetVerbs()
+    resetParticles()
+  }
+
   const updateParticleList = async () => {
     if (verbs.items.length === 0 || verbs.selectedItem === "") {
-      particles.setItems([])
+      resetParticles()
     } else {
       const data = await getParticles();
       particles.setItems([...data]);
@@ -66,13 +82,11 @@ const VerbList = ({ originData }) => {
 
   const getParticles = async () => {
     try {
-      if (verbs.selectedItem !== "") {
         const res = await fetch(
           `${server}/api/phrasal-verbs/${verbs.selectedItem}`
         );
         const data = await res.json();
         return data.result;
-      }
     } catch {
       return [];
     }
@@ -99,7 +113,6 @@ const VerbList = ({ originData }) => {
     });
   };
 
-
  const getSearchVerbs = async () => {
   try {
     const fullSearch = searchFullText ? 1 : 0;
@@ -115,11 +128,6 @@ const VerbList = ({ originData }) => {
     return []
   }
  }
-
-  const updateVerbList = async () => {
-      const searchVerbs = await getSearchVerbs()
-      verbs.setItems([...searchVerbs]);
-  };
 
   return (
     <div className={styles.wrapper}>
@@ -141,8 +149,9 @@ const VerbList = ({ originData }) => {
         {<SelectItem {...verbs} />}
         {<SelectItem {...particles} />}
       </div>
-
-      <ExplanationCard {...cardData} />
+      {verbs.selectedItem !=="" && particles.selectedItem !== "" && (
+        <ExplanationCard {...cardData} />
+      )}
     </div>
   );
 };

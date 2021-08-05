@@ -11,17 +11,30 @@ const IdiomList = ({ originData }) => {
   const [cardData, setCardData] = useState({});
   const [searchText, setSearchText] = useState("");
   const [searchFullText, setSearchFullText] = useState(false);
+  const [placeholder, setPlaceholder] = useState("");
   
   useEffect(()=>{
     if (originData && originData.length === 0) {
       updateIdiomList();
     }
   },[])
+
+  useEffect(() => {
+    setIdiomInfo();
+  }, [idioms.selectedItem, searchText]);
   
   useEffect(() => {
     resetItems()
     updateIdiomList();
   }, [searchText, searchFullText]);
+  
+  useEffect(() => {
+    if (searchFullText) {
+      setPlaceholder("Find idioms in definitions and sentences")
+    } else {
+      setPlaceholder("Search.....")
+    }
+  }, [searchFullText]);
 
   const resetItems = () => {
     idioms.setItems([])
@@ -30,12 +43,11 @@ const IdiomList = ({ originData }) => {
 
   const updateIdiomList = async () => {
     const searchIdioms = await getSearchIdioms()
-    console.log(searchIdioms)
     idioms.setItems([...searchIdioms]);   
 };
 
   const getSearchIdioms = async () => {
-    const fullSearch = searchFullText ? 1 : 0;
+    const fullSearch = searchText !== "" && searchFullText ? 1 : 0;
     try {
       const params = createQueryParams({
         search_key: searchText,
@@ -67,15 +79,11 @@ const IdiomList = ({ originData }) => {
     });
   };
 
-  useEffect(() => {
-    setIdiomInfo();
-  }, [idioms.selectedItem, searchText]);
-
   return (
     <div className={styles.wrapper}>
       <input
         className={styles.input}
-        placeholder="Find idioms"
+        placeholder={placeholder}
         type="text"
         onChange={(e) => setSearchText(e.target.value)}
       />
@@ -90,7 +98,9 @@ const IdiomList = ({ originData }) => {
       <div className={[styles.strechChildBox]}>
         <SelectItem {...idioms} />
       </div>
+      {idioms.selectedItem !=="" && (
         <ExplanationCard {...cardData} />
+      )}
     </div>
   );
 };
