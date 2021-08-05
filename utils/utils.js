@@ -44,3 +44,11 @@ export const getRandomItems = ({ src, remove, itemCount }) => {
   }
   return result;
 };
+
+export const renameObjectKey = ({src, oldKey, newKey})=> {
+  if (oldKey !== newKey && src[oldKey]) {
+    Object.defineProperty(src, newKey,
+        Object.getOwnPropertyDescriptor(src, oldKey));
+    delete src[oldKey];
+  }
+}

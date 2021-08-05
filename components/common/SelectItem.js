@@ -26,9 +26,7 @@ const SelectItem = ({ items, sortKey, selectedItem, setSelectedItem }) => {
   };
 
   useEffect(() => {
-    if (sortedItems.length === 0) {
-      setSelectedItem("");
-    } else {
+    if (sortedItems.length > 0) {
       selectFristElementIfNotExist();
     }
   }, [sortedItems]);

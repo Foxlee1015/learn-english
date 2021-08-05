@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Meta from "../../components/Meta";
+import Header from "../../components/Header";
 import {
   randomElement,
   randomArrayShuffle,
@@ -9,7 +10,7 @@ import { server } from "../../config";
 import { createQueryParams } from "../../utils/utils";
 import Modal from "../../components/common/Modal";
 
-import styles from "../../styles/pages/Game.module.css";
+import quizStyles from "../../styles/pages/Quiz.module.css";
 
 const Idioms = () => {
   const [idiomData, setIdiomData] = useState([]);
@@ -20,6 +21,10 @@ const Idioms = () => {
   const [clickedAnswers, setClickedAnswers] = useState([]);
   const [showModal, setShowModal] = useState(false);
 
+  useEffect(() => {
+    getRandomIdioms();
+  }, []);
+
   const nextQuiz = () => {
     setClickedAnswers([]);
     setShowModal(false);
@@ -27,14 +32,20 @@ const Idioms = () => {
   };
 
   useEffect(() => {
-    getRandomIdioms();
-  }, []);
+    if (idiomData.length !== 0) {
+      setQuiz();
+    }
+  }, [idiomData]);
 
   const getRandomIdioms = async () => {
-    const params = createQueryParams({ random_verb_count: 3 });
-    const res = await fetch(`${server}/api/idioms/?${params}`);
-    const data = await res.json();
-    setIdiomData([...data.result]);
+    try {
+      const params = createQueryParams({ random_verb_count: 3 });
+      const res = await fetch(`${server}/api/idioms/?${params}`);
+      const data = await res.json();
+      setIdiomData([...data.result]);
+    } catch {
+      setIdiomData([]);
+    }
   };
 
   const setQuiz = () => {
@@ -57,12 +68,6 @@ const Idioms = () => {
     setAnswers([...shffledIdioms]);
   };
 
-  useEffect(() => {
-    if (idiomData.length !== 0) {
-      setQuiz();
-    }
-  }, [idiomData]);
-
   const checkAnswer = (clickedAnswer) => {
     if (clickedAnswer === idiom) {
       setShowModal(true);
@@ -74,19 +79,19 @@ const Idioms = () => {
   return (
     <div>
       <Meta title="Idioms quiz" />
-      <h5>Idioms quiz</h5>
-      <div className={styles.header}>
-        <h4>Question</h4>
+      <Header title="Idioms quiz" />
+      <div className={quizStyles.header}>
+        <h4>Pick an idiom meaning:</h4>
       </div>
       <div>
         {definitions.map((definition) => (
           <p key={definition}>{definition}</p>
         ))}
       </div>
-      <div className={styles.btnContainer}>
+      <div className={quizStyles.btnContainer}>
         {answers.map((answer) => (
           <button
-            className={styles.btn}
+            className={quizStyles.btn}
             disabled={clickedAnswers.includes(answer)}
             key={answer}
             onClick={(e) => checkAnswer(answer)}

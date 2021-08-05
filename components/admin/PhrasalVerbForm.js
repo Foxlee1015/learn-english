@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { Form, Input, Button, InputNumber } from "antd";
-
-import { createQueryParams } from "../../utils/utils";
+import { Form, Input, Button, InputNumber, Switch } from "antd";
+import Cookies from "universal-cookie";
 import { server } from "../../config";
 import AntFormList from "./common/AntFormList";
 
+import {renameObjectKey} from "../../utils/utils"
 import AdminStyle from "../../styles/pages/admin/Admin.module.css";
 
 const initialValues = {
@@ -12,8 +12,8 @@ const initialValues = {
   particle: "",
   definitions: [],
   sentences: [],
-  reviewed: false,
   difficulty: 1,
+  isPublic: false,
 };
 
 const validateMessages = {
@@ -21,10 +21,14 @@ const validateMessages = {
 };
 
 const addPhrasalVerb = async (data) => {
+  renameObjectKey({src:data, oldKey:"isPublic", newKey:"is_public"})
+  const cookies = new Cookies();
+  const session = cookies.get("EID_SES");
   const res = await fetch(`${server}/api/phrasal-verbs/`, {
     body: JSON.stringify(data),
     headers: {
       "Content-Type": "application/json",
+      Authorization: session,
     },
     method: "POST",
   });
@@ -34,57 +38,53 @@ const addPhrasalVerb = async (data) => {
 const PhrasalVerbForm = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const [verbData, setVerbData] = useState({});
+  const [verbData, setVerbData] = useState([]);
   const [showFormList, setShowFormList] = useState(false);
 
   const onFinish = (values) => {
-    const { verb, particle, sentences, definitions, difficulty } = values;
-
     setLoading(true);
     addPhrasalVerb({
-      verb,
-      particle,
-      level: difficulty,
-      sentences,
-      definitions,
+      ...values
     });
     form.resetFields();
     setLoading(false);
   };
 
-  useEffect(()=>{
-    const {verb} = form.getFieldValue()
+  useEffect(() => {
+    const { verb } = form.getFieldValue();
     if (verb !== "") {
-      getVerbData(verb)
+      getVerbData(verb);
     }
-
-  }, [form.getFieldValue().verb])
+  }, [form.getFieldValue().verb]);
 
   const getVerbData = async (verb) => {
-    setVerbData({});
+    setVerbData([]);
 
     if (verb !== "") {
       const currentVerbData = await getCurrentVerbParticleData(verb);
       if (currentVerbData) {
-        setVerbData({ ...currentVerbData });
+        setVerbData([...currentVerbData]);
       }
     }
   };
 
-  useEffect(()=>{
-    const {particle} = form.getFieldValue()
-    updateFormList(particle)
-
-  },[verbData])
+  useEffect(() => {
+    const { particle } = form.getFieldValue();
+    updateFormList(particle);
+  }, [verbData]);
 
   const updateFormList = (particle) => {
-    setShowFormList(false)
+    setShowFormList(false);
     let definitions = [];
     let sentences = [];
+    let difficulty = 1
+    let isPublic = false
 
     if (particle !== "") {
-      if (verbData && verbData.particles && verbData.particles[particle]) {
-        ({ definitions, sentences } = verbData.particles[particle]);
+      const phrasalVerb = verbData.find(verb=>verb.particle===particle)
+      if (phrasalVerb) {
+        ({ definitions, sentences, difficulty} = phrasalVerb);
+        isPublic = phrasalVerb["is_public"] === 1 ? true : false
       }
     }
 
@@ -92,9 +92,11 @@ const PhrasalVerbForm = () => {
       ...form.getFieldValue(),
       definitions,
       sentences,
+      difficulty,
+      isPublic
     });
-    
-    setShowFormList(true)
+
+    setShowFormList(true);
   };
 
   const getCurrentVerbParticleData = async (verb) => {
@@ -127,13 +129,18 @@ const PhrasalVerbForm = () => {
       >
         <Input onBlur={(e) => updateFormList(e.target.value)} />
       </Form.Item>
-      <Form.Item
-        name={"difficulty"}
-        label="Difficulty"
-        rules={[{ type: "number", min: 1, max: 5 }]}
-      >
-        <InputNumber />
-      </Form.Item>
+      <div className={AdminStyle.formSubContainer}>
+        <Form.Item
+          name={"difficulty"}
+          label="Difficulty"
+          rules={[{ type: "number", min: 1, max: 5 }]}
+        >
+          <InputNumber />
+        </Form.Item>
+        <Form.Item label="Public" name={"isPublic"} valuePropName="checked">
+          <Switch />
+        </Form.Item>
+      </div>
       {showFormList && (
         <>
           <AntFormList name="definitions" />

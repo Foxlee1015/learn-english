@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useSelector, useDispatch } from "react-redux";
 
-import { authenticate } from "../../redux/actions/authActions";
+import { authenticate, reauthenticate } from "../../redux/actions/authActions";
 import useInput from "../../hooks/useInput";
 
 import signinStyles from "../../styles/components/Signin.module.css";
@@ -31,7 +31,9 @@ const Signin = ({}) => {
             username: username.value,
             password: password.value,
           },
-          () => router.push("/"),
+          () => {
+            router.push("/");
+        },
           (err) => setErrMsg(err)
         )
       );

@@ -1,5 +1,4 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import dynamic from "next/dynamic";
 
@@ -13,8 +12,15 @@ const ProtectedRoute = (ProtectedComponent) => {
       if (auth.loggedIn === null) {
         return <DynamicComponent />;
       }
-
       if (auth.loggedIn) {
+        if (Router.pathname.includes("admin")) {
+          if (auth.is_admin === 1) {
+            return <ProtectedComponent {...props} />;
+          } else {
+            Router.replace("/");
+            return null;
+          }
+        }
         return <ProtectedComponent {...props} />;
       } else {
         Router.replace("/");

@@ -1,5 +1,5 @@
 import { server } from "../../config";
-import { AUTHENTICATE, DEAUTHENTICATE } from "../actionTypes";
+import { AUTHENTICATE, DEAUTHENTICATE, REAUTHENTICATE } from "../actionTypes";
 import Cookies from "universal-cookie";
 
 export const authenticate =
@@ -23,11 +23,12 @@ export const authenticate =
       .then((response) => {
         if (response && response.result) {
           const cookies = new Cookies();
-          cookies.set("EID_SES", response.result, {
+          const {session, name, is_admin} = response.result
+          cookies.set("EID_SES", session, {
             path: "/",
             maxAge: 60 * 60 * 24,
           });
-          dispatch({ type: AUTHENTICATE });
+          dispatch({ type: AUTHENTICATE, payload: {name, is_admin} });
           successCallback();
         }
       })
@@ -46,8 +47,13 @@ export const reauthenticate = () => (dispatch) => {
         Authorization: session,
       },
     })
+      .then((res) => {
+        if (res.status === 200) {
+          return res.json();
+        }
+      })
       .then((response) => {
-        dispatch({ type: AUTHENTICATE });
+        dispatch({ type: REAUTHENTICATE, payload: response.result });
       })
       .catch(() => {
         dispatch({ type: DEAUTHENTICATE });
@@ -58,7 +64,6 @@ export const reauthenticate = () => (dispatch) => {
 };
 
 export const deauthenticate = () => (dispatch) => {
-  console.log("dde");
   const cookies = new Cookies();
   const session = cookies.get("EID_SES");
   cookies.remove("EID_SES", { path: "/" });

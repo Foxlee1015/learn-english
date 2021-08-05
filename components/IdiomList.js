@@ -1,38 +1,91 @@
 import { useState, useEffect, useCallback } from "react";
 import SelectItem from "./common/SelectItem";
 import ExplanationCard from "./common/ExplanationCard";
+import InputCheckbox from "./common/InputCheckbox";
 import useSelectItem from "../hooks/useSelectItem";
 import styles from "../styles/pages/Idiom.module.css";
+import { createQueryParams } from "../utils/utils";
+import { server } from "../config";
+import useInputSearch from "../hooks/useInputSearch";
 
-const IdiomList = ({ data }) => {
-  const idioms = useSelectItem(data, "expression");
+const IdiomList = ({ originData }) => {
+  const idioms = useSelectItem(originData, "expression");
+  const [inputSearch, setInputSearchPlaceholder] = useInputSearch();
   const [cardData, setCardData] = useState({});
-  const [searchText, setSearchText] = useState("");
+  const [searchFullText, setSearchFullText] = useState(false);
+  const [searchExactText, setSearchExactText] = useState(false);
 
-  const filterVerbList = () => {
-    if (searchText === "") {
-      idioms.setItems([...data]);
-    } else {
-      const filteredIdioms = data.filter((idiom) =>
-        idiom.expression.includes(searchText.toLowerCase())
+  useEffect(() => {
+    if (originData && originData.length === 0) {
+      updateIdiomList();
+    }
+  }, []);
+
+  useEffect(() => {
+    setIdiomInfo();
+  }, [idioms.selectedItem, inputSearch.value]);
+
+  useEffect(() => {
+    resetItems();
+    updateIdiomList();
+  }, [inputSearch.value, , searchFullText, searchExactText]);
+
+  useEffect(() => {
+    updatePlaceholder();
+  }, [searchFullText, searchExactText]);
+
+  const updatePlaceholder = () => {
+    if (searchFullText && searchExactText) {
+      setInputSearchPlaceholder(
+        "Search an exact idiom in definitions and sentences....."
       );
-      idioms.setItems([...filteredIdioms]);
+    } else if (searchFullText) {
+      setInputSearchPlaceholder(
+        "Search idioms in definitions and sentences....."
+      );
+    } else if (searchExactText) {
+      setInputSearchPlaceholder("Search an exact idiom.....");
+    } else {
+      setInputSearchPlaceholder("Search.....");
     }
   };
 
-  useEffect(() => {
-    filterVerbList();
-  }, [searchText]);
+  const resetItems = () => {
+    idioms.setItems([]);
+    idioms.setSelectedItem("");
+  };
+
+  const updateIdiomList = async () => {
+    const searchIdioms = await getSearchIdioms();
+    idioms.setItems([...searchIdioms]);
+  };
+
+  const getSearchIdioms = async () => {
+    const fullSearch = inputSearch.value !== "" && searchFullText ? 1 : 0;
+    const ExactSearch = inputSearch.value !== "" && searchExactText ? 1 : 0;
+
+    try {
+      const params = createQueryParams({
+        search_key: inputSearch.value,
+        full_search: fullSearch,
+        exact: ExactSearch,
+      });
+      const res = await fetch(`${server}/api/idioms/?${params}`);
+      const data = await res.json();
+      return data.result;
+    } catch {
+      return [];
+    }
+  };
 
   const setIdiomInfo = () => {
     let expression = "";
     let definitions = [];
     let sentences = [];
 
-    const selectedIdiom = data.find(
+    const selectedIdiom = idioms.items.find(
       (item) => item["expression"] === idioms.selectedItem
     );
-    console.log(selectedIdiom)
     if (selectedIdiom) {
       ({ expression, definitions, sentences } = selectedIdiom);
     }
@@ -43,23 +96,25 @@ const IdiomList = ({ data }) => {
     });
   };
 
-  useEffect(() => {
-    setIdiomInfo();
-  }, [idioms.selectedItem, searchText]);
-
   return (
     <div className={styles.wrapper}>
-      <input
-        className={styles.input}
-        placeholder="Find idioms"
-        type="text"
-        onChange={(e) => setSearchText(e.target.value)}
-      />
+      <input {...inputSearch} className={styles.input} />
+      <div>
+        <InputCheckbox
+          label="Search in definitions/sentences"
+          checked={searchFullText}
+          onChange={setSearchFullText}
+        />
+        <InputCheckbox
+          label="Search exact Idiom if you get too many results"
+          checked={searchExactText}
+          onChange={setSearchExactText}
+        />
+      </div>
       <div className={[styles.strechChildBox]}>
         <SelectItem {...idioms} />
       </div>
-
-      <ExplanationCard {...cardData} />
+      {idioms.selectedItem !== "" && <ExplanationCard {...cardData} />}
     </div>
   );
 };

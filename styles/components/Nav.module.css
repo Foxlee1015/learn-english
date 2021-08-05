@@ -18,8 +18,11 @@
 }
 
 .nav button {
-  margin-left: auto;
   color: #1890ff;
+}
+
+.buttons {
+  margin-left: auto;
 }
 
 .linkText {
