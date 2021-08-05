@@ -28,6 +28,7 @@ const VerbList = ({ originData }) => {
   const particles = useSelectItem([], "particle");
   const [cardData, setCardData] = useState({});
   const [searchFullText, setSearchFullText] = useState(false);
+  const [searchExactText, setSearchExactText] = useState(false);
 
   useEffect(() => {
     if (originData && originData.length === 0) {
@@ -43,7 +44,7 @@ const VerbList = ({ originData }) => {
     } else {
       setInputSearchPlaceholder("Search.....");
     }
-  }, [searchFullText]);
+  }, [searchFullText, searchExactText]);
 
   useEffect(() => {
     updateParticleList();
@@ -57,7 +58,7 @@ const VerbList = ({ originData }) => {
   useEffect(() => {
     resetItems();
     updateVerbList();
-  }, [inputSearch.value, searchFullText]);
+  }, [inputSearch.value, searchFullText, searchExactText]);
 
   const updateVerbList = async () => {
     const searchVerbs = await getSearchVerbs();
@@ -125,9 +126,11 @@ const VerbList = ({ originData }) => {
   const getSearchVerbs = async () => {
     try {
       const fullSearch = inputSearch.value !== "" && searchFullText ? 1 : 0;
+      const ExactSearch = inputSearch.value !== "" && searchExactText ? 1 : 0;
       const params = createQueryParams({
         search_key: inputSearch.value.toLowerCase(),
         full_search: fullSearch,
+        exact: ExactSearch,
       });
       const res = await fetch(`${server}/api/phrasal-verbs/?${params}`);
       const data = await res.json();
@@ -142,12 +145,24 @@ const VerbList = ({ originData }) => {
     <div className={styles.wrapper}>
       <input {...inputSearch} className={styles.input} />
       <div>
-        <input
-          type="checkbox"
-          className={styles.checkbox}
-          checked={searchFullText}
-          onChange={(e) => setSearchFullText(e.target.checked)}
-        ></input>
+        <div className={styles.checkboxWrapper}>
+          <input
+            type="checkbox"
+            className={styles.checkbox}
+            checked={searchFullText}
+            onChange={(e) => setSearchFullText(e.target.checked)}
+          ></input>
+          <label> Find in verb or definitions/sentences</label>
+        </div>
+        <div className={styles.checkboxWrapper}>
+          <input
+            type="checkbox"
+            className={styles.checkbox}
+            checked={searchExactText}
+            onChange={(e) => setSearchExactText(e.target.checked)}
+          ></input>
+          <label>Find containing or exact word</label>
+        </div>
       </div>
       <div className={styles.flex}>
         {<SelectItem {...verbs} />}
