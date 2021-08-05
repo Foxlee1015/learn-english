@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import SelectItem from "./common/SelectItem";
 import ExplanationCard from "./common/ExplanationCard";
+import InputCheckbox from "./common/InputCheckbox";
 import styles from "../styles/pages/Verb.module.css";
 import useSelectItem from "../hooks/useSelectItem";
 import { createQueryParams } from "../utils/utils";
@@ -37,13 +38,7 @@ const VerbList = ({ originData }) => {
   }, []);
 
   useEffect(() => {
-    if (searchFullText) {
-      setInputSearchPlaceholder(
-        "Find phrasal verbs in definitions and sentences"
-      );
-    } else {
-      setInputSearchPlaceholder("Search.....");
-    }
+    updatePlaceholder();
   }, [searchFullText, searchExactText]);
 
   useEffect(() => {
@@ -59,6 +54,22 @@ const VerbList = ({ originData }) => {
     resetItems();
     updateVerbList();
   }, [inputSearch.value, searchFullText, searchExactText]);
+
+  const updatePlaceholder = () => {
+    if (searchFullText && searchExactText) {
+      setInputSearchPlaceholder(
+        "Search an exact verb in definitions and sentences....."
+      );
+    } else if (searchFullText) {
+      setInputSearchPlaceholder(
+        "Search verbs in definitions and sentences....."
+      );
+    } else if (searchExactText) {
+      setInputSearchPlaceholder("Search an exact verb.....");
+    } else {
+      setInputSearchPlaceholder("Search.....");
+    }
+  };
 
   const updateVerbList = async () => {
     const searchVerbs = await getSearchVerbs();
@@ -109,7 +120,6 @@ const VerbList = ({ originData }) => {
       const phrasalVerbInfo = particles.items.find(
         (item) => item.particle === particles.selectedItem
       );
-      console.log(particles, phrasalVerbInfo);
       if (phrasalVerbInfo) {
         ({ definitions, sentences } = phrasalVerbInfo);
       }
@@ -145,24 +155,16 @@ const VerbList = ({ originData }) => {
     <div className={styles.wrapper}>
       <input {...inputSearch} className={styles.input} />
       <div>
-        <div className={styles.checkboxWrapper}>
-          <input
-            type="checkbox"
-            className={styles.checkbox}
-            checked={searchFullText}
-            onChange={(e) => setSearchFullText(e.target.checked)}
-          ></input>
-          <label> Find in verb or definitions/sentences</label>
-        </div>
-        <div className={styles.checkboxWrapper}>
-          <input
-            type="checkbox"
-            className={styles.checkbox}
-            checked={searchExactText}
-            onChange={(e) => setSearchExactText(e.target.checked)}
-          ></input>
-          <label>Find containing or exact word</label>
-        </div>
+        <InputCheckbox
+          label="Search in verb or definitions/sentences"
+          checked={searchFullText}
+          onChange={setSearchFullText}
+        />
+        <InputCheckbox
+          label="Search containing or exact word"
+          checked={searchExactText}
+          onChange={setSearchExactText}
+        />
       </div>
       <div className={styles.flex}>
         {<SelectItem {...verbs} />}

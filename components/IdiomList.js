@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import SelectItem from "./common/SelectItem";
 import ExplanationCard from "./common/ExplanationCard";
+import InputCheckbox from "./common/InputCheckbox";
 import useSelectItem from "../hooks/useSelectItem";
 import styles from "../styles/pages/Idiom.module.css";
 import { createQueryParams } from "../utils/utils";
@@ -30,12 +31,24 @@ const IdiomList = ({ originData }) => {
   }, [inputSearch.value, , searchFullText, searchExactText]);
 
   useEffect(() => {
-    if (searchFullText) {
-      setInputSearchPlaceholder("Find idioms in definitions and sentences");
+    updatePlaceholder();
+  }, [searchFullText, searchExactText]);
+
+  const updatePlaceholder = () => {
+    if (searchFullText && searchExactText) {
+      setInputSearchPlaceholder(
+        "Search an exact idiom in definitions and sentences....."
+      );
+    } else if (searchFullText) {
+      setInputSearchPlaceholder(
+        "Search idioms in definitions and sentences....."
+      );
+    } else if (searchExactText) {
+      setInputSearchPlaceholder("Search an exact idiom.....");
     } else {
       setInputSearchPlaceholder("Search.....");
     }
-  }, [searchFullText, searchExactText]);
+  };
 
   const resetItems = () => {
     idioms.setItems([]);
@@ -87,24 +100,16 @@ const IdiomList = ({ originData }) => {
     <div className={styles.wrapper}>
       <input {...inputSearch} className={styles.input} />
       <div>
-        <div className={styles.checkboxWrapper}>
-          <input
-            type="checkbox"
-            className={styles.checkbox}
-            checked={searchFullText}
-            onChange={(e) => setSearchFullText(e.target.checked)}
-          ></input>
-          <label> Find in idiom or definitions/sentences</label>
-        </div>
-        <div className={styles.checkboxWrapper}>
-          <input
-            type="checkbox"
-            className={styles.checkbox}
-            checked={searchExactText}
-            onChange={(e) => setSearchExactText(e.target.checked)}
-          ></input>
-          <label>Find containing or exact word</label>
-        </div>
+        <InputCheckbox
+          label="Search in definitions/sentences"
+          checked={searchFullText}
+          onChange={setSearchFullText}
+        />
+        <InputCheckbox
+          label="Search exact Idiom if you get too many results"
+          checked={searchExactText}
+          onChange={setSearchExactText}
+        />
       </div>
       <div className={[styles.strechChildBox]}>
         <SelectItem {...idioms} />
