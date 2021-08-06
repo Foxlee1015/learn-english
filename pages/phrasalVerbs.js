@@ -1,15 +1,20 @@
 import Meta from "../components/Meta";
-import VerbList from "../components/Verblist";
+import PhrasalVerbList from "../components/PhrasalVerbList";
 import Header from "../components/Header";
 import { server } from "../config";
 import { createQueryParams } from "../utils/utils";
+import { useEffect } from "react";
 
-const phrasalVerbs = ({ phrasalVerbs }) => {
+const phrasalVerbs = ({ originData }) => {
+
+  useEffect(()=>{
+    console.log('1', originData)
+  }, [])
   return (
     <>
       <Meta title="Phrasal Verb list" />
       <Header title="Phrasal Verbs" />
-      <VerbList data={phrasalVerbs} />
+      <PhrasalVerbList data={originData} />
     </>
   );
 };
@@ -22,6 +27,9 @@ export const getStaticProps = async () => {
     const res = await fetch(`${server}/api/phrasal-verbs/?${params}`);
     const data = await res.json();
     const phrasalVerbs = data.result.map((verb) => ({ verb }));
+
+    
+    console.log('0', phrasalVerbs)
 
     return {
       props: {

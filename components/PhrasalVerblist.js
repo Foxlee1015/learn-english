@@ -23,7 +23,7 @@ const setUniqueVerbList = (items) => {
   }
 };
 
-const VerbList = ({ originData }) => {
+const PhrasalVerb = ({ originData }) => {
   const verbs = useSelectItem(originData, "verb");
   const [inputSearch, setInputSearchPlaceholder] = useInputSearch();
   const particles = useSelectItem([], "particle");
@@ -32,6 +32,7 @@ const VerbList = ({ originData }) => {
   const [searchExactText, setSearchExactText] = useState(false);
 
   useEffect(() => {
+    console.log('2', originData)
     if (originData && originData.length === 0) {
       updateVerbList();
     }
@@ -46,7 +47,6 @@ const VerbList = ({ originData }) => {
   }, [verbs.items, verbs.selectedItem]);
 
   useEffect(() => {
-    console.log(verbs.selectedItem, particles.selectedItem);
     setPhrasalVerbInfo();
   }, [verbs.selectedItem, particles.selectedItem]);
 
@@ -177,4 +177,4 @@ const VerbList = ({ originData }) => {
   );
 };
 
-export default VerbList;
+export default PhrasalVerb;

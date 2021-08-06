@@ -3,12 +3,12 @@ import Header from "../components/Header";
 import IdiomList from "../components/IdiomList";
 import { server } from "../config";
 
-const idioms = ({ idioms }) => {
+const idioms = ({ originData }) => {
   return (
     <>
       <Meta title="Idiom list" />
       <Header title="Idioms" />
-      <IdiomList data={idioms} />
+      <IdiomList data={originData} />
     </>
   );
 };
