@@ -4,7 +4,7 @@ import { server } from "../../config";
 import AntFormList from "./common/AntFormList";
 import Cookies from "universal-cookie";
 
-import {renameObjectKey} from "../../utils/utils"
+import {renameObjectKey, removeFalseElements} from "../../utils/utils"
 import AdminStyle from "../../styles/pages/admin/Admin.module.css";
 
 const initialValues = {
@@ -21,6 +21,8 @@ const validateMessages = {
 
 const addIdiom = async (values) => {
   renameObjectKey({src:values, oldKey:"isPublic", newKey:"is_public"})
+  values["definitions"] = removeFalseElements(values["definitions"])
+  values["sentences"] = removeFalseElements(values["sentences"])
   const cookies = new Cookies();
   const session = cookies.get("EID_SES");
   const res = await fetch(`${server}/api/idioms/`, {

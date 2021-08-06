@@ -4,7 +4,7 @@ import Cookies from "universal-cookie";
 import { server } from "../../config";
 import AntFormList from "./common/AntFormList";
 
-import {renameObjectKey} from "../../utils/utils"
+import {renameObjectKey, removeFalseElements} from "../../utils/utils"
 import AdminStyle from "../../styles/pages/admin/Admin.module.css";
 
 const initialValues = {
@@ -20,8 +20,12 @@ const validateMessages = {
   required: "${label} is required!",
 };
 
+
 const addPhrasalVerb = async (data) => {
   renameObjectKey({src:data, oldKey:"isPublic", newKey:"is_public"})
+  data["definitions"] = removeFalseElements(data["definitions"])
+  data["sentences"] = removeFalseElements(data["sentences"])
+  console.log(data)
   const cookies = new Cookies();
   const session = cookies.get("EID_SES");
   const res = await fetch(`${server}/api/phrasal-verbs/`, {
