@@ -169,7 +169,8 @@ const PhrasalVerb = ({ data }) => {
         {<SelectItem {...verbs} />}
         {<SelectItem {...particles} />}
       </div>
-      {verbs.selectedItem !== "" && particles.selectedItem !== "" && (
+      {verbs.selectedItem !== "" && 
+      particles.selectedItem !== "" && (
         <ExplanationCard {...cardData} />
       )}
     </div>
