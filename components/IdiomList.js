@@ -8,15 +8,15 @@ import { createQueryParams } from "../utils/utils";
 import { server } from "../config";
 import useInputSearch from "../hooks/useInputSearch";
 
-const IdiomList = ({ originData }) => {
-  const idioms = useSelectItem(originData, "expression");
+const IdiomList = ({ data }) => {
+  const idioms = useSelectItem(data, "expression");
   const [inputSearch, setInputSearchPlaceholder] = useInputSearch();
   const [cardData, setCardData] = useState({});
   const [searchFullText, setSearchFullText] = useState(false);
   const [searchExactText, setSearchExactText] = useState(false);
 
   useEffect(() => {
-    if (originData && originData.length === 0) {
+    if (data && data.length === 0) {
       updateIdiomList();
     }
   }, []);

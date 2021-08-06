@@ -23,8 +23,8 @@ const setUniqueVerbList = (items) => {
   }
 };
 
-const VerbList = ({ originData }) => {
-  const verbs = useSelectItem(originData, "verb");
+const PhrasalVerb = ({ data }) => {
+  const verbs = useSelectItem(data, "verb");
   const [inputSearch, setInputSearchPlaceholder] = useInputSearch();
   const particles = useSelectItem([], "particle");
   const [cardData, setCardData] = useState({});
@@ -32,7 +32,7 @@ const VerbList = ({ originData }) => {
   const [searchExactText, setSearchExactText] = useState(false);
 
   useEffect(() => {
-    if (originData && originData.length === 0) {
+    if (data && data.length === 0) {
       updateVerbList();
     }
   }, []);
@@ -46,7 +46,6 @@ const VerbList = ({ originData }) => {
   }, [verbs.items, verbs.selectedItem]);
 
   useEffect(() => {
-    console.log(verbs.selectedItem, particles.selectedItem);
     setPhrasalVerbInfo();
   }, [verbs.selectedItem, particles.selectedItem]);
 
@@ -170,11 +169,12 @@ const VerbList = ({ originData }) => {
         {<SelectItem {...verbs} />}
         {<SelectItem {...particles} />}
       </div>
-      {verbs.selectedItem !== "" && particles.selectedItem !== "" && (
+      {verbs.selectedItem !== "" && 
+      particles.selectedItem !== "" && (
         <ExplanationCard {...cardData} />
       )}
     </div>
   );
 };
 
-export default VerbList;
+export default PhrasalVerb;
