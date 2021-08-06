@@ -52,3 +52,8 @@ export const renameObjectKey = ({src, oldKey, newKey})=> {
     delete src[oldKey];
   }
 }
+
+export const removeFalseElements = (array) => {
+  const flasyValues = [null, undefined, ""]
+  return array.filter(item=>!flasyValues.includes(item))
+}

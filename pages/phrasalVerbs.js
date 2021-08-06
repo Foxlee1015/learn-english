@@ -1,15 +1,16 @@
 import Meta from "../components/Meta";
-import VerbList from "../components/Verblist";
+import PhrasalVerbList from "../components/PhrasalVerbList";
 import Header from "../components/Header";
 import { server } from "../config";
 import { createQueryParams } from "../utils/utils";
 
-const phrasalVerbs = ({ phrasalVerbs }) => {
+const phrasalVerbs = ({ data }) => {
+
   return (
     <>
       <Meta title="Phrasal Verb list" />
       <Header title="Phrasal Verbs" />
-      <VerbList data={phrasalVerbs} />
+      <PhrasalVerbList data={data} />
     </>
   );
 };
@@ -25,13 +26,13 @@ export const getStaticProps = async () => {
 
     return {
       props: {
-        originData: phrasalVerbs,
+        data: phrasalVerbs,
       },
     };
   } catch {
     return {
       props: {
-        originData: [],
+        data: [],
       },
     };
   }
