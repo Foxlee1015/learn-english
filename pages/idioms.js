@@ -3,12 +3,12 @@ import Header from "../components/Header";
 import IdiomList from "../components/IdiomList";
 import { server } from "../config";
 
-const idioms = ({ originData }) => {
+const idioms = ({ data }) => {
   return (
     <>
       <Meta title="Idiom list" />
       <Header title="Idioms" />
-      <IdiomList data={originData} />
+      <IdiomList data={data} />
     </>
   );
 };
@@ -21,13 +21,13 @@ export const getStaticProps = async () => {
 
     return {
       props: {
-        originData: idioms,
+        data: idioms,
       },
     };
   } catch {
     return {
       props: {
-        originData: [],
+        data: [],
       },
     };
   }
