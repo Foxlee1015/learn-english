@@ -112,16 +112,19 @@ const VerbList = ({ originData }) => {
     }
   };
 
-  const setPhrasalVerbInfo = () => {
+  const setPhrasalVerbInfo = async () => {
     let definitions = [];
     let sentences = [];
+    let count = 0;
+    let _id;
 
     if (verbs.selectedItem !== "" && particles.selectedItem !== "") {
       const phrasalVerbInfo = particles.items.find(
         (item) => item.particle === particles.selectedItem
       );
       if (phrasalVerbInfo) {
-        ({ definitions, sentences } = phrasalVerbInfo);
+        ({ definitions, sentences, _id } = phrasalVerbInfo);
+        count = await getPhrasalVerbLikes(_id);
       }
     }
 
@@ -130,7 +133,21 @@ const VerbList = ({ originData }) => {
       subTitle: particles.selectedItem,
       definitions,
       sentences,
+      count,
     });
+  };
+
+  const getPhrasalVerbLikes = async (_id) => {
+    try {
+      const params = createQueryParams({
+        phrasal_verb_id: _id,
+      });
+      const res = await fetch(`${server}/api/phrasal-verbs/likes?${params}`);
+      const data = await res.json();
+      return data.result;
+    } catch {
+      return 0;
+    }
   };
 
   const getSearchVerbs = async () => {

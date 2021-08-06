@@ -78,22 +78,39 @@ const IdiomList = ({ originData }) => {
     }
   };
 
-  const setIdiomInfo = () => {
+  const setIdiomInfo = async () => {
     let expression = "";
     let definitions = [];
     let sentences = [];
+    let count = 0;
+    let _id;
 
     const selectedIdiom = idioms.items.find(
       (item) => item["expression"] === idioms.selectedItem
     );
     if (selectedIdiom) {
-      ({ expression, definitions, sentences } = selectedIdiom);
+      ({ expression, definitions, sentences, _id } = selectedIdiom);
+      count = await getIdiomLikes(_id);
     }
     setCardData({
       title: expression,
       definitions,
       sentences,
+      count,
     });
+  };
+
+  const getIdiomLikes = async (_id) => {
+    try {
+      const params = createQueryParams({
+        idiom_id: _id,
+      });
+      const res = await fetch(`${server}/api/idioms/likes?${params}`);
+      const data = await res.json();
+      return data.result;
+    } catch {
+      return 0;
+    }
   };
 
   return (
