@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import styles from "../../styles/components/SelectItem.module.css";
-import LoadingIndicator from "./LoadingIndicator";
 
 const stringSort = (sortKey) => (a, b) => {
   if (a[sortKey] < b[sortKey]) return -1;
@@ -33,7 +32,6 @@ const SelectItem = ({ items, sortKey, selectedItem, setSelectedItem }) => {
 
   return (
     <div className={styles.scrollableContainer}>
-      <LoadingIndicator />
       <div className={styles.scrollable}>
         {sortedItems.length > 0 &&
           sortedItems.map((item) => (

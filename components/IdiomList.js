@@ -8,6 +8,7 @@ import { createQueryParams, renameObjectKey } from "../utils/utils";
 import { server } from "../config";
 import useInputSearch from "../hooks/useInputSearch";
 import useFetch from "../hooks/useFetch";
+import BarLoader from "react-spinners/BarLoader";
 
 const IdiomList = ({ idiomList }) => {
   const idioms = useSelectItem(idiomList, "expression");
@@ -31,7 +32,6 @@ const IdiomList = ({ idiomList }) => {
     resetItems();
     getIdioms();
   }, [inputSearch.value, , searchFullText, searchExactText]);
-
 
   useEffect(() => {
     updatePlaceholder();
@@ -58,9 +58,9 @@ const IdiomList = ({ idiomList }) => {
     idioms.setSelectedItem("");
   };
 
-  useEffect(()=>{
-    idioms.setItems([...fetchIdioms.data])
-  }, [fetchIdioms.data])
+  useEffect(() => {
+    idioms.setItems([...fetchIdioms.data]);
+  }, [fetchIdioms.data]);
 
   const getIdioms = async () => {
     const fullSearch = inputSearch.value !== "" && searchFullText ? 1 : 0;
@@ -70,7 +70,7 @@ const IdiomList = ({ idiomList }) => {
       full_search: fullSearch,
       exact: ExactSearch,
     });
-    doFetchIidoms(`${server}/api/idioms/?${params}`)
+    doFetchIidoms(`${server}/api/idioms/?${params}`);
   };
 
   const setIdiomInfo = async () => {
@@ -79,7 +79,7 @@ const IdiomList = ({ idiomList }) => {
     );
     if (selectedIdiom) {
       // renameObjectKey({src:selectedIdiom, oldKey:"expression", newKey:"title"})
-      setCardData({...selectedIdiom, title:selectedIdiom.expression})
+      setCardData({ ...selectedIdiom, title: selectedIdiom.expression });
     } else {
       setCardData({});
     }
@@ -103,18 +103,19 @@ const IdiomList = ({ idiomList }) => {
       <div className={[styles.strechChildBox]}>
         {fetchIdioms.loading ? (
           <div className={styles.loading}>
-            {fetchIdioms.loading}
+            <BarLoader color="#0070f3" />
           </div>
         ) : (
           <SelectItem {...idioms} />
         )}
       </div>
       {idioms.selectedItem !== "" && (
-        <ExplanationCard 
-          {...cardData} 
+        <ExplanationCard
+          {...cardData}
           resources="idioms"
-          resource_id="idiom_id" 
-        />)}
+          resource_id="idiom_id"
+        />
+      )}
     </div>
   );
 };

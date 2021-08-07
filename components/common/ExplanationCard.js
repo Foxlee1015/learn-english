@@ -1,8 +1,9 @@
 import CardStyle from "../../styles/components/ExplanationCard.module.css";
-import useFetch from "../../hooks/useFetch"
+import useFetch from "../../hooks/useFetch";
 import { useEffect } from "react";
-import {createQueryParams} from "../../utils/utils"
+import { createQueryParams } from "../../utils/utils";
 import { server } from "../../config";
+import PuffLoader from "react-spinners/PuffLoader";
 
 const ExplanationCard = ({
   title = "",
@@ -11,24 +12,24 @@ const ExplanationCard = ({
   sentences = [],
   _id,
   resources,
-  resource_id
+  resource_id,
 }) => {
   const [fetchLikes, doFetchLikes] = useFetch(0);
-  
-  useEffect(()=>{
+
+  useEffect(() => {
     if (_id) {
       const params = createQueryParams({
-        [resource_id] : _id,
+        [resource_id]: _id,
       });
-      doFetchLikes(`${server}/api/${resources}/likes?${params}`)
+      doFetchLikes(`${server}/api/${resources}/likes?${params}`);
     }
-  },[_id])
+  }, [_id]);
 
   return (
     <div className={CardStyle.container}>
       <h3 className={CardStyle.head}>{title.toUpperCase()}</h3>
       <h3 className={CardStyle.headSub}>{subTitle}</h3>
-      <p>{fetchLikes.loading? fetchLikes.loading : fetchLikes.data}</p>
+      <p>{fetchLikes.loading ? <PuffLoader size={20} /> : fetchLikes.data}</p>
       {definitions.length > 0 && (
         <>
           <p className={CardStyle.tag}>Definition</p>

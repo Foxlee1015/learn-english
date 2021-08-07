@@ -9,6 +9,8 @@ import { server } from "../config";
 import useInputSearch from "../hooks/useInputSearch";
 import useFetch from "../hooks/useFetch";
 
+import BarLoader from "react-spinners/BarLoader";
+
 const setUniqueVerbList = (items) => {
   try {
     const uniqueVerbs = new Set();
@@ -92,13 +94,15 @@ const PhrasalVerb = ({ data }) => {
     if (verbs.items.length === 0 || verbs.selectedItem === "") {
       resetParticles();
     } else {
-      doFetchParticles(`${server}/api/phrasal-verbs/${verbs.selectedItem.toLowerCase()}`)
+      doFetchParticles(
+        `${server}/api/phrasal-verbs/${verbs.selectedItem.toLowerCase()}`
+      );
     }
   };
-  
-  useEffect(()=>{
-    particles.setItems([...fetchParticles.data])
-  }, [fetchParticles.data])
+
+  useEffect(() => {
+    particles.setItems([...fetchParticles.data]);
+  }, [fetchParticles.data]);
 
   const setPhrasalVerbInfo = async () => {
     if (verbs.selectedItem !== "" && particles.selectedItem !== "") {
@@ -107,20 +111,20 @@ const PhrasalVerb = ({ data }) => {
       );
       if (selectedPhrasalVerb) {
         setCardData({
-          ...selectedPhrasalVerb, 
-          title:verbs.selectedItem,
-          subTitle:particles.selectedItem
-        })
+          ...selectedPhrasalVerb,
+          title: verbs.selectedItem,
+          subTitle: particles.selectedItem,
+        });
       } else {
-        setCardData({})
+        setCardData({});
       }
-    };
-  }
-  
-  useEffect(()=>{
-    const uniqueVerbs = setUniqueVerbList(fetchVerbs.data)
-    verbs.setItems([...uniqueVerbs])
-  }, [fetchVerbs.data])
+    }
+  };
+
+  useEffect(() => {
+    const uniqueVerbs = setUniqueVerbList(fetchVerbs.data);
+    verbs.setItems([...uniqueVerbs]);
+  }, [fetchVerbs.data]);
 
   const getVerbs = async () => {
     const fullSearch = inputSearch.value !== "" && searchFullText ? 1 : 0;
@@ -130,8 +134,8 @@ const PhrasalVerb = ({ data }) => {
       full_search: fullSearch,
       exact: ExactSearch,
     });
-    doFetchVerbs(`${server}/api/phrasal-verbs/?${params}`)
-  }
+    doFetchVerbs(`${server}/api/phrasal-verbs/?${params}`);
+  };
 
   return (
     <div className={styles.wrapper}>
@@ -151,23 +155,22 @@ const PhrasalVerb = ({ data }) => {
       <div className={styles.flex}>
         {fetchVerbs.loading && (
           <div className={styles.loading}>
-            {fetchVerbs.loading}
+            <BarLoader color="#0070f3" />
           </div>
         )}
         {<SelectItem {...verbs} />}
         {fetchParticles.loading && (
           <div className={styles.loading}>
-            {fetchParticles.loading}
+            <BarLoader color="#0070f3" />
           </div>
         )}
         {<SelectItem {...particles} />}
       </div>
-      {verbs.selectedItem !== "" && 
-      particles.selectedItem !== "" && (
-        <ExplanationCard 
-          {...cardData} 
+      {verbs.selectedItem !== "" && particles.selectedItem !== "" && (
+        <ExplanationCard
+          {...cardData}
           resources="phrasal-verbs"
-          resource_id="phrasal_verb_id" 
+          resource_id="phrasal_verb_id"
         />
       )}
     </div>

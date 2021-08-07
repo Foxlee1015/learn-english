@@ -1,4 +1,5 @@
 import inputCheckboxStyles from "../../styles/components/InputCheckbox.module.css";
+import { Checkbox } from "antd";
 
 const InputCheckbox = ({
   label = "",
@@ -7,18 +8,13 @@ const InputCheckbox = ({
 }) => {
   return (
     <div className={inputCheckboxStyles.container}>
-      <input
-        className={inputCheckboxStyles.input}
-        type="checkbox"
+      <Checkbox
         checked={checked}
+        value={checked}
         onChange={(e) => onChange(e.target.checked)}
-      ></input>
-      <label
-        onClick={() => onChange(!checked)}
-        className={inputCheckboxStyles.label}
       >
         {label}
-      </label>
+      </Checkbox>
     </div>
   );
 };
