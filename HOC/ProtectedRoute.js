@@ -1,34 +1,46 @@
 import { useRouter } from "next/router";
-import { useSelector } from "react-redux";
-import dynamic from "next/dynamic";
+import dynamic from "next/dynamic"
+import {useState, useEffect} from "react"
+import { useSelector, useDispatch } from "react-redux";
+import { reauthenticate } from "../redux/actions/authActions"
 
-const LoadingComponent = dynamic(() => import("../components/Loading"));
+const AuthLoadingComponents = dynamic(()=>import("../components/AuthLoading"))
 
 const ProtectedRoute = (ProtectedComponent) => {
   return (props) => {
-    if (typeof window !== "undefined") {
       const Router = useRouter();
+      const dispatch = useDispatch();
       const auth = useSelector((state) => state.auth);
-      if (auth.loggedIn === null) {
-        return <LoadingComponent />;
-      }
-      if (Router.pathname.includes("admin")) {
-        if (auth.is_admin === 1) {
-          return <ProtectedComponent {...props} />;
-        } else {
-          Router.replace("/403");
-          return null;
+      const [verified, setVerified] = useState(false);
+
+      useEffect(async () => {
+        if (auth.loggedIn) { // redux
+          setVerified(true)
+        } else {    // directly access to the page
+          dispatch(
+            reauthenticate(
+              ()=>setVerified(true),
+              ()=>Router.replace("/member/signin")))
         }
-      } else {
-        if (auth.loggedIn) {
-          return <ProtectedComponent {...props} />;
-        } else {
-          Router.replace("/401");
-          return null;
+      }, []);
+
+      if (verified) {
+        if (Router.pathname.includes("admin")) {
+          if (auth.is_admin === 1) {
+            return <ProtectedComponent {...props} />
+          } else {
+            Router.replace("/403")
+          }
         }
+        return <ProtectedComponent {...props} />
       }
-    }
-    return null;
-  };
-};
+
+      // authenticating
+      if (auth.loggedIn) { // loading indicator - redux store login state
+        return null;
+      }
+      return <AuthLoadingComponents />; // show only directly access to the pages // re-auth lading indicator
+  }
+}
+
 export default ProtectedRoute;

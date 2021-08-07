@@ -37,7 +37,7 @@ export const authenticate =
       });
   };
 
-export const reauthenticate = () => (dispatch) => {
+export const reauthenticate = (successCallback=()=>{}, failCallback=()=>{}) => (dispatch) => {
   const cookies = new Cookies();
   const session = cookies.get("EID_SES");
   if (session) {
@@ -54,12 +54,15 @@ export const reauthenticate = () => (dispatch) => {
       })
       .then((response) => {
         dispatch({ type: REAUTHENTICATE, payload: response.result });
+        successCallback()
       })
-      .catch(() => {
+      .catch((err) => {
         dispatch({ type: DEAUTHENTICATE });
+        failCallback()
       });
   } else {
     dispatch({ type: DEAUTHENTICATE });
+    failCallback()
   }
 };
 

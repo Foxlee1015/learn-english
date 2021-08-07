@@ -2,7 +2,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import navStyles from "../../styles/components/Nav.module.css";
 import { useSelector, useDispatch } from "react-redux";
-import { deauthenticate } from "../../redux/actions/authActions";
+import { reauthenticate, deauthenticate } from "../../redux/actions/authActions";
+import { useEffect } from "react";
 
 const routes = [
   { href: "/", text: "Home" },
@@ -20,6 +21,10 @@ const Nav = () => {
     dispatch(deauthenticate());
     router.push("/");
   };
+
+  useEffect(()=>{
+    dispatch(reauthenticate());
+  },[])
 
   return (
     <nav className={navStyles.nav}>

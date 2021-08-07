@@ -2,7 +2,6 @@ import { Provider } from "react-redux";
 import { useStore } from "../redux";
 
 import ProtectedRoute from "../HOC/ProtectedRoute"
-import App from "../components/App";
 import Layout from "../components/layouts/Layout";
 import AdminLayout from "../components/layouts/AdminLayout";
 import AccountLayout from "../components/layouts/AccountLayout";
@@ -31,7 +30,7 @@ export default function MyApp({ Component, pageProps, router: { route } }) {
 
   return (
     <Provider store={store}>
-      <App>{getLayout(<Component {...pageProps} />)}</App>
+      {getLayout(<Component {...pageProps} />)}
     </Provider>
   );
 }

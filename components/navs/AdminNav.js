@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { deauthenticate } from "../../redux/actions/authActions";
 import { Menu } from "antd";
 import AdminNavStyle from "../../styles/components/AdminNav.module.css";
@@ -21,7 +21,6 @@ const routes = [
 const AdminNav = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const auth = useSelector((state) => state.auth);
 
   const [current, setCurrent] = useState("");
 
