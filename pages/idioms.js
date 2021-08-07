@@ -8,7 +8,7 @@ const idioms = ({ data }) => {
     <>
       <Meta title="Idiom list" />
       <Header title="Idioms" />
-      <IdiomList data={data} />
+      <IdiomList idiomList={data} />
     </>
   );
 };

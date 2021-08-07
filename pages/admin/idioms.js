@@ -1,5 +1,6 @@
 import IdiomForm from "../../components/admin/IdiomForm";
 import IdiomList from "../../components/admin/IdiomList";
+import ProtectedRoute from "../../HOC/ProtectedRoute";
 
 import AdminStyle from "../../styles/pages/admin/Admin.module.css";
 
@@ -11,5 +12,4 @@ const Idioms = () => {
     </div>
   );
 };
-
-export default Idioms;
+export default ProtectedRoute(Idioms);

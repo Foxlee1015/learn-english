@@ -4,20 +4,22 @@ import ExplanationCard from "./common/ExplanationCard";
 import InputCheckbox from "./common/InputCheckbox";
 import useSelectItem from "../hooks/useSelectItem";
 import styles from "../styles/pages/Idiom.module.css";
-import { createQueryParams } from "../utils/utils";
+import { createQueryParams, renameObjectKey } from "../utils/utils";
 import { server } from "../config";
 import useInputSearch from "../hooks/useInputSearch";
+import useFetch from "../hooks/useFetch";
 
-const IdiomList = ({ data }) => {
-  const idioms = useSelectItem(data, "expression");
+const IdiomList = ({ idiomList }) => {
+  const idioms = useSelectItem(idiomList, "expression");
   const [inputSearch, setInputSearchPlaceholder] = useInputSearch();
+  const [fetchIdioms, doFetchIidoms] = useFetch([]);
   const [cardData, setCardData] = useState({});
   const [searchFullText, setSearchFullText] = useState(false);
   const [searchExactText, setSearchExactText] = useState(false);
 
   useEffect(() => {
-    if (data && data.length === 0) {
-      updateIdiomList();
+    if (idiomList && idiomList.length === 0) {
+      getIdioms();
     }
   }, []);
 
@@ -27,8 +29,9 @@ const IdiomList = ({ data }) => {
 
   useEffect(() => {
     resetItems();
-    updateIdiomList();
+    getIdioms();
   }, [inputSearch.value, , searchFullText, searchExactText]);
+
 
   useEffect(() => {
     updatePlaceholder();
@@ -55,61 +58,30 @@ const IdiomList = ({ data }) => {
     idioms.setSelectedItem("");
   };
 
-  const updateIdiomList = async () => {
-    const searchIdioms = await getSearchIdioms();
-    idioms.setItems([...searchIdioms]);
-  };
+  useEffect(()=>{
+    idioms.setItems([...fetchIdioms.data])
+  }, [fetchIdioms.data])
 
-  const getSearchIdioms = async () => {
+  const getIdioms = async () => {
     const fullSearch = inputSearch.value !== "" && searchFullText ? 1 : 0;
     const ExactSearch = inputSearch.value !== "" && searchExactText ? 1 : 0;
-
-    try {
-      const params = createQueryParams({
-        search_key: inputSearch.value,
-        full_search: fullSearch,
-        exact: ExactSearch,
-      });
-      const res = await fetch(`${server}/api/idioms/?${params}`);
-      const data = await res.json();
-      return data.result;
-    } catch {
-      return [];
-    }
+    const params = createQueryParams({
+      search_key: inputSearch.value,
+      full_search: fullSearch,
+      exact: ExactSearch,
+    });
+    doFetchIidoms(`${server}/api/idioms/?${params}`)
   };
 
   const setIdiomInfo = async () => {
-    let expression = "";
-    let definitions = [];
-    let sentences = [];
-    let count = 0;
-    let _id;
-
     const selectedIdiom = idioms.items.find(
       (item) => item["expression"] === idioms.selectedItem
     );
     if (selectedIdiom) {
-      ({ expression, definitions, sentences, _id } = selectedIdiom);
-      count = await getIdiomLikes(_id);
-    }
-    setCardData({
-      title: expression,
-      definitions,
-      sentences,
-      count,
-    });
-  };
-
-  const getIdiomLikes = async (_id) => {
-    try {
-      const params = createQueryParams({
-        idiom_id: _id,
-      });
-      const res = await fetch(`${server}/api/idioms/likes?${params}`);
-      const data = await res.json();
-      return data.result;
-    } catch {
-      return 0;
+      // renameObjectKey({src:selectedIdiom, oldKey:"expression", newKey:"title"})
+      setCardData({...selectedIdiom, title:selectedIdiom.expression})
+    } else {
+      setCardData({});
     }
   };
 
@@ -129,9 +101,20 @@ const IdiomList = ({ data }) => {
         />
       </div>
       <div className={[styles.strechChildBox]}>
-        <SelectItem {...idioms} />
+        {fetchIdioms.loading ? (
+          <div className={styles.loading}>
+            {fetchIdioms.loading}
+          </div>
+        ) : (
+          <SelectItem {...idioms} />
+        )}
       </div>
-      {idioms.selectedItem !== "" && <ExplanationCard {...cardData} />}
+      {idioms.selectedItem !== "" && (
+        <ExplanationCard 
+          {...cardData} 
+          resources="idioms"
+          resource_id="idiom_id" 
+        />)}
     </div>
   );
 };

@@ -7,6 +7,7 @@ import useSelectItem from "../hooks/useSelectItem";
 import { createQueryParams } from "../utils/utils";
 import { server } from "../config";
 import useInputSearch from "../hooks/useInputSearch";
+import useFetch from "../hooks/useFetch";
 
 const setUniqueVerbList = (items) => {
   try {
@@ -27,13 +28,15 @@ const PhrasalVerb = ({ data }) => {
   const verbs = useSelectItem(data, "verb");
   const [inputSearch, setInputSearchPlaceholder] = useInputSearch();
   const particles = useSelectItem([], "particle");
+  const [fetchVerbs, doFetchVerbs] = useFetch([]);
+  const [fetchParticles, doFetchParticles] = useFetch([]);
   const [cardData, setCardData] = useState({});
   const [searchFullText, setSearchFullText] = useState(false);
   const [searchExactText, setSearchExactText] = useState(false);
 
   useEffect(() => {
     if (data && data.length === 0) {
-      updateVerbList();
+      getVerbs();
     }
   }, []);
 
@@ -42,7 +45,7 @@ const PhrasalVerb = ({ data }) => {
   }, [searchFullText, searchExactText]);
 
   useEffect(() => {
-    updateParticleList();
+    getParticles();
   }, [verbs.items, verbs.selectedItem]);
 
   useEffect(() => {
@@ -51,7 +54,7 @@ const PhrasalVerb = ({ data }) => {
 
   useEffect(() => {
     resetItems();
-    updateVerbList();
+    getVerbs();
   }, [inputSearch.value, searchFullText, searchExactText]);
 
   const updatePlaceholder = () => {
@@ -70,11 +73,6 @@ const PhrasalVerb = ({ data }) => {
     }
   };
 
-  const updateVerbList = async () => {
-    const searchVerbs = await getSearchVerbs();
-    verbs.setItems([...searchVerbs]);
-  };
-
   const resetVerbs = () => {
     verbs.setItems([]);
     verbs.setSelectedItem("");
@@ -90,105 +88,87 @@ const PhrasalVerb = ({ data }) => {
     resetParticles();
   };
 
-  const updateParticleList = async () => {
+  const getParticles = () => {
     if (verbs.items.length === 0 || verbs.selectedItem === "") {
       resetParticles();
     } else {
-      const data = await getParticles();
-      particles.setItems([...data]);
+      doFetchParticles(`${server}/api/phrasal-verbs/${verbs.selectedItem.toLowerCase()}`)
     }
   };
-
-  const getParticles = async () => {
-    try {
-      const res = await fetch(
-        `${server}/api/phrasal-verbs/${verbs.selectedItem.toLowerCase()}`
-      );
-      const data = await res.json();
-      return data.result;
-    } catch {
-      return [];
-    }
-  };
+  
+  useEffect(()=>{
+    particles.setItems([...fetchParticles.data])
+  }, [fetchParticles.data])
 
   const setPhrasalVerbInfo = async () => {
-    let definitions = [];
-    let sentences = [];
-    let count = 0;
-    let _id;
-
     if (verbs.selectedItem !== "" && particles.selectedItem !== "") {
-      const phrasalVerbInfo = particles.items.find(
+      const selectedPhrasalVerb = particles.items.find(
         (item) => item.particle === particles.selectedItem
       );
-      if (phrasalVerbInfo) {
-        ({ definitions, sentences, _id } = phrasalVerbInfo);
-        count = await getPhrasalVerbLikes(_id);
+      if (selectedPhrasalVerb) {
+        setCardData({
+          ...selectedPhrasalVerb, 
+          title:verbs.selectedItem,
+          subTitle:particles.selectedItem
+        })
+      } else {
+        setCardData({})
       }
-    }
+    };
+  }
+  
+  useEffect(()=>{
+    const uniqueVerbs = setUniqueVerbList(fetchVerbs.data)
+    verbs.setItems([...uniqueVerbs])
+  }, [fetchVerbs.data])
 
-    setCardData({
-      title: verbs.selectedItem,
-      subTitle: particles.selectedItem,
-      definitions,
-      sentences,
-      count,
+  const getVerbs = async () => {
+    const fullSearch = inputSearch.value !== "" && searchFullText ? 1 : 0;
+    const ExactSearch = inputSearch.value !== "" && searchExactText ? 1 : 0;
+    const params = createQueryParams({
+      search_key: inputSearch.value.toLowerCase(),
+      full_search: fullSearch,
+      exact: ExactSearch,
     });
-  };
-
-  const getPhrasalVerbLikes = async (_id) => {
-    try {
-      const params = createQueryParams({
-        phrasal_verb_id: _id,
-      });
-      const res = await fetch(`${server}/api/phrasal-verbs/likes?${params}`);
-      const data = await res.json();
-      return data.result;
-    } catch {
-      return 0;
-    }
-  };
-
-  const getSearchVerbs = async () => {
-    try {
-      const fullSearch = inputSearch.value !== "" && searchFullText ? 1 : 0;
-      const ExactSearch = inputSearch.value !== "" && searchExactText ? 1 : 0;
-      const params = createQueryParams({
-        search_key: inputSearch.value.toLowerCase(),
-        full_search: fullSearch,
-        exact: ExactSearch,
-      });
-      const res = await fetch(`${server}/api/phrasal-verbs/?${params}`);
-      const data = await res.json();
-      const uniqueVerbs = setUniqueVerbList(data.result);
-      return uniqueVerbs;
-    } catch {
-      return [];
-    }
-  };
+    doFetchVerbs(`${server}/api/phrasal-verbs/?${params}`)
+  }
 
   return (
     <div className={styles.wrapper}>
       <input {...inputSearch} className={styles.input} />
       <div>
         <InputCheckbox
-          label="Search in verb or definitions/sentences"
+          label="Search in definitions/sentences"
           checked={searchFullText}
           onChange={setSearchFullText}
         />
         <InputCheckbox
-          label="Search containing or exact word"
+          label="Search exact word if you get too many results"
           checked={searchExactText}
           onChange={setSearchExactText}
         />
       </div>
       <div className={styles.flex}>
+        {fetchVerbs.loading && (
+          <div className={styles.loading}>
+            {fetchVerbs.loading}
+          </div>
+        )}
         {<SelectItem {...verbs} />}
+        {fetchParticles.loading && (
+          <div className={styles.loading}>
+            {fetchParticles.loading}
+          </div>
+        )}
         {<SelectItem {...particles} />}
       </div>
       {verbs.selectedItem !== "" && 
       particles.selectedItem !== "" && (
-        <ExplanationCard {...cardData} />
+        <ExplanationCard 
+          {...cardData} 
+          resources="phrasal-verbs"
+          resource_id="phrasal_verb_id" 
+        />
       )}
     </div>
   );
