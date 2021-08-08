@@ -1,6 +1,6 @@
 import CardStyle from "../../styles/components/ExplanationCard.module.css";
 import useFetch from "../../hooks/useFetch";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { createQueryParams } from "../../utils/utils";
 import { postUserLike } from "../../utils/apis";
 import { server } from "../../config";
@@ -8,6 +8,7 @@ import PuffLoader from "react-spinners/PuffLoader";
 import { LikeOutlined, LikeTwoTone } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import Notification from "./Notification";
+import useNotification from "../../hooks/useNotification";
 
 const ExplanationCard = ({
   title = "",
@@ -19,7 +20,7 @@ const ExplanationCard = ({
   resource_id,
 }) => {
   const [fetchLikes, doFetchLikes] = useFetch({ count: 0, active: 0 });
-  const [showNotification, setShowNotification] = useState(false);
+  const notification = useNotification();
   const auth = useSelector((state) => state.auth);
 
   const updateLikes = () => {
@@ -33,15 +34,28 @@ const ExplanationCard = ({
 
   const handleClick = () => {
     if (auth.loggedIn) {
+      let like;
+      let notiText;
+      if (fetchLikes.data.active === 1) {
+        like = 0;
+        notiText = "Removed in likes";
+      } else {
+        like = 1;
+        notiText = "Saved in likes";
+      }
       const likeItem = {
         resources,
+        like,
         [resource_id]: _id,
-        like: fetchLikes.data.active === 1 ? 0 : 1,
       };
-      postUserLike(likeItem, updateLikes);
+      postUserLike(likeItem, () => {
+        updateLikes();
+        notification.setText(notiText);
+      });
     } else {
-      setShowNotification(true);
+      notification.setText("Please log in first");
     }
+    notification.setOpen(true);
   };
 
   useEffect(() => {
@@ -50,11 +64,7 @@ const ExplanationCard = ({
 
   return (
     <div className={CardStyle.container}>
-      <Notification
-        type="loginRequired"
-        open={showNotification}
-        setOpen={setShowNotification}
-      />
+      <Notification {...notification} />
       <div className={CardStyle.head}>
         <h3 className={CardStyle.title}>
           {title.toUpperCase()}

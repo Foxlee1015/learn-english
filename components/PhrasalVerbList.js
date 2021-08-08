@@ -106,7 +106,6 @@ const PhrasalVerb = ({ data }) => {
   }, [fetchParticles.data]);
 
   const setPhrasalVerbInfo = async () => {
-    console.log(verbs.selectedItem, particles.selectedItem);
     if (verbs.selectedItem !== "" && particles.selectedItem !== "") {
       const selectedPhrasalVerb = particles.items.find(
         (item) => item._id === particles.selectedItem

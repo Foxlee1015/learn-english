@@ -4,7 +4,7 @@ import Cookies from "universal-cookie";
 import { server } from "../../config";
 import AntFormList from "./common/AntFormList";
 
-import {renameObjectKey, removeFalseElements} from "../../utils/utils"
+import { renameObjectKey, removeFalseElements } from "../../utils/utils";
 import AdminStyle from "../../styles/pages/admin/Admin.module.css";
 
 const initialValues = {
@@ -20,12 +20,10 @@ const validateMessages = {
   required: "${label} is required!",
 };
 
-
 const addPhrasalVerb = async (data) => {
-  renameObjectKey({src:data, oldKey:"isPublic", newKey:"is_public"})
-  data["definitions"] = removeFalseElements(data["definitions"])
-  data["sentences"] = removeFalseElements(data["sentences"])
-  console.log(data)
+  renameObjectKey({ src: data, oldKey: "isPublic", newKey: "is_public" });
+  data["definitions"] = removeFalseElements(data["definitions"]);
+  data["sentences"] = removeFalseElements(data["sentences"]);
   const cookies = new Cookies();
   const session = cookies.get("EID_SES");
   const res = await fetch(`${server}/api/phrasal-verbs/`, {
@@ -48,7 +46,7 @@ const PhrasalVerbForm = () => {
   const onFinish = (values) => {
     setLoading(true);
     addPhrasalVerb({
-      ...values
+      ...values,
     });
     form.resetFields();
     setLoading(false);
@@ -81,14 +79,14 @@ const PhrasalVerbForm = () => {
     setShowFormList(false);
     let definitions = [];
     let sentences = [];
-    let difficulty = 1
-    let isPublic = false
+    let difficulty = 1;
+    let isPublic = false;
 
     if (particle !== "") {
-      const phrasalVerb = verbData.find(verb=>verb.particle===particle)
+      const phrasalVerb = verbData.find((verb) => verb.particle === particle);
       if (phrasalVerb) {
-        ({ definitions, sentences, difficulty} = phrasalVerb);
-        isPublic = phrasalVerb["is_public"] === 1 ? true : false
+        ({ definitions, sentences, difficulty } = phrasalVerb);
+        isPublic = phrasalVerb["is_public"] === 1 ? true : false;
       }
     }
 
@@ -97,7 +95,7 @@ const PhrasalVerbForm = () => {
       definitions,
       sentences,
       difficulty,
-      isPublic
+      isPublic,
     });
 
     setShowFormList(true);
