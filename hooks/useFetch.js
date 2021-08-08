@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { setHeaders } from "../utils/apis";
 
 const useFetch = (initialValue) => {
   const [url, setUrl] = useState("");
@@ -13,8 +14,10 @@ const useFetch = (initialValue) => {
       setData(initialValue);
       setError(null);
       const source = axios.CancelToken.source();
+      const headers = setHeaders();
+      const params = { cancelToken: source.token, headers };
       axios
-        .get(url, { cancelToken: source.token })
+        .get(url, params)
         .then((res) => {
           setLoading(false);
           res.data.result && setData(res.data.result);

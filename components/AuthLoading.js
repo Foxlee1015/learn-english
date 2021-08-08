@@ -8,7 +8,7 @@ const styles = {
     padding: 20,
   },
 };
-//
+
 const AuthLoading = () => {
   return (
     <div style={styles.conatiner}>
