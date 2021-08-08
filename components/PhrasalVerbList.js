@@ -9,8 +9,6 @@ import { server } from "../config";
 import useInputSearch from "../hooks/useInputSearch";
 import useFetch from "../hooks/useFetch";
 
-import BarLoader from "react-spinners/BarLoader";
-
 const setUniqueVerbList = (items) => {
   try {
     const uniqueVerbs = new Set();
@@ -18,8 +16,8 @@ const setUniqueVerbList = (items) => {
       uniqueVerbs.add(item.verb.toLowerCase());
     }
 
-    return Array.from(uniqueVerbs).map((item) => {
-      return { verb: item };
+    return Array.from(uniqueVerbs).map((item, index) => {
+      return { _id: index, verb: item };
     });
   } catch {
     return [];
@@ -94,8 +92,11 @@ const PhrasalVerb = ({ data }) => {
     if (verbs.items.length === 0 || verbs.selectedItem === "") {
       resetParticles();
     } else {
+      const selectedVerb = verbs.items.find(
+        (verb) => verb._id === verbs.selectedItem
+      );
       doFetchParticles(
-        `${server}/api/phrasal-verbs/${verbs.selectedItem.toLowerCase()}`
+        `${server}/api/phrasal-verbs/${selectedVerb.verb.toLowerCase()}`
       );
     }
   };
@@ -105,15 +106,16 @@ const PhrasalVerb = ({ data }) => {
   }, [fetchParticles.data]);
 
   const setPhrasalVerbInfo = async () => {
+    console.log(verbs.selectedItem, particles.selectedItem);
     if (verbs.selectedItem !== "" && particles.selectedItem !== "") {
       const selectedPhrasalVerb = particles.items.find(
-        (item) => item.particle === particles.selectedItem
+        (item) => item._id === particles.selectedItem
       );
       if (selectedPhrasalVerb) {
         setCardData({
           ...selectedPhrasalVerb,
-          title: verbs.selectedItem,
-          subTitle: particles.selectedItem,
+          title: selectedPhrasalVerb.verb,
+          subTitle: selectedPhrasalVerb.particle,
         });
       } else {
         setCardData({});
@@ -153,18 +155,8 @@ const PhrasalVerb = ({ data }) => {
         />
       </div>
       <div className={styles.flex}>
-        {fetchVerbs.loading && (
-          <div className={styles.loading}>
-            <BarLoader color="#0070f3" />
-          </div>
-        )}
-        {<SelectItem {...verbs} />}
-        {fetchParticles.loading && (
-          <div className={styles.loading}>
-            <BarLoader color="#0070f3" />
-          </div>
-        )}
-        {<SelectItem {...particles} />}
+        {<SelectItem {...verbs} loading={fetchVerbs.loading} />}
+        {<SelectItem {...particles} loading={fetchParticles.loading} />}
       </div>
       {verbs.selectedItem !== "" && particles.selectedItem !== "" && (
         <ExplanationCard

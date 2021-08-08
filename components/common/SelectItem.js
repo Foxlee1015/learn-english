@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import BarLoader from "react-spinners/BarLoader";
 import styles from "../../styles/components/SelectItem.module.css";
 
 const stringSort = (sortKey) => (a, b) => {
@@ -7,7 +8,13 @@ const stringSort = (sortKey) => (a, b) => {
   return 0;
 };
 
-const SelectItem = ({ items, sortKey, selectedItem, setSelectedItem }) => {
+const SelectItem = ({
+  items,
+  sortKey,
+  selectedItem,
+  setSelectedItem,
+  loading,
+}) => {
   const [sortedItems, setSortedItems] = useState([]);
 
   useEffect(() => {
@@ -18,9 +25,9 @@ const SelectItem = ({ items, sortKey, selectedItem, setSelectedItem }) => {
   const selectFristElementIfNotExist = () => {
     if (
       selectedItem === "" ||
-      !sortedItems.find((item) => item[sortKey] == selectedItem)
+      !sortedItems.find((item) => item["_id"] == selectedItem)
     ) {
-      setSelectedItem(sortedItems[0][sortKey]);
+      setSelectedItem(sortedItems[0]["_id"]);
     }
   };
 
@@ -33,15 +40,16 @@ const SelectItem = ({ items, sortKey, selectedItem, setSelectedItem }) => {
   return (
     <div className={styles.scrollableContainer}>
       <div className={styles.scrollable}>
+        {sortedItems.length === 0 && loading && <BarLoader color="#0070f3" />}
         {sortedItems.length > 0 &&
           sortedItems.map((item) => (
             <button
               className={`${styles.item} ${
-                item[sortKey] === selectedItem && styles.checked
+                item["_id"] === selectedItem && styles.checked
               }`}
-              key={item[sortKey]}
+              key={item["_id"]}
               onClick={() => {
-                setSelectedItem(item[[sortKey]]);
+                setSelectedItem(item[["_id"]]);
               }}
             >
               {item[sortKey]}

@@ -8,7 +8,6 @@ import { createQueryParams, renameObjectKey } from "../utils/utils";
 import { server } from "../config";
 import useInputSearch from "../hooks/useInputSearch";
 import useFetch from "../hooks/useFetch";
-import BarLoader from "react-spinners/BarLoader";
 
 const IdiomList = ({ idiomList }) => {
   const idioms = useSelectItem(idiomList, "expression");
@@ -75,7 +74,7 @@ const IdiomList = ({ idiomList }) => {
 
   const setIdiomInfo = async () => {
     const selectedIdiom = idioms.items.find(
-      (item) => item["expression"] === idioms.selectedItem
+      (item) => item._id === idioms.selectedItem
     );
     if (selectedIdiom) {
       // renameObjectKey({src:selectedIdiom, oldKey:"expression", newKey:"title"})
@@ -101,13 +100,7 @@ const IdiomList = ({ idiomList }) => {
         />
       </div>
       <div className={[styles.strechChildBox]}>
-        {fetchIdioms.loading ? (
-          <div className={styles.loading}>
-            <BarLoader color="#0070f3" />
-          </div>
-        ) : (
-          <SelectItem {...idioms} />
-        )}
+        <SelectItem {...idioms} loading={fetchIdioms.loading} />
       </div>
       {idioms.selectedItem !== "" && (
         <ExplanationCard
