@@ -1,11 +1,14 @@
 import CardStyle from "../../styles/components/ExplanationCard.module.css";
 import useFetch from "../../hooks/useFetch";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { createQueryParams } from "../../utils/utils";
 import { postUserLike } from "../../utils/apis";
 import { server } from "../../config";
 import PuffLoader from "react-spinners/PuffLoader";
 import { LikeOutlined, LikeTwoTone } from "@ant-design/icons";
+import { useSelector } from "react-redux";
+import Notification from "./Notification";
+
 const ExplanationCard = ({
   title = "",
   subTitle = "",
@@ -16,6 +19,8 @@ const ExplanationCard = ({
   resource_id,
 }) => {
   const [fetchLikes, doFetchLikes] = useFetch({ count: 0, active: 0 });
+  const [showNotification, setShowNotification] = useState(false);
+  const auth = useSelector((state) => state.auth);
 
   const updateLikes = () => {
     if (_id) {
@@ -27,12 +32,16 @@ const ExplanationCard = ({
   };
 
   const handleClick = () => {
-    const likeItem = {
-      resources,
-      [resource_id]: _id,
-      like: fetchLikes.data.active === 1 ? 0 : 1,
-    };
-    postUserLike(likeItem, updateLikes);
+    if (auth.loggedIn) {
+      const likeItem = {
+        resources,
+        [resource_id]: _id,
+        like: fetchLikes.data.active === 1 ? 0 : 1,
+      };
+      postUserLike(likeItem, updateLikes);
+    } else {
+      setShowNotification(true);
+    }
   };
 
   useEffect(() => {
@@ -41,6 +50,11 @@ const ExplanationCard = ({
 
   return (
     <div className={CardStyle.container}>
+      <Notification
+        type="loginRequired"
+        open={showNotification}
+        setOpen={setShowNotification}
+      />
       <div className={CardStyle.head}>
         <h3 className={CardStyle.title}>
           {title.toUpperCase()}
