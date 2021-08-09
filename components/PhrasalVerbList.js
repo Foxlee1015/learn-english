@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import SelectItem from "./common/SelectItem";
 import ExplanationCard from "./common/ExplanationCard";
 import InputCheckbox from "./common/InputCheckbox";
@@ -33,8 +33,10 @@ const PhrasalVerb = ({ data }) => {
   const [cardData, setCardData] = useState({});
   const [searchFullText, setSearchFullText] = useState(false);
   const [searchExactText, setSearchExactText] = useState(false);
+  const inputRef = useRef(null);
 
   useEffect(() => {
+    inputRef.current.focus();
     if (data && data.length === 0) {
       getVerbs();
     }
@@ -140,7 +142,7 @@ const PhrasalVerb = ({ data }) => {
 
   return (
     <div className={styles.wrapper}>
-      <input {...inputSearch} className={styles.input} />
+      <input {...inputSearch} className={styles.input} ref={inputRef} />
       <div>
         <InputCheckbox
           label="Search in definitions/sentences"

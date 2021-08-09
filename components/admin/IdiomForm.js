@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Form, Input, Switch, Button, InputNumber } from "antd";
 import { server } from "../../config";
 import AntFormList from "./common/AntFormList";
 import Cookies from "universal-cookie";
 
-import {renameObjectKey, removeFalseElements} from "../../utils/utils"
+import { renameObjectKey, removeFalseElements } from "../../utils/utils";
 import AdminStyle from "../../styles/pages/admin/Admin.module.css";
 
 const initialValues = {
@@ -20,9 +20,9 @@ const validateMessages = {
 };
 
 const addIdiom = async (values) => {
-  renameObjectKey({src:values, oldKey:"isPublic", newKey:"is_public"})
-  values["definitions"] = removeFalseElements(values["definitions"])
-  values["sentences"] = removeFalseElements(values["sentences"])
+  renameObjectKey({ src: values, oldKey: "isPublic", newKey: "is_public" });
+  values["definitions"] = removeFalseElements(values["definitions"]);
+  values["sentences"] = removeFalseElements(values["sentences"]);
   const cookies = new Cookies();
   const session = cookies.get("EID_SES");
   const res = await fetch(`${server}/api/idioms/`, {
@@ -39,13 +39,18 @@ const addIdiom = async (values) => {
 const IdiomForm = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
+  const inputRef = useRef(null);
 
   const onFinish = (values) => {
     setLoading(true);
     addIdiom(values);
     form.resetFields();
     setLoading(false);
+    inputRef.current.focus();
   };
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
 
   return (
     <Form
@@ -60,7 +65,7 @@ const IdiomForm = () => {
         label="Expression"
         rules={[{ required: true }]}
       >
-        <Input />
+        <Input ref={inputRef} />
       </Form.Item>
       <div className={AdminStyle.formSubContainer}>
         <Form.Item
