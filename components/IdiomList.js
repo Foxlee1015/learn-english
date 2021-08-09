@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import SelectItem from "./common/SelectItem";
 import ExplanationCard from "./common/ExplanationCard";
 import InputCheckbox from "./common/InputCheckbox";
@@ -16,10 +16,8 @@ const IdiomList = ({ idiomList }) => {
   const [cardData, setCardData] = useState({});
   const [searchFullText, setSearchFullText] = useState(false);
   const [searchExactText, setSearchExactText] = useState(false);
-  const inputRef = useRef(null);
 
   useEffect(() => {
-    inputRef.current.focus();
     if (idiomList && idiomList.length === 0) {
       getIdioms();
     }
@@ -88,7 +86,7 @@ const IdiomList = ({ idiomList }) => {
 
   return (
     <div className={styles.wrapper}>
-      <input {...inputSearch} className={styles.input} ref={inputRef} />
+      <input {...inputSearch} className={styles.input} />
       <div>
         <InputCheckbox
           label="Search in definitions/sentences"
