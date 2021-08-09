@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Form, Input, Button, InputNumber, Switch } from "antd";
 import Cookies from "universal-cookie";
 import { server } from "../../config";
@@ -42,6 +42,7 @@ const PhrasalVerbForm = () => {
   const [loading, setLoading] = useState(false);
   const [verbData, setVerbData] = useState([]);
   const [showFormList, setShowFormList] = useState(false);
+  const inputRef = useRef(null);
 
   const onFinish = (values) => {
     setLoading(true);
@@ -50,7 +51,12 @@ const PhrasalVerbForm = () => {
     });
     form.resetFields();
     setLoading(false);
+    inputRef.current.focus();
   };
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
 
   useEffect(() => {
     const { verb } = form.getFieldValue();
@@ -121,7 +127,7 @@ const PhrasalVerbForm = () => {
         rules={[{ required: true }]}
         labelAlign="left"
       >
-        <Input onBlur={(e) => getVerbData(e.target.value)} />
+        <Input onBlur={(e) => getVerbData(e.target.value)} ref={inputRef} />
       </Form.Item>
       <Form.Item
         name={"particle"}
