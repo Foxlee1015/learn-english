@@ -48,7 +48,7 @@ const Join = ({}) => {
 
   return (
     <>
-      <h2>Signin</h2>
+      <h2>Join</h2>
       <input {...username} className={signinStyles.input}></input>
       <input {...password} className={signinStyles.input}></input>
       <input
