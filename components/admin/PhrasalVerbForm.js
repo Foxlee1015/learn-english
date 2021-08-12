@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Form, Input, Button, InputNumber, Switch } from "antd";
-import Cookies from "universal-cookie";
-import { server } from "../../config";
 import AntFormList from "./common/AntFormList";
-
+import { postPhrasalVerb } from "../../utils/apis";
+import { server } from "../../config";
 import { renameObjectKey, removeFalseElements } from "../../utils/utils";
 import AdminStyle from "../../styles/pages/admin/Admin.module.css";
 
@@ -20,37 +19,23 @@ const validateMessages = {
   required: "${label} is required!",
 };
 
-const addPhrasalVerb = async (data) => {
-  renameObjectKey({ src: data, oldKey: "isPublic", newKey: "is_public" });
-  data["definitions"] = removeFalseElements(data["definitions"]);
-  data["sentences"] = removeFalseElements(data["sentences"]);
-  const cookies = new Cookies();
-  const session = cookies.get("EID_SES");
-  const res = await fetch(`${server}/api/phrasal-verbs/`, {
-    body: JSON.stringify(data),
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: session,
-    },
-    method: "POST",
-  });
-  const result = await res.json();
-};
-
 const PhrasalVerbForm = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [verbData, setVerbData] = useState([]);
   const [showFormList, setShowFormList] = useState(false);
+  const inputRef = useRef(null);
 
   const onFinish = (values) => {
     setLoading(true);
     addPhrasalVerb({
       ...values,
     });
-    form.resetFields();
-    setLoading(false);
   };
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
 
   useEffect(() => {
     const { verb } = form.getFieldValue();
@@ -101,6 +86,19 @@ const PhrasalVerbForm = () => {
     setShowFormList(true);
   };
 
+  const addPhrasalVerb = async (data) => {
+    renameObjectKey({ src: data, oldKey: "isPublic", newKey: "is_public" });
+    data["verb"] = data.verb.toLowerCase();
+    data["particle"] = data.particle.toLowerCase();
+    data["definitions"] = removeFalseElements(data["definitions"]);
+    data["sentences"] = removeFalseElements(data["sentences"]);
+    postPhrasalVerb(data, () => {
+      form.resetFields();
+      setLoading(false);
+      inputRef.current.focus();
+    });
+  };
+
   const getCurrentVerbParticleData = async (verb) => {
     const res = await fetch(`${server}/api/phrasal-verbs/${verb}`);
     const data = await res.json();
@@ -121,7 +119,7 @@ const PhrasalVerbForm = () => {
         rules={[{ required: true }]}
         labelAlign="left"
       >
-        <Input onBlur={(e) => getVerbData(e.target.value)} />
+        <Input onBlur={(e) => getVerbData(e.target.value)} ref={inputRef} />
       </Form.Item>
       <Form.Item
         name={"particle"}

@@ -29,8 +29,8 @@ const AdminNav = () => {
   }, []);
 
   const handleLogout = () => {
-    dispatch(deauthenticate());
     router.push("/");
+    dispatch(deauthenticate());
   };
 
   return (

@@ -1,11 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Form, Input, Switch, Button, InputNumber } from "antd";
-import { server } from "../../config";
 import AntFormList from "./common/AntFormList";
-import Cookies from "universal-cookie";
-
-import {renameObjectKey, removeFalseElements} from "../../utils/utils"
+import { renameObjectKey, removeFalseElements } from "../../utils/utils";
 import AdminStyle from "../../styles/pages/admin/Admin.module.css";
+import { postIdiom } from "../../utils/apis";
 
 const initialValues = {
   expression: "",
@@ -19,32 +17,30 @@ const validateMessages = {
   required: "${label} is required!",
 };
 
-const addIdiom = async (values) => {
-  renameObjectKey({src:values, oldKey:"isPublic", newKey:"is_public"})
-  values["definitions"] = removeFalseElements(values["definitions"])
-  values["sentences"] = removeFalseElements(values["sentences"])
-  const cookies = new Cookies();
-  const session = cookies.get("EID_SES");
-  const res = await fetch(`${server}/api/idioms/`, {
-    body: JSON.stringify(values),
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: session,
-    },
-    method: "POST",
-  });
-  const result = await res.json();
-};
-
 const IdiomForm = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
 
   const onFinish = (values) => {
     setLoading(true);
     addIdiom(values);
-    form.resetFields();
-    setLoading(false);
+  };
+
+  const addIdiom = async (values) => {
+    renameObjectKey({ src: values, oldKey: "isPublic", newKey: "is_public" });
+    values["expression"] = values.expression.toLowerCase();
+    values["definitions"] = removeFalseElements(values["definitions"]);
+    values["sentences"] = removeFalseElements(values["sentences"]);
+    postIdiom(values, () => {
+      form.resetFields();
+      setLoading(false);
+      inputRef.current.focus();
+    });
   };
 
   return (
@@ -60,7 +56,7 @@ const IdiomForm = () => {
         label="Expression"
         rules={[{ required: true }]}
       >
-        <Input />
+        <Input ref={inputRef} />
       </Form.Item>
       <div className={AdminStyle.formSubContainer}>
         <Form.Item

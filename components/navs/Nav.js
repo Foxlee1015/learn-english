@@ -2,7 +2,10 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import navStyles from "../../styles/components/Nav.module.css";
 import { useSelector, useDispatch } from "react-redux";
-import { reauthenticate, deauthenticate } from "../../redux/actions/authActions";
+import {
+  reauthenticate,
+  deauthenticate,
+} from "../../redux/actions/authActions";
 import { useEffect } from "react";
 
 const routes = [
@@ -22,9 +25,9 @@ const Nav = () => {
     router.push("/");
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(reauthenticate());
-  },[])
+  }, []);
 
   return (
     <nav className={navStyles.nav}>
@@ -38,8 +41,8 @@ const Nav = () => {
       <div className={navStyles.buttons}>
         {auth.is_admin === 1 && (
           <button className={navStyles.linkText}>
-          <Link href={"/admin"}>Admin</Link>
-        </button>
+            <Link href={"/admin"}>Admin</Link>
+          </button>
         )}
         {auth.loggedIn ? (
           <>
@@ -54,9 +57,14 @@ const Nav = () => {
             </button>
           </>
         ) : (
-          <button className={navStyles.linkText}>
-            <Link href={"/member/signin"}>Signin</Link>
-          </button>
+          <>
+            <button className={navStyles.linkText}>
+              <Link href={"/member/signin"}>Signin</Link>
+            </button>
+            <button className={navStyles.linkText}>
+              <Link href={"/member/join"}>Join</Link>
+            </button>
+          </>
         )}
       </div>
     </nav>
