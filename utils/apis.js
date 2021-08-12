@@ -42,3 +42,25 @@ export const postNewUser = async (
     failCallack(response.message);
   }
 };
+
+export const postIdiom = async (data, callback) => {
+  const res = await fetch(`${server}/api/idioms/`, {
+    body: JSON.stringify(data),
+    headers: setHeaders(),
+    method: "POST",
+  });
+  if (res.status === 201) {
+    callback();
+  }
+};
+
+export const postPhrasalVerb = async (data, callback) => {
+  const res = await fetch(`${server}/api/phrasal-verbs/`, {
+    body: JSON.stringify(data),
+    headers: setHeaders(),
+    method: "POST",
+  });
+  if (res.status === 201) {
+    callback();
+  }
+};
