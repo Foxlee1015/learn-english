@@ -5,25 +5,6 @@ import useInput from "../../hooks/useInput";
 import signinStyles from "../../styles/components/Signin.module.css";
 import { postNewUser } from "../../utils/apis";
 
-function validatePassword(p, setErrors) {
-  const errors = [];
-  if (p.length < 8) {
-      errors.push("Your password must be at least 8 characters"); 
-  }
-  if (p.search(/[a-z]/i) < 0) {
-      errors.push("Your password must contain at least one letter.");
-  }
-  if (p.search(/[0-9]/) < 0) {
-      errors.push("Your password must contain at least one digit."); 
-  }
-  if (errors.length > 0) {
-    setErrors(errors.join("\n"))
-  } else {
-    setErrors("")
-  }
-}
-
-
 const Join = ({}) => {
   const router = useRouter();
   const username = useInput("username", "username", "text");
@@ -33,9 +14,8 @@ const Join = ({}) => {
     "confirm password",
     "password"
   );
-  const [errMsg, setErrMsg] = useState("");
+  const [errMsg, setErrMsg] = useState([]);
   const [openSubmit, setOpenSubmit] = useState(false);
-
 
   useEffect(() => {
     setOpenSubmit(false);
@@ -46,16 +26,35 @@ const Join = ({}) => {
     }
   }, [username.value, password.value, passwordConfirm.value]);
 
+  function validatePassword() {
+    const errors = [];
+
+    if (password.value === "") {
+      setErrMsg([]);
+      return;
+    }
+    if (password.value.length < 8) {
+      errors.push("Your password must be at least 8 characters");
+    }
+    if (password.value.search(/[a-z]/i) < 0) {
+      errors.push("Your password must contain at least one letter.");
+    }
+    if (password.value.search(/[0-9]/) < 0) {
+      errors.push("Your password must contain at least one digit.");
+    }
+    setErrMsg([...errors]);
+  }
+
   const submit = () => {
-    if (openSubmit && error === "") {
+    if (openSubmit && errMsg.length === 0) {
       postNewUser(
         {
           name: username.value,
           password: password.value,
           password_confirm: passwordConfirm.value,
         },
-        () => router.push("/"),
-        (err) => setErrMsg(err)
+        () => router.push("/member/signin/"),
+        (err) => setErrMsg([err])
       );
     }
   };
@@ -67,22 +66,28 @@ const Join = ({}) => {
   };
 
   const validatePasswords = () => {
-    if (password.value !== passwordConfirm.value) {
-      setErrMsg("password and password confirm must match.")
+    const matchErr = "password and password confirm must match.";
+    if (password.value === passwordConfirm.value) {
+      setErrMsg([]);
+    } else {
+      setErrMsg([matchErr]);
     }
-  }
+  };
+
+  useEffect(() => {
+    validatePassword();
+  }, [password.value]);
 
   return (
     <>
       <h2>Join</h2>
       <input {...username} className={signinStyles.input}></input>
-      <input {...password} className={signinStyles.input} onBlur={()=>{
-    validatePassword(password.value, setErrMsg)}}></input>
+      <input {...password} className={signinStyles.input}></input>
       <input
         {...passwordConfirm}
         className={signinStyles.input}
         onKeyDown={handleKeyDown}
-        onBlur={()=>validatePasswords()}
+        onBlur={() => validatePasswords()}
       ></input>
       <button
         type="button"
@@ -92,7 +97,9 @@ const Join = ({}) => {
       >
         Submit
       </button>
-      {errMsg}
+      {errMsg.map((err) => (
+        <p key={err}>{err}</p>
+      ))}
     </>
   );
 };
