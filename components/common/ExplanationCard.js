@@ -10,6 +10,17 @@ import { useSelector } from "react-redux";
 import Notification from "./Notification";
 import useNotification from "../../hooks/useNotification";
 
+const setTitle = ({title, subTitle, upperCase=true}) => {
+  const mainText = upperCase ? title.toUpperCase() : title;
+
+  if (subTitle !=="") {
+    const subText = upperCase ? subTitle.toUpperCase(): subTitle;
+    return `${mainText} - ${subText}`
+  }
+  return mainText
+}
+
+
 const ExplanationCard = ({
   title = "",
   subTitle = "",
@@ -50,7 +61,7 @@ const ExplanationCard = ({
       };
       postUserLike(likeItem, () => {
         updateLikes();
-        notification.setText(notiText);
+        notification.setText(`${notiText} - ${setTitle({title,subTitle, upperCase:false})}`);
       });
     } else {
       notification.setText("Please log in first");
@@ -67,8 +78,7 @@ const ExplanationCard = ({
       <Notification {...notification} />
       <div className={CardStyle.head}>
         <h3 className={CardStyle.title}>
-          {title.toUpperCase()}
-          {subTitle && ` - ${subTitle.toUpperCase()}`}
+          {setTitle({title, subTitle})}
         </h3>
         <div className={CardStyle.likeBox}>
           {fetchLikes.loading ? (
