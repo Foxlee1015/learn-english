@@ -2,51 +2,77 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
 import useInput from "../../hooks/useInput";
-import signinStyles from "../../styles/components/Signin.module.css";
+import memberStyles from "../../styles/components/Member.module.css";
 import { postNewUser } from "../../utils/apis";
+
+const usernameErr =
+  "Username must be at 4~10 characters and contain at least one lower case and one digit.";
+const matchErr = "Password and Password confirm must match.";
+const lengthErr = "Password must be between 8 and 16 characters.";
+const lowercaseErr = "Password must contain at least one lower case.";
+const uppercaseErr = "Password must contain at least one upper case.";
+const digitErr = "Password must contain at least one digit.";
+const usernameRegex = /^(?=.*[a-z])(?=.*\d)[a-z\d]{4,10}$/;
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,16}$/;
 
 const Join = ({}) => {
   const router = useRouter();
-  const username = useInput("username", "username", "text");
-  const password = useInput("password", "password", "password");
-  const passwordConfirm = useInput(
+  const [username, usernameMsg] = useInput("username", "username", "text");
+  const [password, _] = useInput("password", "password", "password");
+  const [passwordConfirm, passwordMsg] = useInput(
     "confirm password",
     "confirm password",
     "password"
   );
-  const [errMsg, setErrMsg] = useState([]);
   const [openSubmit, setOpenSubmit] = useState(false);
 
   useEffect(() => {
     setOpenSubmit(false);
     if (username.value !== "" && password.value !== "") {
-      if (passwordConfirm.value === password.value) {
+      if (usernameMsg.err.length === 0 && passwordMsg.err.length === 0) {
         setOpenSubmit(true);
       }
     }
-  }, [username.value, password.value, passwordConfirm.value]);
+  }, [usernameMsg.err, passwordMsg.err]);
 
-  function validatePassword() {
-    const errors = [];
-
-    if (password.value === "") {
-      setErrMsg([]);
+  const validateUsername = () => {
+    if (usernameRegex.test(username.value)) {
+      usernameMsg.setErr([]);
       return;
     }
-    if (password.value.length < 8) {
-      errors.push("Your password must be at least 8 characters");
+    usernameMsg.setErr([usernameErr]);
+  };
+
+  const validatePassword = () => {
+    const pwd = password.value;
+
+    if (passwordRegex.test(pwd)) {
+      passwordMsg.setErr([]);
+      return;
     }
-    if (password.value.search(/[a-z]/i) < 0) {
-      errors.push("Your password must contain at least one letter.");
+    if (pwd === "") {
+      passwordMsg.setErr([]);
+      return;
     }
-    if (password.value.search(/[0-9]/) < 0) {
-      errors.push("Your password must contain at least one digit.");
+
+    const errors = [];
+    if (pwd.length < 8 || pwd.length > 16) {
+      errors.push(lengthErr);
     }
-    setErrMsg([...errors]);
-  }
+    if (pwd.search(/[a-z]/i) < 0) {
+      errors.push(lowercaseErr);
+    }
+    if (pwd.search(/[A-Z]/) < 0) {
+      errors.push(uppercaseErr);
+    }
+    if (pwd.search(/[0-9]/) < 0) {
+      errors.push(digitErr);
+    }
+    passwordMsg.setErr([...errors]);
+  };
 
   const submit = () => {
-    if (openSubmit && errMsg.length === 0) {
+    if (openSubmit) {
       postNewUser(
         {
           name: username.value,
@@ -54,7 +80,7 @@ const Join = ({}) => {
           password_confirm: passwordConfirm.value,
         },
         () => router.push("/member/signin/"),
-        (err) => setErrMsg([err])
+        (err) => passwordMsg.setErr([err])
       );
     }
   };
@@ -66,11 +92,10 @@ const Join = ({}) => {
   };
 
   const validatePasswords = () => {
-    const matchErr = "password and password confirm must match.";
     if (password.value === passwordConfirm.value) {
-      setErrMsg([]);
+      passwordMsg.setErr([]);
     } else {
-      setErrMsg([matchErr]);
+      passwordMsg.setErr([matchErr]);
     }
   };
 
@@ -79,28 +104,39 @@ const Join = ({}) => {
   }, [password.value]);
 
   return (
-    <>
-      <h2>Join</h2>
-      <input {...username} className={signinStyles.input}></input>
-      <input {...password} className={signinStyles.input}></input>
+    <div className={memberStyles.contianer}>
+      <h2 className={memberStyles.title}>Join</h2>
+      <input
+        {...username}
+        className={memberStyles.input}
+        onBlur={() => validateUsername()}
+      ></input>
+      {usernameMsg.err.map((err) => (
+        <p className={memberStyles.err} key={err}>
+          {err}
+        </p>
+      ))}
+      <input {...password} className={memberStyles.input}></input>
       <input
         {...passwordConfirm}
-        className={signinStyles.input}
+        className={memberStyles.input}
         onKeyDown={handleKeyDown}
         onBlur={() => validatePasswords()}
       ></input>
+      {passwordMsg.err.map((err) => (
+        <p className={memberStyles.err} key={err}>
+          {err}
+        </p>
+      ))}
       <button
         type="button"
-        className={signinStyles.btn}
+        className={memberStyles.btn}
         disabled={!openSubmit}
         onClick={(e) => submit(e)}
       >
         Submit
       </button>
-      {errMsg.map((err) => (
-        <p key={err}>{err}</p>
-      ))}
-    </>
+    </div>
   );
 };
 

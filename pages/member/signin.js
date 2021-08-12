@@ -1,17 +1,16 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 
-import { authenticate, reauthenticate } from "../../redux/actions/authActions";
+import { authenticate } from "../../redux/actions/authActions";
 import useInput from "../../hooks/useInput";
 
-import signinStyles from "../../styles/components/Signin.module.css";
+import memberStyles from "../../styles/components/Member.module.css";
 
 const Signin = ({}) => {
   const router = useRouter();
-  const username = useInput("username", "username", "text");
-  const password = useInput("password", "password", "password");
-  const [errMsg, setErrMsg] = useState("");
+  const [username, _] = useInput("username", "username", "text");
+  const [password, passwordMsg] = useInput("password", "password", "password");
   const [openSubmit, setOpenSubmit] = useState(false);
   const dispatch = useDispatch();
 
@@ -33,8 +32,8 @@ const Signin = ({}) => {
           },
           () => {
             router.push("/");
-        },
-          (err) => setErrMsg(err)
+          },
+          (err) => passwordMsg.setErr([err])
         )
       );
     }
@@ -47,24 +46,28 @@ const Signin = ({}) => {
   };
 
   return (
-    <>
-      <h2>Signin</h2>
-      <input {...username} className={signinStyles.input}></input>
+    <div className={memberStyles.contianer}>
+      <h2 className={memberStyles.title}>Signin</h2>
+      <input {...username} className={memberStyles.input}></input>
       <input
         {...password}
-        className={signinStyles.input}
+        className={memberStyles.input}
         onKeyDown={handleKeyDown}
       ></input>
+      {passwordMsg.err.map((err) => (
+        <p className={memberStyles.err} key={err}>
+          {err}
+        </p>
+      ))}
       <button
         type="button"
-        className={signinStyles.btn}
+        className={memberStyles.btn}
         disabled={!openSubmit}
         onClick={(e) => submit(e)}
       >
         Submit
       </button>
-      {errMsg}
-    </>
+    </div>
   );
 };
 
