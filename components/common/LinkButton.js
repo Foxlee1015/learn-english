@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-const ButtonLink = ({style, href=null, text, onClick=()=>{}}) => {
+const LinkButton = ({style, href=null, text, onClick=()=>{}}) => {
   return (
     <button className={style} onClick={()=>onClick()}>
         {href ? <Link href={href}>{text}</Link> : text}
@@ -8,4 +8,4 @@ const ButtonLink = ({style, href=null, text, onClick=()=>{}}) => {
   )
 };
 
-export default ButtonLink;
+export default LinkButton;

@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import useFetch from "../../hooks/useFetch";
+import LikeButton from "../common/LikeButton";
 
 const LikeList = () => {
   const [fetchIdioms, doFetchIdioms] = useFetch({});
@@ -14,7 +15,18 @@ const LikeList = () => {
       <div>
         {fetchIdioms.loading && <p>loading...</p>}
         {fetchIdioms.data.phrassal_verbs && fetchIdioms.data.phrassal_verbs.map(item=>(
-          <p key={item._id}>{item.verb}-{item.particle}</p>
+          <div key={item._id}>
+            <p>{item.verb}-{item.particle}</p>
+            <div>
+              <LikeButton 
+                active
+                resources="phrasal-verbs"
+                resource_id="phrasal_verb_id"
+                _id={item._id}
+                callback={()=>doFetchIdioms(`users/likes`)}
+              />
+            </div>
+          </div>
         ))}
       </div>
     </div>
@@ -23,7 +35,18 @@ const LikeList = () => {
       <div>
         {fetchIdioms.loading && <p>loading...</p>}
         {fetchIdioms.data.idioms && fetchIdioms.data.idioms.map(item=>(
-          <p key={item._id}>{item.expression}</p>
+          <div key={item._id}>
+            <p>{item.expression}</p>
+            <div>
+              <LikeButton 
+                  active
+                  resources="idioms"
+                  resource_id="idiom_id" 
+                  _id={item._id}
+                  callback={()=>doFetchIdioms(`users/likes`)}
+                />
+            </div>
+          </div>
         ))}
       </div>
     </div>
