@@ -12,7 +12,7 @@ import useFetch from "../hooks/useFetch";
 const IdiomList = ({ idiomList }) => {
   const idioms = useSelectItem(idiomList, "expression");
   const [inputSearch, setInputSearchPlaceholder] = useInputSearch();
-  const [fetchIdioms, doFetchIidoms] = useFetch([]);
+  const [fetchIdioms, doFetchIdioms] = useFetch([]);
   const [cardData, setCardData] = useState({});
   const [searchFullText, setSearchFullText] = useState(false);
   const [searchExactText, setSearchExactText] = useState(false);
@@ -69,7 +69,7 @@ const IdiomList = ({ idiomList }) => {
       full_search: fullSearch,
       exact: ExactSearch,
     });
-    doFetchIidoms(`${server}/api/idioms/?${params}`);
+    doFetchIdioms(`${server}/api/idioms/?${params}`);
   };
 
   const setIdiomInfo = async () => {
