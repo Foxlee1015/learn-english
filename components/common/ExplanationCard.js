@@ -2,12 +2,11 @@ import CardStyle from "../../styles/components/ExplanationCard.module.css";
 import useFetch from "../../hooks/useFetch";
 import { useEffect } from "react";
 import { createQueryParams } from "../../utils/utils";
-import { postUserLike } from "../../utils/apis";
 import PuffLoader from "react-spinners/PuffLoader";
-import { LikeOutlined, LikeTwoTone } from "@ant-design/icons";
-import { useSelector } from "react-redux";
+import LikeButton from "./LikeButton";
 import Notification from "./Notification";
 import useNotification from "../../hooks/useNotification";
+import { useSelector } from "react-redux";
 
 const setTitle = ({title, subTitle, upperCase=true}) => {
   const mainText = upperCase ? title.toUpperCase() : title;
@@ -19,7 +18,6 @@ const setTitle = ({title, subTitle, upperCase=true}) => {
   return mainText
 }
 
-
 const ExplanationCard = ({
   title = "",
   subTitle = "",
@@ -30,9 +28,8 @@ const ExplanationCard = ({
   resource_id,
 }) => {
   const [fetchLikes, doFetchLikes] = useFetch({ count: 0, active: 0 });
-  const notification = useNotification();
   const auth = useSelector((state) => state.auth);
-
+  const notification = useNotification();
   const updateLikes = () => {
     if (_id) {
       const params = createQueryParams({
@@ -42,38 +39,39 @@ const ExplanationCard = ({
     }
   };
 
-  const handleClick = () => {
-    if (auth.loggedIn) {
-      let like;
-      let notiText;
-      if (fetchLikes.data.active === 1) {
-        like = 0;
-        notiText = "Removed in likes";
-      } else {
-        like = 1;
-        notiText = "Saved in likes";
-      }
-      const likeItem = {
-        resources,
-        like,
-        [resource_id]: _id,
-      };
-      postUserLike(likeItem, () => {
-        updateLikes();
-        notification.setText(`${notiText} - ${setTitle({title,subTitle, upperCase:false})}`);
-      });
-    } else {
-      notification.setText("Please log in first");
-    }
-    notification.setOpen(true);
-  };
 
   useEffect(() => {
     updateLikes();
   }, [_id]);
 
+  const showNotifications = () => {
+    if (auth.loggedIn) {
+      showLikeResultNotification()
+    } else {
+      showAuthNotification()
+    }
+  }
+  
+  const showErrNotification = (msg) => {
+    notification.setText(msg);
+    notification.setOpen(true)
+  }
+
+  const showLikeResultNotification = () => {
+    let notiText;
+    if (fetchLikes.data.active === 1) {
+      notiText = "Removed in likes";
+    } else {
+      notiText = "Saved in likes";
+    }
+    notiText = `${notiText}-${setTitle({title, subTitle, upperCase:false})}`
+    console.log(notiText)
+    notification.setText(notiText)
+    notification.setOpen(true)    
+  }
+
   return (
-    <div className={CardStyle.container}>
+    <div className={CardStyle.container}>    
       <Notification {...notification} />
       <div className={CardStyle.head}>
         <h3 className={CardStyle.title}>
@@ -84,13 +82,15 @@ const ExplanationCard = ({
             <PuffLoader size={20} />
           ) : (
             <>
-              <button onClick={() => handleClick()}>
-                {fetchLikes.data.active === 1 ? (
-                  <LikeTwoTone />
-                ) : (
-                  <LikeOutlined />
-                )}
-              </button>
+              <LikeButton
+                active={fetchLikes.data.active === 1}
+                resources={resources}
+                _id={_id}
+                successCallback={()=>{
+                  showLikeResultNotification()
+                  updateLikes()}}
+                  failCallback={showErrNotification}
+              />
               <p className={CardStyle.count}>{fetchLikes.data.count}</p>
             </>
           )}

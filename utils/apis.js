@@ -11,7 +11,7 @@ export const setHeaders = () => {
   return headers;
 };
 
-export const postUserLike = async ({ resources, ...data }, callback) => {
+export const postUserLike = async ({ resources, ...data }, callback, failCallback) => {
   const res = await fetch(`${server}/api/${resources}/likes`, {
     body: JSON.stringify(data),
     headers: setHeaders(),
@@ -19,6 +19,10 @@ export const postUserLike = async ({ resources, ...data }, callback) => {
   });
   if (res.status === 200) {
     callback();
+  } else if (res.status === 401) {
+    failCallback("Please login first");
+  } else {
+    failCallback("Something went wrong.")
   }
 };
 

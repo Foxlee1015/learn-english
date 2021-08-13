@@ -21,7 +21,6 @@ const LikeList = () => {
               <LikeButton 
                 active
                 resources="phrasal-verbs"
-                resource_id="phrasal_verb_id"
                 _id={item._id}
                 callback={()=>doFetchIdioms(`users/likes`)}
               />
@@ -41,7 +40,6 @@ const LikeList = () => {
               <LikeButton 
                   active
                   resources="idioms"
-                  resource_id="idiom_id" 
                   _id={item._id}
                   callback={()=>doFetchIdioms(`users/likes`)}
                 />
