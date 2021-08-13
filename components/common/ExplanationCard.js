@@ -8,15 +8,15 @@ import Notification from "./Notification";
 import useNotification from "../../hooks/useNotification";
 import { useSelector } from "react-redux";
 
-const setTitle = ({title, subTitle, upperCase=true}) => {
+const setTitle = ({ title, subTitle, upperCase = true }) => {
   const mainText = upperCase ? title.toUpperCase() : title;
 
-  if (subTitle !=="") {
-    const subText = upperCase ? subTitle.toUpperCase(): subTitle;
-    return `${mainText} - ${subText}`
+  if (subTitle !== "") {
+    const subText = upperCase ? subTitle.toUpperCase() : subTitle;
+    return `${mainText}-${subText}`;
   }
-  return mainText
-}
+  return mainText;
+};
 
 const ExplanationCard = ({
   title = "",
@@ -28,7 +28,6 @@ const ExplanationCard = ({
   resource_id,
 }) => {
   const [fetchLikes, doFetchLikes] = useFetch({ count: 0, active: 0 });
-  const auth = useSelector((state) => state.auth);
   const notification = useNotification();
   const updateLikes = () => {
     if (_id) {
@@ -39,23 +38,14 @@ const ExplanationCard = ({
     }
   };
 
-
   useEffect(() => {
     updateLikes();
   }, [_id]);
 
-  const showNotifications = () => {
-    if (auth.loggedIn) {
-      showLikeResultNotification()
-    } else {
-      showAuthNotification()
-    }
-  }
-  
   const showErrNotification = (msg) => {
     notification.setText(msg);
-    notification.setOpen(true)
-  }
+    notification.setOpen(true);
+  };
 
   const showLikeResultNotification = () => {
     let notiText;
@@ -64,19 +54,20 @@ const ExplanationCard = ({
     } else {
       notiText = "Saved in likes";
     }
-    notiText = `${notiText}-${setTitle({title, subTitle, upperCase:false})}`
-    console.log(notiText)
-    notification.setText(notiText)
-    notification.setOpen(true)    
-  }
+    notiText = `${notiText} - ${setTitle({
+      title,
+      subTitle,
+      upperCase: false,
+    })}`;
+    notification.setText(notiText);
+    notification.setOpen(true);
+  };
 
   return (
-    <div className={CardStyle.container}>    
+    <div className={CardStyle.container}>
       <Notification {...notification} />
       <div className={CardStyle.head}>
-        <h3 className={CardStyle.title}>
-          {setTitle({title, subTitle})}
-        </h3>
+        <h3 className={CardStyle.title}>{setTitle({ title, subTitle })}</h3>
         <div className={CardStyle.likeBox}>
           {fetchLikes.loading ? (
             <PuffLoader size={20} />
@@ -86,10 +77,11 @@ const ExplanationCard = ({
                 active={fetchLikes.data.active === 1}
                 resources={resources}
                 _id={_id}
-                successCallback={()=>{
-                  showLikeResultNotification()
-                  updateLikes()}}
-                  failCallback={showErrNotification}
+                successCallback={() => {
+                  showLikeResultNotification();
+                  updateLikes();
+                }}
+                failCallback={showErrNotification}
               />
               <p className={CardStyle.count}>{fetchLikes.data.count}</p>
             </>

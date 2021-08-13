@@ -1,6 +1,16 @@
 import Cookies from "universal-cookie";
 import { server } from "../config";
 
+const checkIfSessionExists = () => {
+  const cookies = new Cookies();
+  const session = cookies.get("EID_SES");
+  if (session) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
 export const setHeaders = () => {
   const headers = { "Content-Type": "application/json" };
   const cookies = new Cookies();
@@ -11,7 +21,14 @@ export const setHeaders = () => {
   return headers;
 };
 
-export const postUserLike = async ({ resources, ...data }, callback, failCallback) => {
+export const postUserLike = async (
+  { resources, ...data },
+  callback,
+  failCallback
+) => {
+  if (!checkIfSessionExists()) {
+    failCallback("Please login first");
+  }
   const res = await fetch(`${server}/api/${resources}/likes`, {
     body: JSON.stringify(data),
     headers: setHeaders(),
@@ -20,9 +37,9 @@ export const postUserLike = async ({ resources, ...data }, callback, failCallbac
   if (res.status === 200) {
     callback();
   } else if (res.status === 401) {
-    failCallback("Please login first");
+    failCallback("Please login.");
   } else {
-    failCallback("Something went wrong.")
+    failCallback("Something went wrong.");
   }
 };
 
