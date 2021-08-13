@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 
 import { authenticate } from "../../redux/actions/authActions";
 import useInput from "../../hooks/useInput";
+import ErrorMessage from "../../components/member/ErrorMessage";
 
 import memberStyles from "../../styles/components/Member.module.css";
 
@@ -12,28 +13,36 @@ const Signin = ({}) => {
   const [username, _] = useInput("username", "username", "text");
   const [password, passwordMsg] = useInput("password", "password", "password");
   const [openSubmit, setOpenSubmit] = useState(false);
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
-  useEffect(() => {
+  const validateValues = () => {
     if (username.value !== "" && password.value !== "") {
+      return true;
+    }
+    return false;
+  };
+
+  useEffect(() => {
+    if (validateValues()) {
       setOpenSubmit(true);
     } else {
       setOpenSubmit(false);
     }
   }, [username.value, password.value]);
 
-  const submit = () => {
-    if (username.value !== "" && password.value !== "") {
+  const submit = async () => {
+    if (openSubmit) {
+      setLoading(true);
       dispatch(
         authenticate(
           {
             username: username.value,
             password: password.value,
           },
-          () => {
-            router.push("/");
-          },
-          (err) => passwordMsg.setErr([err])
+          () => router.push("/"),
+          (err) => passwordMsg.setErr([err]),
+          () => setLoading(false)
         )
       );
     }
@@ -54,18 +63,14 @@ const Signin = ({}) => {
         className={memberStyles.input}
         onKeyDown={handleKeyDown}
       ></input>
-      {passwordMsg.err.map((err) => (
-        <p className={memberStyles.err} key={err}>
-          {err}
-        </p>
-      ))}
+      <ErrorMessage errors={passwordMsg.err} />
       <button
         type="button"
         className={memberStyles.btn}
         disabled={!openSubmit}
         onClick={(e) => submit(e)}
       >
-        Submit
+        {loading ? "loading..." : "Submit"}
       </button>
     </div>
   );

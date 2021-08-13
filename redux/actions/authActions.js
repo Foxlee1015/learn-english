@@ -3,7 +3,7 @@ import { AUTHENTICATE, DEAUTHENTICATE, REAUTHENTICATE } from "../actionTypes";
 import Cookies from "universal-cookie";
 
 export const authenticate =
-  (user, successCallback, failCallback) => (dispatch) => {
+  (user, successCallback, failCallback, finishCallback) => (dispatch) => {
     fetch(`${server}/api/sessions/`, {
       body: JSON.stringify(user),
       headers: {
@@ -23,48 +23,53 @@ export const authenticate =
       .then((response) => {
         if (response && response.result) {
           const cookies = new Cookies();
-          const {session, name, is_admin} = response.result
+          const { session, name, is_admin } = response.result;
           cookies.set("EID_SES", session, {
             path: "/",
             maxAge: 60 * 60 * 24,
           });
-          dispatch({ type: AUTHENTICATE, payload: {name, is_admin} });
+          dispatch({ type: AUTHENTICATE, payload: { name, is_admin } });
           successCallback();
         }
       })
       .catch(() => {
         failCallback("Sever error");
+      })
+      .finally(() => {
+        finishCallback();
       });
   };
 
-export const reauthenticate = (successCallback=()=>{}, failCallback=()=>{}) => (dispatch) => {
-  const cookies = new Cookies();
-  const session = cookies.get("EID_SES");
-  if (session) {
-    fetch(`${server}/api/sessions/validate`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: session,
-      },
-    })
-      .then((res) => {
-        if (res.status === 200) {
-          return res.json();
-        }
+export const reauthenticate =
+  (successCallback = () => {}, failCallback = () => {}) =>
+  (dispatch) => {
+    const cookies = new Cookies();
+    const session = cookies.get("EID_SES");
+    if (session) {
+      fetch(`${server}/api/sessions/validate`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: session,
+        },
       })
-      .then((response) => {
-        dispatch({ type: REAUTHENTICATE, payload: response.result });
-        successCallback()
-      })
-      .catch((err) => {
-        dispatch({ type: DEAUTHENTICATE });
-        failCallback()
-      });
-  } else {
-    dispatch({ type: DEAUTHENTICATE });
-    failCallback()
-  }
-};
+        .then((res) => {
+          if (res.status === 200) {
+            return res.json();
+          }
+        })
+        .then((response) => {
+          dispatch({ type: REAUTHENTICATE, payload: response.result });
+          successCallback();
+        })
+        .catch((err) => {
+          dispatch({ type: DEAUTHENTICATE });
+          failCallback();
+        });
+    } else {
+      dispatch({ type: DEAUTHENTICATE });
+      failCallback();
+    }
+  };
 
 export const deauthenticate = () => (dispatch) => {
   const cookies = new Cookies();

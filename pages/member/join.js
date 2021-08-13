@@ -4,39 +4,56 @@ import { useRouter } from "next/router";
 import useInput from "../../hooks/useInput";
 import memberStyles from "../../styles/components/Member.module.css";
 import { postNewUser } from "../../utils/apis";
+import ErrorMessage from "../../components/member/ErrorMessage";
 
 const usernameErr =
-  "Username must be at 4~10 characters and contain at least one lower case and one digit.";
+  "Username must be at 4~10 characters and contain only lower cases and digits.";
 const matchErr = "Password and Password confirm must match.";
 const lengthErr = "Password must be between 8 and 16 characters.";
 const lowercaseErr = "Password must contain at least one lower case.";
 const uppercaseErr = "Password must contain at least one upper case.";
 const digitErr = "Password must contain at least one digit.";
-const usernameRegex = /^(?=.*[a-z])(?=.*\d)[a-z\d]{4,10}$/;
+const usernameRegex = /^[a-z0-9]{4,10}$/;
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,16}$/;
 
 const Join = ({}) => {
   const router = useRouter();
   const [username, usernameMsg] = useInput("username", "username", "text");
-  const [password, _] = useInput("password", "password", "password");
-  const [passwordConfirm, passwordMsg] = useInput(
+  const [password, passwordMsg] = useInput("password", "password", "password");
+  const [passwordConfirm, passwordConfirmMsg] = useInput(
     "confirm password",
     "confirm password",
     "password"
   );
   const [openSubmit, setOpenSubmit] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [joinResult, setJoinResult] = useState("");
 
   useEffect(() => {
     setOpenSubmit(false);
-    if (username.value !== "" && password.value !== "") {
-      if (usernameMsg.err.length === 0 && passwordMsg.err.length === 0) {
-        setOpenSubmit(true);
-      }
+    const values = [username.value, password.value, passwordConfirm.value];
+    const errCounts = [
+      usernameMsg.err.length,
+      passwordMsg.err.length,
+      passwordConfirmMsg.err.length,
+    ];
+
+    if (
+      joinResult === "" &&
+      !values.includes("") &&
+      errCounts.every((cnt) => cnt === 0)
+    ) {
+      setOpenSubmit(true);
     }
-  }, [usernameMsg.err, passwordMsg.err]);
+  }, [usernameMsg, passwordMsg, passwordConfirmMsg, joinResult]);
+
+  useEffect(() => {
+    setJoinResult("");
+  }, [password.value, passwordConfirm.value, username.value]);
 
   const validateUsername = () => {
-    if (usernameRegex.test(username.value)) {
+    const name = username.value;
+    if (name === "" || usernameRegex.test(name)) {
       usernameMsg.setErr([]);
       return;
     }
@@ -46,23 +63,18 @@ const Join = ({}) => {
   const validatePassword = () => {
     const pwd = password.value;
 
-    if (passwordRegex.test(pwd)) {
+    if (pwd === "" || passwordRegex.test(pwd)) {
       passwordMsg.setErr([]);
       return;
     }
-    if (pwd === "") {
-      passwordMsg.setErr([]);
-      return;
-    }
-
     const errors = [];
     if (pwd.length < 8 || pwd.length > 16) {
       errors.push(lengthErr);
     }
-    if (pwd.search(/[a-z]/i) < 0) {
+    if (!/[a-z]/.test(pwd)) {
       errors.push(lowercaseErr);
     }
-    if (pwd.search(/[A-Z]/) < 0) {
+    if (!/[A-Z]/.test(pwd)) {
       errors.push(uppercaseErr);
     }
     if (pwd.search(/[0-9]/) < 0) {
@@ -71,17 +83,19 @@ const Join = ({}) => {
     passwordMsg.setErr([...errors]);
   };
 
-  const submit = () => {
+  const submit = async () => {
     if (openSubmit) {
-      postNewUser(
+      setLoading(true);
+      await postNewUser(
         {
           name: username.value,
           password: password.value,
           password_confirm: passwordConfirm.value,
         },
         () => router.push("/member/signin/"),
-        (err) => passwordMsg.setErr([err])
+        (err) => setJoinResult(err)
       );
+      setLoading(false);
     }
   };
 
@@ -92,16 +106,12 @@ const Join = ({}) => {
   };
 
   const validatePasswords = () => {
-    if (password.value === passwordConfirm.value) {
-      passwordMsg.setErr([]);
+    if (password.value !== passwordConfirm.value) {
+      passwordConfirmMsg.setErr([matchErr]);
     } else {
-      passwordMsg.setErr([matchErr]);
+      passwordConfirmMsg.setErr([]);
     }
   };
-
-  useEffect(() => {
-    validatePassword();
-  }, [password.value]);
 
   return (
     <div className={memberStyles.contianer}>
@@ -111,30 +121,28 @@ const Join = ({}) => {
         className={memberStyles.input}
         onBlur={() => validateUsername()}
       ></input>
-      {usernameMsg.err.map((err) => (
-        <p className={memberStyles.err} key={err}>
-          {err}
-        </p>
-      ))}
-      <input {...password} className={memberStyles.input}></input>
+      <ErrorMessage errors={usernameMsg.err} />
+      <input
+        {...password}
+        className={memberStyles.input}
+        onBlur={() => validatePassword()}
+      ></input>
       <input
         {...passwordConfirm}
         className={memberStyles.input}
         onKeyDown={handleKeyDown}
         onBlur={() => validatePasswords()}
       ></input>
-      {passwordMsg.err.map((err) => (
-        <p className={memberStyles.err} key={err}>
-          {err}
-        </p>
-      ))}
+      <ErrorMessage errors={passwordMsg.err} />
+      <ErrorMessage errors={passwordConfirmMsg.err} />
+      {joinResult !== "" && <ErrorMessage errors={[joinResult]} />}
       <button
         type="button"
         className={memberStyles.btn}
         disabled={!openSubmit}
         onClick={(e) => submit(e)}
       >
-        Submit
+        {loading ? "loading..." : "Submit"}
       </button>
     </div>
   );
