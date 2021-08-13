@@ -7,7 +7,7 @@ import {
   deauthenticate,
 } from "../../redux/actions/authActions";
 import { useEffect } from "react";
-import ButtonLink from "../common/ButtonLink";
+import LinkButton from "../common/LinkButton";
 
 const routes = [
   { href: "/", text: "Home" },
@@ -41,17 +41,17 @@ const Nav = () => {
       </ul>
       <div className={navStyles.buttons}>
         {auth.is_admin === 1 && (
-          <ButtonLink style={navStyles.linkText} href={"/admin"} text={"Admin"} />
+          <LinkButton style={navStyles.linkText} href={"/admin"} text={"Admin"} />
         )}
         {auth.loggedIn ? (
           <>        
-            <ButtonLink style={navStyles.linkText} href={"/account"} text={"Mypage"} />
-            <ButtonLink style={navStyles.linkText} onClick={handleLogout} text={"Logout"} />
+            <LinkButton style={navStyles.linkText} href={"/account"} text={"Mypage"} />
+            <LinkButton style={navStyles.linkText} onClick={handleLogout} text={"Logout"} />
           </>
         ) : (
           <>
-          <ButtonLink style={navStyles.linkText} href={"/member/signin"} text={"Signin"} />
-          <ButtonLink style={navStyles.linkText} href={"/member/join"} text={"Join"} />
+          <LinkButton style={navStyles.linkText} href={"/member/signin"} text={"Signin"} />
+          <LinkButton style={navStyles.linkText} href={"/member/join"} text={"Join"} />
           </>
         )}
       </div>
