@@ -1,12 +1,17 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { setHeaders } from "../utils/apis";
+import { server } from "../config"
 
 const useFetch = (initialValue) => {
   const [url, setUrl] = useState("");
   const [data, setData] = useState(initialValue);
   const [loading, setLoading] = useState(null);
   const [error, setError] = useState(null);
+
+  const setEndpoint = (endpoint) => {
+    setUrl(`${server}/api/${endpoint}`)
+  }
 
   useEffect(() => {
     if (url !== "") {
@@ -35,7 +40,7 @@ const useFetch = (initialValue) => {
     }
   }, [url]);
 
-  return [{ data, loading, error }, setUrl];
+  return [{ data, loading, error }, setEndpoint];
 };
 
 export default useFetch;

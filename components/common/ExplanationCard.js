@@ -3,7 +3,6 @@ import useFetch from "../../hooks/useFetch";
 import { useEffect } from "react";
 import { createQueryParams } from "../../utils/utils";
 import { postUserLike } from "../../utils/apis";
-import { server } from "../../config";
 import PuffLoader from "react-spinners/PuffLoader";
 import { LikeOutlined, LikeTwoTone } from "@ant-design/icons";
 import { useSelector } from "react-redux";
@@ -39,7 +38,7 @@ const ExplanationCard = ({
       const params = createQueryParams({
         [resource_id]: _id,
       });
-      doFetchLikes(`${server}/api/${resources}/likes?${params}`);
+      doFetchLikes(`${resources}/likes?${params}`);
     }
   };
 

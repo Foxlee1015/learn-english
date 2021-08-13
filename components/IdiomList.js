@@ -5,7 +5,6 @@ import InputCheckbox from "./common/InputCheckbox";
 import useSelectItem from "../hooks/useSelectItem";
 import styles from "../styles/pages/Idiom.module.css";
 import { createQueryParams, renameObjectKey } from "../utils/utils";
-import { server } from "../config";
 import useInputSearch from "../hooks/useInputSearch";
 import useFetch from "../hooks/useFetch";
 
@@ -69,7 +68,7 @@ const IdiomList = ({ idiomList }) => {
       full_search: fullSearch,
       exact: ExactSearch,
     });
-    doFetchIdioms(`${server}/api/idioms/?${params}`);
+    doFetchIdioms(`idioms/?${params}`);
   };
 
   const setIdiomInfo = async () => {

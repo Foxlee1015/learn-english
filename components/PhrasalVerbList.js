@@ -5,7 +5,6 @@ import InputCheckbox from "./common/InputCheckbox";
 import styles from "../styles/pages/Verb.module.css";
 import useSelectItem from "../hooks/useSelectItem";
 import { createQueryParams } from "../utils/utils";
-import { server } from "../config";
 import useInputSearch from "../hooks/useInputSearch";
 import useFetch from "../hooks/useFetch";
 
@@ -96,7 +95,7 @@ const PhrasalVerb = ({ data }) => {
         (verb) => verb._id === verbs.selectedItem
       );
       doFetchParticles(
-        `${server}/api/phrasal-verbs/${selectedVerb.verb.toLowerCase()}`
+        `phrasal-verbs/${selectedVerb.verb.toLowerCase()}`
       );
     }
   };
@@ -135,7 +134,7 @@ const PhrasalVerb = ({ data }) => {
       full_search: fullSearch,
       exact: ExactSearch,
     });
-    doFetchVerbs(`${server}/api/phrasal-verbs/?${params}`);
+    doFetchVerbs(`phrasal-verbs/?${params}`);
   };
 
   return (

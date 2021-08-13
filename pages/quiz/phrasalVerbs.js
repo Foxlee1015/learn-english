@@ -10,8 +10,6 @@ import {
 import Modal from "../../components/common/Modal";
 import PuffLoader from "react-spinners/PuffLoader";
 import quizStyles from "../../styles/pages/Quiz.module.css";
-
-import { server } from "../../config";
 import useFetch from "../../hooks/useFetch";
 
 import * as Data from "../../data";
@@ -56,7 +54,7 @@ const PhrasalVerbs = () => {
 
   const getRandomVerb = async () => {
     const params = createQueryParams({ random_verb_count: 1 });
-    doFetchPhrasalVerb(`${server}/api/phrasal-verbs/?${params}`);
+    doFetchPhrasalVerb(`phrasal-verbs/?${params}`);
   };
 
   const setQuiz = () => {
