@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 
 import { authenticate } from "../../redux/actions/authActions";
 import useInput from "../../hooks/useInput";
+import Input from "../../components/member/Input";
 import ErrorMessage from "../../components/member/ErrorMessage";
 
 import memberStyles from "../../styles/components/Member.module.css";
@@ -57,12 +58,12 @@ const Signin = ({}) => {
   return (
     <div className={memberStyles.contianer}>
       <h2 className={memberStyles.title}>Signin</h2>
-      <input {...username} className={memberStyles.input}></input>
-      <input
-        {...password}
-        className={memberStyles.input}
+      <Input inputAttrs={username} label={"Username"} />
+      <Input
+        inputAttrs={password}
+        label={"Password"}
         onKeyDown={handleKeyDown}
-      ></input>
+      />
       <ErrorMessage errors={passwordMsg.err} />
       <button
         type="button"

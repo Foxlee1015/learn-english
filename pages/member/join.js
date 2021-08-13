@@ -5,6 +5,7 @@ import useInput from "../../hooks/useInput";
 import memberStyles from "../../styles/components/Member.module.css";
 import { postNewUser } from "../../utils/apis";
 import ErrorMessage from "../../components/member/ErrorMessage";
+import Input from "../../components/member/Input";
 
 const usernameErr =
   "Username must be at 4~10 characters and contain only lower cases and digits.";
@@ -22,7 +23,7 @@ const Join = ({}) => {
   const [password, passwordMsg] = useInput("password", "password", "password");
   const [passwordConfirm, passwordConfirmMsg] = useInput(
     "confirm password",
-    "confirm password",
+    "password confirm",
     "password"
   );
   const [openSubmit, setOpenSubmit] = useState(false);
@@ -124,22 +125,22 @@ const Join = ({}) => {
   return (
     <div className={memberStyles.contianer}>
       <h2 className={memberStyles.title}>Join</h2>
-      <input
-        {...username}
-        className={memberStyles.input}
-        onBlur={() => validateUsername()}
-      ></input>
+      <Input
+        inputAttrs={username}
+        label={"Username"}
+        onBlur={validateUsername}
+      />
       <ErrorMessage errors={usernameMsg.err} />
-      <input
-        {...password}
-        className={memberStyles.input}
-        onBlur={() => validatePassword()}
-      ></input>
-      <input
-        {...passwordConfirm}
-        className={memberStyles.input}
+      <Input
+        inputAttrs={password}
+        label={"Password"}
+        onBlur={validatePassword}
+      />
+      <Input
+        inputAttrs={passwordConfirm}
+        label={"Password confirm"}
         onKeyDown={handleKeyDown}
-      ></input>
+      />
       <ErrorMessage errors={passwordMsg.err} />
       <ErrorMessage errors={passwordConfirmMsg.err} />
       {joinResult !== "" && <ErrorMessage errors={[joinResult]} />}

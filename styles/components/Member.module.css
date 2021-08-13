@@ -60,11 +60,3 @@
   border-color: #ff7875;
   opacity: 0.5;
 }
-
-.err {
-  margin: 0px 10px;
-  color: #ff7875;
-  font-size: 10px;
-  word-wrap: break-word;
-  align-self: flex-start;
-}
