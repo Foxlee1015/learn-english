@@ -51,6 +51,10 @@ const Join = ({}) => {
     setJoinResult("");
   }, [password.value, passwordConfirm.value, username.value]);
 
+  useEffect(() => {
+    validatePasswords("");
+  }, [password.value, passwordConfirm.value]);
+
   const validateUsername = () => {
     const name = username.value;
     if (name === "" || usernameRegex.test(name)) {
@@ -106,7 +110,11 @@ const Join = ({}) => {
   };
 
   const validatePasswords = () => {
-    if (password.value !== passwordConfirm.value) {
+    if (
+      password.value !== "" &&
+      passwordConfirm.value !== "" &&
+      password.value !== passwordConfirm.value
+    ) {
       passwordConfirmMsg.setErr([matchErr]);
     } else {
       passwordConfirmMsg.setErr([]);
@@ -131,7 +139,6 @@ const Join = ({}) => {
         {...passwordConfirm}
         className={memberStyles.input}
         onKeyDown={handleKeyDown}
-        onBlur={() => validatePasswords()}
       ></input>
       <ErrorMessage errors={passwordMsg.err} />
       <ErrorMessage errors={passwordConfirmMsg.err} />
