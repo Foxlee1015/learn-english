@@ -22,6 +22,7 @@ const LikeList = () => {
         {fetchData.data.phrassal_verbs &&
           fetchData.data.phrassal_verbs.map((item) => (
             <LikeCard
+              key={item._id}
               item={item}
               title={`${item.verb}-${item.particle}`}
               resources={"phrasal-verbs"}
@@ -36,6 +37,7 @@ const LikeList = () => {
         {fetchData.data.idioms &&
           fetchData.data.idioms.map((item) => (
             <LikeCard
+              key={item._id}
               item={item}
               title={item.expression}
               resources={"idioms"}
