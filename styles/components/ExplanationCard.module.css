@@ -8,59 +8,15 @@
   padding: 10px;
   margin: 10px;
 }
-.head {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-}
-.head > * {
-  margin-right: 30px;
-}
-
-.title {
-  color: #000000d9;
-  font-weight: 700;
-  font-size: 20px;
-  line-height: 1.5715;
-}
-
-.subtitle {
-  color: #000000d9;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 1.5715;
-}
-
-.text {
-  color: #000000d9;
-  font-weight: 500;
-  font-size: 124x;
-  padding-left: 10px;
-}
-
-.tag {
-  width: 80px;
-  text-align: center;
-  color: #c41d7f;
-  background: #fff0f6;
-  border-color: #ffadd2;
-  margin-bottom: 10px;
-  box-sizing: border-box;
-  padding: 0 7px;
-  font-size: 12px;
-  border: 1px solid #d9d9d9;
-  border-radius: 2px;
-  opacity: 0.9;
-  transition: all 0.3s;
-}
 
 .likeBox {
   display: flex;
-  justify-content: center;
+  justify-content: left;
   align-items: center;
+  margin-bottom: 10px;
 }
 
 .count {
-  margin: 0;
+  margin: 0px 6px;
   padding: 0;
 }
