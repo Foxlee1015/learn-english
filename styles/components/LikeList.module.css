@@ -64,3 +64,16 @@
     margin-bottom: 40px;
   }
 }
+
+.subHead {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+
+.subTitle {
+  width: 150px;
+}
