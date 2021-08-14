@@ -31,7 +31,7 @@ const DescCard = ({ data, title }) => {
           </p>
         ))
       ) : (
-        <p style={style.text}>No definitions yet...</p>
+        <p style={style.text}>No {title} yet...</p>
       )}
     </>
   );
