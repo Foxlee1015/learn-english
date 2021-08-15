@@ -53,7 +53,7 @@ const PhrasalVerbs = () => {
   }, [fetchPhrasalVerb.data]);
 
   const getRandomVerb = async () => {
-    const params = createQueryParams({ random_verb_count: 1 });
+    const params = createQueryParams({ random_count: 1 });
     doFetchPhrasalVerb(`phrasal-verbs/?${params}`);
   };
 
