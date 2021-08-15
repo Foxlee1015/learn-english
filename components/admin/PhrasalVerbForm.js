@@ -61,6 +61,8 @@ const PhrasalVerbForm = ({
         newKey: "is_public",
       });
       form.setFieldsValue({ ...values });
+    } else {
+      form.setFieldsValue({ ...initialValues });
     }
     updateParticleList();
   }, [selectedItem]);
