@@ -23,7 +23,6 @@ const PhrasalVerbForm = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [verbData, setVerbData] = useState([]);
-  const [showFormList, setShowFormList] = useState(false);
   const inputRef = useRef(null);
 
   const onFinish = (values) => {
@@ -37,14 +36,8 @@ const PhrasalVerbForm = () => {
     inputRef.current.focus();
   }, []);
 
-  useEffect(() => {
+  const getVerbData = async () => {
     const { verb } = form.getFieldValue();
-    if (verb !== "") {
-      getVerbData(verb);
-    }
-  }, [form.getFieldValue().verb]);
-
-  const getVerbData = async (verb) => {
     setVerbData([]);
 
     if (verb !== "") {
@@ -55,35 +48,28 @@ const PhrasalVerbForm = () => {
     }
   };
 
-  useEffect(() => {
-    const { particle } = form.getFieldValue();
-    updateFormList(particle);
-  }, [verbData]);
-
-  const updateFormList = (particle) => {
-    setShowFormList(false);
-    let definitions = [];
-    let sentences = [];
-    let difficulty = 1;
-    let isPublic = false;
+  const updateFormList = () => {
+    const { verb, particle } = form.getFieldValue();
+    console.log(verb, particle);
+    let values = { ...initialValues, verb, particle };
 
     if (particle !== "") {
-      const phrasalVerb = verbData.find((verb) => verb.particle === particle);
+      const phrasalVerb = verbData.find((item) => item.particle === particle);
       if (phrasalVerb) {
-        ({ definitions, sentences, difficulty } = phrasalVerb);
-        isPublic = phrasalVerb["is_public"] === 1 ? true : false;
+        const { definitions, sentences, difficulty } = phrasalVerb;
+        values = {
+          ...values,
+          definitions,
+          sentences,
+          difficulty,
+        };
+        values.isPublic = phrasalVerb["is_public"] === 1 ? true : false;
       }
     }
-
+    console.log("values : ", values);
     form.setFieldsValue({
-      ...form.getFieldValue(),
-      definitions,
-      sentences,
-      difficulty,
-      isPublic,
+      ...values,
     });
-
-    setShowFormList(true);
   };
 
   const addPhrasalVerb = async (data) => {
@@ -105,6 +91,24 @@ const PhrasalVerbForm = () => {
     return data.result;
   };
 
+  const handleBlurVerb = () => {
+    console.log("handleBlurVerb");
+    form.setFieldsValue({ particle: "" });
+    getVerbData();
+    updateFormList();
+  };
+
+  const handleBlurParticle = () => {
+    console.log("handleBlurParticle");
+    updateFormList();
+  };
+
+  const handleClickParticle = (particle) => {
+    console.log("handleClickParticle");
+    form.setFieldsValue({ particle });
+    updateFormList();
+  };
+
   return (
     <Form
       form={form}
@@ -114,26 +118,46 @@ const PhrasalVerbForm = () => {
       validateMessages={validateMessages}
     >
       <Form.Item
-        name={"verb"}
+        name="verb"
         label="Verb"
         rules={[{ required: true }]}
         labelAlign="left"
       >
-        <Input onBlur={(e) => getVerbData(e.target.value)} ref={inputRef} />
+        <Input
+          ref={inputRef}
+          onBlur={() => {
+            handleBlurVerb();
+          }}
+        />
       </Form.Item>
+      {verbData.length > 0 &&
+        verbData.map((verb) => (
+          <span
+            key={verb._id}
+            style={{
+              margin: 5,
+              cursor: "pointer",
+            }}
+            onClick={() => {
+              handleClickParticle(verb.particle);
+            }}
+          >
+            {verb.particle}
+          </span>
+        ))}
       <Form.Item
         name={"particle"}
         label="Particle"
         labelAlign="left"
         rules={[{ required: true }]}
       >
-        <Input onBlur={(e) => updateFormList(e.target.value)} />
+        <Input onBlur={() => handleBlurParticle()} />
       </Form.Item>
       <div className={AdminStyle.formSubContainer}>
         <Form.Item
           name={"difficulty"}
           label="Difficulty"
-          rules={[{ type: "number", min: 1, max: 5 }]}
+          rules={[{ type: "number", min: 0, max: 5 }]}
         >
           <InputNumber />
         </Form.Item>
@@ -141,12 +165,8 @@ const PhrasalVerbForm = () => {
           <Switch />
         </Form.Item>
       </div>
-      {showFormList && (
-        <>
-          <AntFormList name="definitions" />
-          <AntFormList name="sentences" />
-        </>
-      )}
+      <AntFormList name="definitions" />
+      <AntFormList name="sentences" />
       <Form.Item>
         <div className={AdminStyle.formItemSub}>
           <Button type="primary" htmlType="submit" loading={loading}>

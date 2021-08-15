@@ -33,15 +33,17 @@ const Idioms = () => {
 
   useEffect(() => {
     if (idiomData.length !== 0) {
+      console.log(idiomData);
       setQuiz();
     }
   }, [idiomData]);
 
   const getRandomIdioms = async () => {
     try {
-      const params = createQueryParams({ random_verb_count: 3 });
+      const params = createQueryParams({ random_count: 3 });
       const res = await fetch(`${server}/api/idioms/?${params}`);
       const data = await res.json();
+      console.log(data);
       setIdiomData([...data.result]);
     } catch {
       setIdiomData([]);
@@ -55,13 +57,11 @@ const Idioms = () => {
     const randomIdioms = getRandomItems({
       src: idiomExpressions,
       remove: expression,
-      itemCount: 3,
+      itemCount: 2,
     });
-
     const shffledIdioms = randomArrayShuffle(
       Array.from(randomIdioms.add(expression))
     );
-
     setIdiom(expression);
     setDefinitions(definitions);
     setSentenses(sentences);
