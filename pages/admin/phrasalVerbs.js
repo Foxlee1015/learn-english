@@ -30,6 +30,7 @@ const PhrasalVerbs = () => {
         data={fetchPhrasalVerbs.data}
         selectedItem={selectedItem}
         setSelectedItem={setSelectedItem}
+        refreshData={loadPhrasalVerbs}
       />
     </div>
   );
