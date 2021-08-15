@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { setHeaders } from "../utils/apis";
-import { server } from "../config"
+import { server } from "../config";
 
 const useFetch = (initialValue) => {
   const [url, setUrl] = useState("");
@@ -10,8 +10,8 @@ const useFetch = (initialValue) => {
   const [error, setError] = useState(null);
 
   const setEndpoint = (endpoint) => {
-    setUrl(`${server}/api/${endpoint}`)
-  }
+    setUrl(`${server}/api/${endpoint}`);
+  };
 
   useEffect(() => {
     if (url !== "") {

@@ -12,70 +12,62 @@ import PuffLoader from "react-spinners/PuffLoader";
 import quizStyles from "../../styles/pages/Quiz.module.css";
 import useFetch from "../../hooks/useFetch";
 
-import * as Data from "../../data";
-
-const particleResources = Data.particles;
-
 const PhrasalVerbs = () => {
   const [fetchPhrasalVerb, doFetchPhrasalVerb] = useFetch([]);
-  const [verbData, setVerbData] = useState({});
-  const [particle, setParticle] = useState("");
-  const [definitions, setDefinitions] = useState([]);
-  const [sentenses, setSentenses] = useState([]);
+  const [fetchParticles, doFetchParticles] = useFetch([]);
+  const [phrasalVerb, setPhrasalVerb] = useState({});
   const [answers, setAnswers] = useState([]);
   const [clickedAnswers, setClickedAnswers] = useState([]);
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    getRandomVerb();
+    const params = createQueryParams({ only_particle: 1 });
+    doFetchParticles(`phrasal-verbs/?${params}`);
   }, []);
-
-  useEffect(() => {
-    if (Object.keys(verbData).length !== 0) {
-      setQuiz();
-    } else {
-      getRandomVerb();
-    }
-  }, [verbData]);
-
-  const nextQuiz = () => {
-    setClickedAnswers([]);
-    setShowModal(false);
-    getRandomVerb();
-  };
-
-  useEffect(() => {
-    if (fetchPhrasalVerb.data.length > 0) {
-      setVerbData({ ...fetchPhrasalVerb.data[0] });
-    } else {
-      setVerbData({});
-    }
-  }, [fetchPhrasalVerb.data]);
 
   const getRandomVerb = async () => {
     const params = createQueryParams({ random_count: 1 });
     doFetchPhrasalVerb(`phrasal-verbs/?${params}`);
   };
 
+  const nextQuiz = () => {
+    getRandomVerb();
+    setClickedAnswers([]);
+    setShowModal(false);
+  };
+
+  useEffect(() => {
+    if (fetchParticles.data.length > 0) {
+      getRandomVerb();
+    }
+  }, [fetchParticles.data]);
+
+  useEffect(() => {
+    if (fetchPhrasalVerb.data.length > 0) {
+      setPhrasalVerb(fetchPhrasalVerb.data[0]);
+    }
+  }, [fetchPhrasalVerb.data]);
+
+  useEffect(() => {
+    if (Object.keys(phrasalVerb).length > 0) {
+      setQuiz();
+    }
+  }, [phrasalVerb]);
+
   const setQuiz = () => {
     const randomParticles = getRandomItems({
-      src: particleResources,
-      remove: verbData.particle,
+      src: fetchParticles.data,
+      remove: phrasalVerb.particle,
       itemCount: 3,
     });
-
     const shffledParticles = randomArrayShuffle(
-      Array.from(randomParticles.add(verbData.particle))
+      Array.from(randomParticles.add(phrasalVerb.particle))
     );
-
-    setParticle(verbData.particle);
-    setDefinitions([...verbData.definitions]);
-    setSentenses([...verbData.sentences]);
     setAnswers([...shffledParticles]);
   };
 
   const checkAnswer = (clickedAnswer) => {
-    if (clickedAnswer === particle) {
+    if (clickedAnswer === phrasalVerb.particle) {
       setShowModal(true);
     } else {
       setClickedAnswers([...clickedAnswers, clickedAnswer]);
@@ -89,18 +81,19 @@ const PhrasalVerbs = () => {
       <div className={quizStyles.header}>
         <h4>Pick a preposition or adverb for the blank</h4>
       </div>
-      {fetchPhrasalVerb.loading ? (
-        <PuffLoader size={20} />
-      ) : (
+      {fetchPhrasalVerb.loading && <PuffLoader size={20} />}
+      {Object.keys(phrasalVerb).length > 0 > 0 && (
         <>
           <div className={quizStyles.tagBox}>
-            {definitions.map((definition) => (
+            {phrasalVerb.definitions.map((definition) => (
               <p key={definition}>{definition}</p>
             ))}
           </div>
           <div>
-            {sentenses.map((sentense) => (
-              <p key={sentense}>{replaceText(sentense, particle, "___")}</p>
+            {phrasalVerb.sentences.map((sentence) => (
+              <p key={sentence}>
+                {replaceText(sentence, phrasalVerb.particle, "___")}
+              </p>
             ))}
           </div>
           <div className={quizStyles.btnContainer}>
@@ -119,9 +112,9 @@ const PhrasalVerbs = () => {
       )}
       {showModal && (
         <Modal
-          header={`${verbData.verb}-${particle}`}
-          main={sentenses.map((sentense) => (
-            <p key={sentense}>{sentense}</p>
+          header={`${phrasalVerb.verb}-${phrasalVerb.particle}`}
+          main={phrasalVerb.sentences.map((sentence) => (
+            <p key={sentence}>{sentence}</p>
           ))}
           buttons={[{ onClick: nextQuiz, text: "Next" }]}
         />
