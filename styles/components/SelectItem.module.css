@@ -48,6 +48,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: center;
 }
 
 .scrollable div {
@@ -56,7 +57,7 @@
 
 @media (min-width: 360px) {
   .scrollableContainer {
-    width: 160px;
+    width: 150px;
   }
 }
 
@@ -67,7 +68,7 @@
 }
 @media (min-width: 1000px) {
   .scrollableContainer {
-    width: 400px;
+    width: 470px;
   }
 }
 /*IE*/

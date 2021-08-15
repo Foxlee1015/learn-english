@@ -48,3 +48,17 @@
   border-radius: 2px;
   transition: all 0.3s;
 }
+
+.checkboxWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+}
+
+.loading {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 160px;
+}

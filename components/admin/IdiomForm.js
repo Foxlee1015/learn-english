@@ -1,43 +1,54 @@
-import { useState } from "react";
-import { Form, Input, Switch, Button } from "antd";
-import { server } from "../../config";
-import AntFormList from "./common/AntFormList"
-
-import AdminStyle from "../../styles/pages/admin/Admin.module.css"
+import { useEffect, useState, useRef } from "react";
+import { Form, Input, Switch, Button, InputNumber } from "antd";
+import AntFormList from "./common/AntFormList";
+import { renameObjectKey, removeFalseElements } from "../../utils/utils";
+import AdminStyle from "../../styles/pages/admin/Admin.module.css";
+import { postIdiom } from "../../utils/apis";
 
 const initialValues = {
   expression: "",
   definitions: [],
   sentences: [],
-  reviewed: false,
-}
+  difficulty: 1,
+  isPublic: false,
+};
 
 const validateMessages = {
   required: "${label} is required!",
 };
 
-const addIdiom = async (values) => {
-  const res = await fetch(`${server}/api/idioms/`, {
-    body: JSON.stringify(values),
-    headers: {
-      "Content-Type": "application/json",
-    },
-    method: "POST",
-  });
-
-  const result = await res.json();
-  console.log(result);
-};
-
 const IdiomForm = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
 
   const onFinish = (values) => {
     setLoading(true);
     addIdiom(values);
-    form.resetFields();
-    setLoading(false);
+  };
+
+  const addIdiom = async (values) => {
+    const renamedValues = renameObjectKey({
+      src: values,
+      oldKey: "isPublic",
+      newKey: "is_public",
+    });
+    renamedValues["expression"] = renamedValues.expression.toLowerCase();
+    renamedValues["definitions"] = removeFalseElements(
+      renamedValues["definitions"]
+    );
+    renamedValues["sentences"] = removeFalseElements(
+      renamedValues["sentences"]
+    );
+    postIdiom(renamedValues, () => {
+      form.resetFields();
+      setLoading(false);
+      inputRef.current.focus();
+    });
   };
 
   return (
@@ -51,20 +62,29 @@ const IdiomForm = () => {
       <Form.Item
         name={"expression"}
         label="Expression"
-        rules={[{required: true}]}>
-        <Input />
+        rules={[{ required: true }]}
+      >
+        <Input ref={inputRef} />
       </Form.Item>
+      <div className={AdminStyle.formSubContainer}>
+        <Form.Item
+          name={"difficulty"}
+          label="Difficulty"
+          rules={[{ type: "number", min: 1, max: 5 }]}
+        >
+          <InputNumber />
+        </Form.Item>
+        <Form.Item label="Public" name={"isPublic"} valuePropName="checked">
+          <Switch />
+        </Form.Item>
+      </div>
       <AntFormList name="definitions" />
       <AntFormList name="sentences" />
-      
-      <Form.Item label="Public" name={"reviewed"}>
-        <Switch />
-      </Form.Item>
       <Form.Item>
-      <div className={AdminStyle.formItemSub}>
-        <Button type="primary" htmlType="submit" loading={loading}>
-          Submit
-        </Button>
+        <div className={AdminStyle.formItemSub}>
+          <Button type="primary" htmlType="submit" loading={loading}>
+            Submit
+          </Button>
         </div>
       </Form.Item>
     </Form>

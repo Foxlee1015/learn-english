@@ -8,7 +8,7 @@ const useSelectItem = (data, sortKey) => {
     if (data && data.length > 0) {
       setItems([...data]);
     }
-  }, [data]);
+  }, []);
 
   return {
     items,
