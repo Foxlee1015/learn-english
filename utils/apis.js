@@ -28,6 +28,7 @@ export const postUserLike = async (
 ) => {
   if (!checkIfSessionExists()) {
     failCallback("Please login first");
+    return;
   }
   const res = await fetch(`${server}/api/${resources}/likes`, {
     body: JSON.stringify(data),
@@ -65,6 +66,9 @@ export const postNewUser = async (
 };
 
 export const postIdiom = async (data, callback) => {
+  if (!checkIfSessionExists()) {
+    return;
+  }
   const res = await fetch(`${server}/api/idioms/`, {
     body: JSON.stringify(data),
     headers: setHeaders(),
@@ -76,12 +80,28 @@ export const postIdiom = async (data, callback) => {
 };
 
 export const postPhrasalVerb = async (data, callback) => {
+  if (!checkIfSessionExists()) {
+    return;
+  }
   const res = await fetch(`${server}/api/phrasal-verbs/`, {
     body: JSON.stringify(data),
     headers: setHeaders(),
     method: "POST",
   });
   if (res.status === 201) {
+    callback();
+  }
+};
+
+export const deleteResource = async (resource, _id, callback) => {
+  if (!checkIfSessionExists()) {
+    return;
+  }
+  const res = await fetch(`${server}/api/${resource}/?_id=${_id}`, {
+    headers: setHeaders(),
+    method: "DELETE",
+  });
+  if (res.status === 200) {
     callback();
   }
 };
