@@ -80,7 +80,7 @@ const PhrasalVerbForm = ({ data, selectedItem, setSelectedItem }) => {
   };
 
   const addPhrasalVerb = async (data) => {
-    renamedData = renameObjectKey({
+    const renamedData = renameObjectKey({
       src: data,
       oldKey: "isPublic",
       newKey: "is_public",
