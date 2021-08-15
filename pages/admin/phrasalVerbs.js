@@ -10,6 +10,7 @@ const PhrasalVerbs = () => {
   const [selectedItem, setSelectedItem] = useState({});
 
   const loadPhrasalVerbs = () => {
+    setSelectedItem({});
     doFetchPhrasalVerbs("phrasal-verbs/");
   };
 
