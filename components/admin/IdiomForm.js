@@ -32,11 +32,19 @@ const IdiomForm = () => {
   };
 
   const addIdiom = async (values) => {
-    renameObjectKey({ src: values, oldKey: "isPublic", newKey: "is_public" });
-    values["expression"] = values.expression.toLowerCase();
-    values["definitions"] = removeFalseElements(values["definitions"]);
-    values["sentences"] = removeFalseElements(values["sentences"]);
-    postIdiom(values, () => {
+    const renamedValues = renameObjectKey({
+      src: values,
+      oldKey: "isPublic",
+      newKey: "is_public",
+    });
+    renamedValues["expression"] = renamedValues.expression.toLowerCase();
+    renamedValues["definitions"] = removeFalseElements(
+      renamedValues["definitions"]
+    );
+    renamedValues["sentences"] = removeFalseElements(
+      renamedValues["sentences"]
+    );
+    postIdiom(renamedValues, () => {
       form.resetFields();
       setLoading(false);
       inputRef.current.focus();

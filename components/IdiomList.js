@@ -4,7 +4,7 @@ import ExplanationCard from "./common/ExplanationCard";
 import InputCheckbox from "./common/InputCheckbox";
 import useSelectItem from "../hooks/useSelectItem";
 import styles from "../styles/pages/Idiom.module.css";
-import { createQueryParams, renameObjectKey } from "../utils/utils";
+import { createQueryParams } from "../utils/utils";
 import useInputSearch from "../hooks/useInputSearch";
 import useFetch from "../hooks/useFetch";
 
@@ -76,7 +76,6 @@ const IdiomList = ({ idiomList }) => {
       (item) => item._id === idioms.selectedItem
     );
     if (selectedIdiom) {
-      // renameObjectKey({src:selectedIdiom, oldKey:"expression", newKey:"title"})
       setCardData({ ...selectedIdiom, title: selectedIdiom.expression });
     } else {
       setCardData({});

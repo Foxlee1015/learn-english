@@ -2,10 +2,8 @@ import { useEffect, useState, useRef } from "react";
 import { Form, Input, Button, InputNumber, Switch } from "antd";
 import AntFormList from "./common/AntFormList";
 import { postPhrasalVerb } from "../../utils/apis";
-import { server } from "../../config";
 import { renameObjectKey, removeFalseElements } from "../../utils/utils";
 import AdminStyle from "../../styles/pages/admin/Admin.module.css";
-import useFetch from "../../hooks/useFetch";
 
 const initialValues = {
   verb: "",
@@ -20,12 +18,11 @@ const validateMessages = {
   required: "${label} is required!",
 };
 
-const PhrasalVerbForm = () => {
+const PhrasalVerbForm = ({ data, selectedItem, setSelectedItem }) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const [verbData, setVerbData] = useState([]);
+  const [particles, setParticles] = useState([]);
   const inputRef = useRef(null);
-  const [fetchParticles, doFetchParticles] = useFetch([]);
 
   const onFinish = (values) => {
     setLoading(true);
@@ -38,31 +35,37 @@ const PhrasalVerbForm = () => {
     inputRef.current.focus();
   }, []);
 
-  const getVerbData = async () => {
+  const updateParticleList = () => {
     const { verb } = form.getFieldValue();
-    setVerbData([]);
-
-    if (verb !== "") {
-      doFetchParticles(`phrasal-verbs/${verb}`);
-    }
+    const filtered = data.filter((item) => item.verb === verb);
+    setParticles([...filtered]);
   };
 
   useEffect(() => {
-    if (fetchParticles.data.length > 0) {
-      setVerbData([...fetchParticles.data]);
+    if (Object.keys(selectedItem).length > 0) {
+      const values = renameObjectKey({
+        src: selectedItem,
+        oldKey: "isPublic",
+        newKey: "is_public",
+      });
+      form.setFieldsValue({ ...values });
     }
-  }, [fetchParticles.data]);
+    updateParticleList();
+  }, [selectedItem]);
 
   const updateFormList = () => {
     const { verb, particle } = form.getFieldValue();
     let values = { ...initialValues, verb, particle };
 
     if (particle !== "") {
-      const phrasalVerb = verbData.find((item) => item.particle === particle);
+      const phrasalVerb = data.find(
+        (item) => item.verb === verb && item.particle === particle
+      );
       if (phrasalVerb) {
-        const { definitions, sentences, difficulty } = phrasalVerb;
+        const { _id, definitions, sentences, difficulty } = phrasalVerb;
         values = {
           ...values,
+          _id,
           definitions,
           sentences,
           difficulty,
@@ -70,17 +73,24 @@ const PhrasalVerbForm = () => {
         values.isPublic = phrasalVerb["is_public"] === 1 ? true : false;
       }
     }
+    setSelectedItem({ ...values });
     form.setFieldsValue({
       ...values,
     });
   };
 
   const addPhrasalVerb = async (data) => {
-    renameObjectKey({ src: data, oldKey: "isPublic", newKey: "is_public" });
-    data["verb"] = data.verb.toLowerCase();
-    data["particle"] = data.particle.toLowerCase();
-    data["definitions"] = removeFalseElements(data["definitions"]);
-    data["sentences"] = removeFalseElements(data["sentences"]);
+    renamedData = renameObjectKey({
+      src: data,
+      oldKey: "isPublic",
+      newKey: "is_public",
+    });
+    renamedData["verb"] = renamedData.verb.toLowerCase();
+    renamedData["particle"] = renamedData.particle.toLowerCase();
+    renamedData["definitions"] = removeFalseElements(
+      renamedData["definitions"]
+    );
+    renamedData["sentences"] = removeFalseElements(renamedData["sentences"]);
     postPhrasalVerb(data, () => {
       form.resetFields();
       setLoading(false);
@@ -89,8 +99,7 @@ const PhrasalVerbForm = () => {
   };
 
   const handleBlurVerb = () => {
-    form.setFieldsValue({ particle: "" });
-    getVerbData();
+    updateParticleList();
     updateFormList();
   };
 
@@ -124,19 +133,19 @@ const PhrasalVerbForm = () => {
           }}
         />
       </Form.Item>
-      {verbData.length > 0 &&
-        verbData.map((verb) => (
+      {particles.length > 0 &&
+        particles.map((item) => (
           <span
-            key={verb._id}
+            key={item._id}
             style={{
               margin: 5,
               cursor: "pointer",
             }}
             onClick={() => {
-              handleClickParticle(verb.particle);
+              handleClickParticle(item.particle);
             }}
           >
-            {verb.particle}
+            {item.particle}
           </span>
         ))}
       <Form.Item
