@@ -20,13 +20,12 @@ const PhrasalVerbList = ({
       {data &&
         data.length > 0 &&
         data.map((item) => (
-          <div style={style.btn}>
+          <div key={item._id} style={style.btn}>
             <p>
               {selectedItem._id === item._id && "*"}
               {item.verb}-{item.particle} {item.is_public}
             </p>
             <button
-              key={item._id}
               style={style.btn}
               onClick={() => {
                 setSelectedItem(item);
