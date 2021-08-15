@@ -9,8 +9,12 @@ const PhrasalVerbs = () => {
   const [fetchPhrasalVerbs, doFetchPhrasalVerbs] = useFetch([]);
   const [selectedItem, setSelectedItem] = useState({});
 
-  useEffect(() => {
+  const loadPhrasalVerbs = () => {
     doFetchPhrasalVerbs("phrasal-verbs/");
+  };
+
+  useEffect(() => {
+    loadPhrasalVerbs();
   }, []);
 
   return (
@@ -19,6 +23,7 @@ const PhrasalVerbs = () => {
         data={fetchPhrasalVerbs.data}
         selectedItem={selectedItem}
         setSelectedItem={setSelectedItem}
+        refreshData={loadPhrasalVerbs}
       />
       <PhrasalVerbList
         data={fetchPhrasalVerbs.data}

@@ -18,7 +18,12 @@ const validateMessages = {
   required: "${label} is required!",
 };
 
-const PhrasalVerbForm = ({ data, selectedItem, setSelectedItem }) => {
+const PhrasalVerbForm = ({
+  data,
+  selectedItem,
+  setSelectedItem,
+  refreshData,
+}) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [particles, setParticles] = useState([]);
@@ -29,6 +34,13 @@ const PhrasalVerbForm = ({ data, selectedItem, setSelectedItem }) => {
     addPhrasalVerb({
       ...values,
     });
+  };
+
+  const refreshForm = () => {
+    setLoading(false);
+    inputRef.current.focus();
+    form.resetFields();
+    refreshData();
   };
 
   useEffect(() => {
@@ -92,9 +104,7 @@ const PhrasalVerbForm = ({ data, selectedItem, setSelectedItem }) => {
     );
     renamedData["sentences"] = removeFalseElements(renamedData["sentences"]);
     postPhrasalVerb(data, () => {
-      form.resetFields();
-      setLoading(false);
-      inputRef.current.focus();
+      refreshForm();
     });
   };
 
