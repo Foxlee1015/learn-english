@@ -1,18 +1,9 @@
-import { useEffect } from "react";
-import useFetch from "../../hooks/useFetch";
-
-const PhrasalVerbList = () => {
-  const [fetchPhrasalVerbs, doFetchPhrasalVerbs] = useFetch([]);
-
-  useEffect(() => {
-    doFetchPhrasalVerbs("phrasal-verbs/");
-  }, []);
-
+const PhrasalVerbList = ({ data, selectedItem, setSelectedItem }) => {
   return (
     <div style={{ display: "flex", flexWrap: "wrap" }}>
-      {fetchPhrasalVerbs.data &&
-        fetchPhrasalVerbs.data.length > 0 &&
-        fetchPhrasalVerbs.data.map((item) => (
+      {data &&
+        data.length > 0 &&
+        data.map((item) => (
           <button
             key={item._id}
             style={{
@@ -21,8 +12,12 @@ const PhrasalVerbList = () => {
               padding: 5,
               boxSizing: "border-box",
             }}
+            onClick={() => {
+              setSelectedItem(item);
+            }}
           >
-            {item.verb}
+            {selectedItem._id === item._id && "*"}
+            {item.verb}-{item.particle} {item.is_public}
           </button>
         ))}
     </div>

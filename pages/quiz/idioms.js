@@ -6,14 +6,15 @@ import {
   randomArrayShuffle,
   getRandomItems,
 } from "../../utils/utils";
-import { server } from "../../config";
 import { createQueryParams } from "../../utils/utils";
 import Modal from "../../components/common/Modal";
+import DescCard from "../../components/common/DescCard";
 
 import quizStyles from "../../styles/pages/Quiz.module.css";
+import useFetch from "../../hooks/useFetch";
 
 const Idioms = () => {
-  const [idiomData, setIdiomData] = useState([]);
+  const [fetchRandomIdiom, doFetchRandomIdioms] = useFetch([]);
   const [idiom, setIdiom] = useState({});
   const [definitions, setDefinitions] = useState([]);
   const [sentenses, setSentenses] = useState([]);
@@ -32,28 +33,22 @@ const Idioms = () => {
   };
 
   useEffect(() => {
-    if (idiomData.length !== 0) {
-      console.log(idiomData);
+    if (fetchRandomIdiom.data.length !== 0) {
       setQuiz();
     }
-  }, [idiomData]);
+  }, [fetchRandomIdiom.data]);
 
   const getRandomIdioms = async () => {
-    try {
-      const params = createQueryParams({ random_count: 3 });
-      const res = await fetch(`${server}/api/idioms/?${params}`);
-      const data = await res.json();
-      console.log(data);
-      setIdiomData([...data.result]);
-    } catch {
-      setIdiomData([]);
-    }
+    const params = createQueryParams({ random_count: 3 });
+    doFetchRandomIdioms(`idioms/?${params}`);
   };
 
   const setQuiz = () => {
-    const randomIdiom = randomElement(idiomData);
+    const randomIdiom = randomElement(fetchRandomIdiom.data);
     const { expression, definitions, sentences } = randomIdiom;
-    const idiomExpressions = idiomData.map((idiom) => idiom.expression);
+    const idiomExpressions = fetchRandomIdiom.data.map(
+      (idiom) => idiom.expression
+    );
     const randomIdioms = getRandomItems({
       src: idiomExpressions,
       remove: expression,
@@ -83,11 +78,7 @@ const Idioms = () => {
       <div className={quizStyles.header}>
         <h4>Pick an idiom meaning:</h4>
       </div>
-      <div>
-        {definitions.map((definition) => (
-          <p key={definition}>{definition}</p>
-        ))}
-      </div>
+      <DescCard data={definitions} title={"Definition"} />
       <div className={quizStyles.btnContainer}>
         {answers.map((answer) => (
           <button
