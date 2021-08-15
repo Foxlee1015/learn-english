@@ -18,6 +18,10 @@ const PhrasalVerbs = () => {
     loadPhrasalVerbs();
   }, []);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [selectedItem]);
+
   return (
     <div className={AdminStyle.container}>
       <PhrasalVerbForm
