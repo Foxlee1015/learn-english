@@ -5,6 +5,7 @@ import { postPhrasalVerb } from "../../utils/apis";
 import { server } from "../../config";
 import { renameObjectKey, removeFalseElements } from "../../utils/utils";
 import AdminStyle from "../../styles/pages/admin/Admin.module.css";
+import useFetch from "../../hooks/useFetch";
 
 const initialValues = {
   verb: "",
@@ -24,6 +25,7 @@ const PhrasalVerbForm = () => {
   const [loading, setLoading] = useState(false);
   const [verbData, setVerbData] = useState([]);
   const inputRef = useRef(null);
+  const [fetchParticles, doFetchParticles] = useFetch([]);
 
   const onFinish = (values) => {
     setLoading(true);
@@ -41,16 +43,18 @@ const PhrasalVerbForm = () => {
     setVerbData([]);
 
     if (verb !== "") {
-      const currentVerbData = await getCurrentVerbParticleData(verb);
-      if (currentVerbData) {
-        setVerbData([...currentVerbData]);
-      }
+      doFetchParticles(`phrasal-verbs/${verb}`);
     }
   };
 
+  useEffect(() => {
+    if (fetchParticles.data.length > 0) {
+      setVerbData([...fetchParticles.data]);
+    }
+  }, [fetchParticles.data]);
+
   const updateFormList = () => {
     const { verb, particle } = form.getFieldValue();
-    console.log(verb, particle);
     let values = { ...initialValues, verb, particle };
 
     if (particle !== "") {
@@ -66,7 +70,6 @@ const PhrasalVerbForm = () => {
         values.isPublic = phrasalVerb["is_public"] === 1 ? true : false;
       }
     }
-    console.log("values : ", values);
     form.setFieldsValue({
       ...values,
     });
@@ -85,26 +88,17 @@ const PhrasalVerbForm = () => {
     });
   };
 
-  const getCurrentVerbParticleData = async (verb) => {
-    const res = await fetch(`${server}/api/phrasal-verbs/${verb}`);
-    const data = await res.json();
-    return data.result;
-  };
-
   const handleBlurVerb = () => {
-    console.log("handleBlurVerb");
     form.setFieldsValue({ particle: "" });
     getVerbData();
     updateFormList();
   };
 
   const handleBlurParticle = () => {
-    console.log("handleBlurParticle");
     updateFormList();
   };
 
   const handleClickParticle = (particle) => {
-    console.log("handleClickParticle");
     form.setFieldsValue({ particle });
     updateFormList();
   };

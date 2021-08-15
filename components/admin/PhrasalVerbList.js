@@ -22,7 +22,7 @@ const PhrasalVerbList = () => {
               boxSizing: "border-box",
             }}
           >
-            {item.verb}
+            {item.verb}-{item.particle}
           </button>
         ))}
     </div>
