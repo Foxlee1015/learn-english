@@ -12,6 +12,7 @@ import DescCard from "../../components/common/DescCard";
 
 import quizStyles from "../../styles/pages/Quiz.module.css";
 import useFetch from "../../hooks/useFetch";
+import AnswerButtons from "../../components/common/AnswerButtons";
 
 const Idioms = () => {
   const [fetchRandomIdiom, doFetchRandomIdioms] = useFetch([]);
@@ -79,18 +80,11 @@ const Idioms = () => {
         <h4>Pick an idiom meaning:</h4>
       </div>
       <DescCard data={definitions} title={"Definition"} />
-      <div className={quizStyles.btnContainer}>
-        {answers.map((answer) => (
-          <button
-            className={quizStyles.btn}
-            disabled={clickedAnswers.includes(answer)}
-            key={answer}
-            onClick={(e) => checkAnswer(answer)}
-          >
-            {answer}
-          </button>
-        ))}
-      </div>
+      <AnswerButtons
+        answers={answers}
+        clickedAnswers={clickedAnswers}
+        onClick={checkAnswer}
+      />
       {showModal && (
         <Modal
           header={idiom}
