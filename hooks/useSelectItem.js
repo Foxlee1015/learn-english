@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 
-const useSelectItem = (data) => {
+const useSelectItem = (data, sortKey) => {
   const [items, setItems] = useState([]);
   const [selectedItem, setSelectedItem] = useState("");
 
   useEffect(() => {
-    setItems(data);
+    if (data && data.length > 0) {
+      setItems([...data]);
+    }
   }, []);
 
   return {
@@ -13,6 +15,7 @@ const useSelectItem = (data) => {
     setItems,
     selectedItem,
     setSelectedItem,
+    sortKey,
   };
 };
 

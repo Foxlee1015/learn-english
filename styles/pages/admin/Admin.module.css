@@ -1,0 +1,14 @@
+.container {
+    width: 100%;
+}
+
+.formItemSub {
+    display: flex;
+    justify-content: left;
+}
+
+.formSubContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}

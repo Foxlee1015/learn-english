@@ -1,33 +1,34 @@
-.tag {
-  color: #c41d7f;
-  background: #fff0f6;
-  border-color: #ffadd2;
+.contianer {
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.input {
   box-sizing: border-box;
-  margin: 0 8px 0 0;
+  margin: 5px 0px;
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  height: 40;
+  margin-bottom: 10px;
+  min-width: 0;
+  padding: 4px 11px;
   color: #000000d9;
   font-size: 14px;
-  font-variant: tabular-nums;
   line-height: 1.5715;
-  list-style: none;
-  font-feature-settings: "tnum";
-  display: inline-block;
-  height: auto;
-  padding: 0 7px;
-  font-size: 16px;
-  line-height: 20px;
-  white-space: nowrap;
+  background-color: #fff;
+  background-image: none;
   border: 1px solid #d9d9d9;
   border-radius: 2px;
-  opacity: 1;
   transition: all 0.3s;
 }
-.tagBox {
-  display: flex;
-}
+
 .btn {
   height: 32px;
   padding: 0px 15px;
-  margin: 8px;
+  margin: 20px;
   color: #000000d9;
   background: #fff;
   border: 1px solid #d9d9d9;
@@ -45,6 +46,7 @@
   user-select: none;
   touch-action: manipulation;
 }
+
 .btn:hover {
   color: #fff;
   background: #40a9ff;
@@ -56,21 +58,5 @@
   color: #ff7875;
   background: #fff;
   border-color: #ff7875;
-  text-decoration: line-through;
-}
-
-.btnContainer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.nextBtns {
-  flex-direction: column;
-}
-
-.active {
-  color: #fff;
-  background: #40a9ff;
-  border-color: #40a9ff;
+  opacity: 0.5;
 }
