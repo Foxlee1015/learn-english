@@ -1,7 +1,13 @@
 import Link from "next/link";
 import linkCardstyles from "../../styles/components/LinkCard.module.css";
 
-const LinkCard = ({ title = "", desc = "", href = "", disabled = false }) => {
+const LinkCard = ({
+  title = "",
+  desc = "",
+  href = "",
+  disabled = false,
+  actionText = "LEARN MORE",
+}) => {
   return (
     <>
       {disabled ? (
@@ -24,7 +30,7 @@ const LinkCard = ({ title = "", desc = "", href = "", disabled = false }) => {
 
           <button className={linkCardstyles.linkBtn}>
             <Link className={linkCardstyles.link} href={href}>
-              LEARN MORE
+              {actionText}
             </Link>
           </button>
         </div>
