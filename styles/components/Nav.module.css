@@ -17,6 +17,14 @@
   list-style: none;
 }
 
+.nav button {
+  color: #1890ff;
+}
+
+.nav .buttons {
+  margin-left: auto;
+}
+
 .linkText {
   margin: 0 10px;
   font-size: 1.2rem;

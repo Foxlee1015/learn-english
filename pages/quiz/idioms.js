@@ -1,80 +1,71 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Meta from "../../components/Meta";
+import Header from "../../components/Header";
 import {
-  randomProperty,
-  replaceText,
   randomElement,
   randomArrayShuffle,
+  getRandomItems,
 } from "../../utils/utils";
+import { createQueryParams } from "../../utils/utils";
+import Modal from "../../components/common/Modal";
+import DescCard from "../../components/common/DescCard";
 
-import styles from "../../styles/pages/Game.module.css";
-
-import * as Data from "../../data";
-
-const verbResources = Data.verbs;
-const particleResources = Data.particles;
+import quizStyles from "../../styles/pages/Quiz.module.css";
+import useFetch from "../../hooks/useFetch";
 
 const Idioms = () => {
-  const [verb, setVerb] = useState("");
-  const [particle, setParticle] = useState("");
-  const [hint, setHint] = useState("");
-  const [showHint, setShowHint] = useState(false);
+  const [fetchRandomIdiom, doFetchRandomIdioms] = useFetch([]);
+  const [idiom, setIdiom] = useState({});
+  const [definitions, setDefinitions] = useState([]);
   const [sentenses, setSentenses] = useState([]);
   const [answers, setAnswers] = useState([]);
   const [clickedAnswers, setClickedAnswers] = useState([]);
-  const [showAnswer, setShowAnswer] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
-  const resetProblem = () => {
+  useEffect(() => {
+    getRandomIdioms();
+  }, []);
+
+  const nextQuiz = () => {
     setClickedAnswers([]);
-    setShowAnswer(false);
-    setShowHint(false);
-  };
-
-  const genProblem = () => {
-    resetProblem();
-
-    // dont repeat past problems
-    const randomVerb = randomProperty(verbResources);
-    const randomParticle = randomProperty(verbResources[randomVerb]);
-    const [definition, examples] = verbResources[randomVerb][randomParticle];
-    const randomParticles = getRandomItems({
-      src: particleResources,
-      remove: randomParticle,
-      itemCount: 3,
-    }); // return Set
-
-    const shffledParticles = randomArrayShuffle(
-      Array.from(randomParticles.add(randomParticle))
-    ); // create array from set
-
-    setVerb(randomVerb);
-    setParticle(randomParticle);
-    setHint(definition);
-    setSentenses(examples);
-    setAnswers([...shffledParticles]);
+    setShowModal(false);
+    getRandomIdioms();
   };
 
   useEffect(() => {
-    genProblem();
-  }, []);
-
-  const getRandomItems = ({ src, remove, itemCount }) => {
-    const result = new Set();
-    const removeIndex = src.indexOf(remove);
-    if (removeIndex > -1) {
-      src.splice(removeIndex, 1);
+    if (fetchRandomIdiom.data.length !== 0) {
+      setQuiz();
     }
+  }, [fetchRandomIdiom.data]);
 
-    while (result.size < itemCount) {
-      result.add(randomElement(src));
-    }
-    return result;
+  const getRandomIdioms = async () => {
+    const params = createQueryParams({ random_count: 3 });
+    doFetchRandomIdioms(`idioms/?${params}`);
+  };
+
+  const setQuiz = () => {
+    const randomIdiom = randomElement(fetchRandomIdiom.data);
+    const { expression, definitions, sentences } = randomIdiom;
+    const idiomExpressions = fetchRandomIdiom.data.map(
+      (idiom) => idiom.expression
+    );
+    const randomIdioms = getRandomItems({
+      src: idiomExpressions,
+      remove: expression,
+      itemCount: 2,
+    });
+    const shffledIdioms = randomArrayShuffle(
+      Array.from(randomIdioms.add(expression))
+    );
+    setIdiom(expression);
+    setDefinitions(definitions);
+    setSentenses(sentences);
+    setAnswers([...shffledIdioms]);
   };
 
   const checkAnswer = (clickedAnswer) => {
-    if (clickedAnswer === particle) {
-      setShowAnswer(true);
-      setShowHint(true);
+    if (clickedAnswer === idiom) {
+      setShowModal(true);
     } else {
       setClickedAnswers([...clickedAnswers, clickedAnswer]);
     }
@@ -82,46 +73,32 @@ const Idioms = () => {
 
   return (
     <div>
-      <Meta title="Idiom Quiz" />
-      <h5>Idiom Quiz</h5>
-      <div className={styles.header}>
-        <h6>{verb}</h6>
-        <div className={styles.tagBox}>
-          <button className={styles.tag} onClick={() => setShowHint(true)}>
-            Hint
-          </button>
-          {showHint ? <p>{hint}</p> : ""}
-        </div>
+      <Meta title="Idioms quiz" />
+      <Header title="Idioms quiz" />
+      <div className={quizStyles.header}>
+        <h4>Pick an idiom meaning:</h4>
       </div>
-      <div>
-        {sentenses.map((sentense) => (
-          <p key={sentense}>
-            {showAnswer ? sentense : replaceText(sentense, particle, "___")}
-          </p>
+      <DescCard data={definitions} title={"Definition"} />
+      <div className={quizStyles.btnContainer}>
+        {answers.map((answer) => (
+          <button
+            className={quizStyles.btn}
+            disabled={clickedAnswers.includes(answer)}
+            key={answer}
+            onClick={(e) => checkAnswer(answer)}
+          >
+            {answer}
+          </button>
         ))}
       </div>
-      {showAnswer && (
-        <div className={`${styles.btnContainer} ${styles.nextBtns}`}>
-          <button className={styles.btn}>Before</button>
-          <button className={styles.btn}>Next(Same verb)</button>
-          <button className={styles.btn} onClick={() => genProblem()}>
-            Next(Different verb)
-          </button>
-        </div>
-      )}
-      {!showAnswer && (
-        <div className={styles.btnContainer}>
-          {answers.map((answer) => (
-            <button
-              className={styles.btn}
-              disabled={clickedAnswers.includes(answer)}
-              key={answer}
-              onClick={(e) => checkAnswer(answer)}
-            >
-              {answer}
-            </button>
+      {showModal && (
+        <Modal
+          header={idiom}
+          main={sentenses.map((sentense) => (
+            <p key={sentense}>{sentense}</p>
           ))}
-        </div>
+          buttons={[{ onClick: nextQuiz, text: "Next" }]}
+        />
       )}
     </div>
   );

@@ -1,10 +1,8 @@
-import { useEffect, useState } from "react";
-import { Form, Input, Button, InputNumber } from "antd";
-
-import { createQueryParams } from "../../utils/utils";
-import { server } from "../../config";
+import { useEffect, useState, useRef } from "react";
+import { Form, Input, Button, InputNumber, Switch } from "antd";
 import AntFormList from "./common/AntFormList";
-
+import { postPhrasalVerb } from "../../utils/apis";
+import { renameObjectKey, removeFalseElements } from "../../utils/utils";
 import AdminStyle from "../../styles/pages/admin/Admin.module.css";
 
 const initialValues = {
@@ -12,95 +10,118 @@ const initialValues = {
   particle: "",
   definitions: [],
   sentences: [],
-  reviewed: false,
   difficulty: 1,
+  isPublic: false,
 };
 
 const validateMessages = {
   required: "${label} is required!",
 };
 
-const addPhrasalVerb = async (data) => {
-  const res = await fetch(`${server}/api/phrasal-verbs/`, {
-    body: JSON.stringify(data),
-    headers: {
-      "Content-Type": "application/json",
-    },
-    method: "POST",
-  });
-  const result = await res.json();
-};
-
-const PhrasalVerbForm = () => {
+const PhrasalVerbForm = ({
+  data,
+  selectedItem,
+  setSelectedItem,
+  refreshData,
+}) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const [verbData, setVerbData] = useState({});
-  const [showFormList, setShowFormList] = useState(false);
+  const [particles, setParticles] = useState([]);
+  const inputRef = useRef(null);
 
   const onFinish = (values) => {
-    const { verb, particle, sentences, definitions, difficulty } = values;
-
     setLoading(true);
     addPhrasalVerb({
-      verb,
-      particle,
-      level: difficulty,
-      sentences,
-      definitions,
+      ...values,
     });
-    form.resetFields();
+  };
+
+  const refreshForm = () => {
     setLoading(false);
+    inputRef.current.focus();
+    form.resetFields();
+    refreshData();
   };
 
-  useEffect(()=>{
-    const {verb} = form.getFieldValue()
-    if (verb !== "") {
-      getVerbData(verb)
-    }
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
 
-  }, [form.getFieldValue().verb])
-
-  const getVerbData = async (verb) => {
-    setVerbData({});
-
-    if (verb !== "") {
-      const currentVerbData = await getCurrentVerbParticleData(verb);
-      if (currentVerbData) {
-        setVerbData({ ...currentVerbData });
-      }
-    }
+  const updateParticleList = () => {
+    const { verb } = form.getFieldValue();
+    const filtered = data.filter((item) => item.verb === verb);
+    setParticles([...filtered]);
   };
 
-  useEffect(()=>{
-    const {particle} = form.getFieldValue()
-    updateFormList(particle)
+  useEffect(() => {
+    if (Object.keys(selectedItem).length > 0) {
+      const values = renameObjectKey({
+        src: selectedItem,
+        oldKey: "isPublic",
+        newKey: "is_public",
+      });
+      form.setFieldsValue({ ...values });
+    } else {
+      form.setFieldsValue({ ...initialValues });
+    }
+    updateParticleList();
+  }, [selectedItem]);
 
-  },[verbData])
-
-  const updateFormList = (particle) => {
-    setShowFormList(false)
-    let definitions = [];
-    let sentences = [];
+  const updateFormList = () => {
+    const { verb, particle } = form.getFieldValue();
+    let values = { ...initialValues, verb, particle };
 
     if (particle !== "") {
-      if (verbData && verbData.particles && verbData.particles[particle]) {
-        ({ definitions, sentences } = verbData.particles[particle]);
+      const phrasalVerb = data.find(
+        (item) => item.verb === verb && item.particle === particle
+      );
+      if (phrasalVerb) {
+        const { _id, definitions, sentences, difficulty } = phrasalVerb;
+        values = {
+          ...values,
+          _id,
+          definitions,
+          sentences,
+          difficulty,
+        };
+        values.isPublic = phrasalVerb["is_public"] === 1 ? true : false;
       }
     }
-
+    setSelectedItem({ ...values });
     form.setFieldsValue({
-      ...form.getFieldValue(),
-      definitions,
-      sentences,
+      ...values,
     });
-    
-    setShowFormList(true)
   };
 
-  const getCurrentVerbParticleData = async (verb) => {
-    const res = await fetch(`${server}/api/phrasal-verbs/${verb}`);
-    const data = await res.json();
-    return data.result;
+  const addPhrasalVerb = async (data) => {
+    const renamedData = renameObjectKey({
+      src: data,
+      oldKey: "isPublic",
+      newKey: "is_public",
+    });
+    renamedData["verb"] = renamedData.verb.toLowerCase();
+    renamedData["particle"] = renamedData.particle.toLowerCase();
+    renamedData["definitions"] = removeFalseElements(
+      renamedData["definitions"]
+    );
+    renamedData["sentences"] = removeFalseElements(renamedData["sentences"]);
+    postPhrasalVerb(data, () => {
+      refreshForm();
+    });
+  };
+
+  const handleBlurVerb = () => {
+    updateParticleList();
+    updateFormList();
+  };
+
+  const handleBlurParticle = () => {
+    updateFormList();
+  };
+
+  const handleClickParticle = (particle) => {
+    form.setFieldsValue({ particle });
+    updateFormList();
   };
 
   return (
@@ -112,34 +133,55 @@ const PhrasalVerbForm = () => {
       validateMessages={validateMessages}
     >
       <Form.Item
-        name={"verb"}
+        name="verb"
         label="Verb"
         rules={[{ required: true }]}
         labelAlign="left"
       >
-        <Input onBlur={(e) => getVerbData(e.target.value)} />
+        <Input
+          ref={inputRef}
+          onBlur={() => {
+            handleBlurVerb();
+          }}
+        />
       </Form.Item>
+      {particles.length > 0 &&
+        particles.map((item) => (
+          <span
+            key={item._id}
+            style={{
+              margin: 5,
+              cursor: "pointer",
+            }}
+            onClick={() => {
+              handleClickParticle(item.particle);
+            }}
+          >
+            {item.particle}
+          </span>
+        ))}
       <Form.Item
         name={"particle"}
         label="Particle"
         labelAlign="left"
         rules={[{ required: true }]}
       >
-        <Input onBlur={(e) => updateFormList(e.target.value)} />
+        <Input onBlur={() => handleBlurParticle()} />
       </Form.Item>
-      <Form.Item
-        name={"difficulty"}
-        label="Difficulty"
-        rules={[{ type: "number", min: 1, max: 5 }]}
-      >
-        <InputNumber />
-      </Form.Item>
-      {showFormList && (
-        <>
-          <AntFormList name="definitions" />
-          <AntFormList name="sentences" />
-        </>
-      )}
+      <div className={AdminStyle.formSubContainer}>
+        <Form.Item
+          name={"difficulty"}
+          label="Difficulty"
+          rules={[{ type: "number", min: 0, max: 5 }]}
+        >
+          <InputNumber />
+        </Form.Item>
+        <Form.Item label="Public" name={"isPublic"} valuePropName="checked">
+          <Switch />
+        </Form.Item>
+      </div>
+      <AntFormList name="definitions" />
+      <AntFormList name="sentences" />
       <Form.Item>
         <div className={AdminStyle.formItemSub}>
           <Button type="primary" htmlType="submit" loading={loading}>
