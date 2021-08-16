@@ -30,7 +30,7 @@ const Home = ({}) => {
       <Header title="Learn English" />
       <div className={Homestyles.grid}>
         {cards.map((data) => (
-          <LinkCard {...data} />
+          <LinkCard key={data.title} {...data} />
         ))}
       </div>
     </>
