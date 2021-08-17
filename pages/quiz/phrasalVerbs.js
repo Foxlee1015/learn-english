@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import Meta from "../../components/Meta";
 import Header from "../../components/Header";
 import {
-  replaceText,
   randomArrayShuffle,
   getRandomItems,
   createQueryParams,
@@ -11,6 +10,9 @@ import Modal from "../../components/common/Modal";
 import PuffLoader from "react-spinners/PuffLoader";
 import quizStyles from "../../styles/pages/Quiz.module.css";
 import useFetch from "../../hooks/useFetch";
+import DescCard from "../../components/common/DescCard";
+import SentenceCard from "../../components/common/SentenceCard";
+import AnswerButtons from "../../components/common/AnswerButtons";
 
 const PhrasalVerbs = () => {
   const [fetchPhrasalVerb, doFetchPhrasalVerb] = useFetch([]);
@@ -84,30 +86,17 @@ const PhrasalVerbs = () => {
       {fetchPhrasalVerb.loading && <PuffLoader size={20} />}
       {Object.keys(phrasalVerb).length > 0 > 0 && (
         <>
-          <div className={quizStyles.tagBox}>
-            {phrasalVerb.definitions.map((definition) => (
-              <p key={definition}>{definition}</p>
-            ))}
-          </div>
-          <div>
-            {phrasalVerb.sentences.map((sentence) => (
-              <p key={sentence}>
-                {replaceText(sentence, phrasalVerb.particle, "___")}
-              </p>
-            ))}
-          </div>
-          <div className={quizStyles.btnContainer}>
-            {answers.map((answer) => (
-              <button
-                className={quizStyles.btn}
-                disabled={clickedAnswers.includes(answer)}
-                key={answer}
-                onClick={(e) => checkAnswer(answer)}
-              >
-                {answer}
-              </button>
-            ))}
-          </div>
+          <DescCard data={phrasalVerb.definitions} title={"Definitions"} />
+          <SentenceCard
+            data={phrasalVerb.sentences}
+            title={"Questions"}
+            replaceToBlank={phrasalVerb.particle}
+          />
+          <AnswerButtons
+            answers={answers}
+            clickedAnswers={clickedAnswers}
+            onClick={checkAnswer}
+          />
         </>
       )}
       {showModal && (
