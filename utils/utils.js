@@ -9,7 +9,7 @@ export const randomElement = (array) => {
 };
 
 export const replaceText = (srcText, target, replaceTo) => {
-  return srcText.replace(target, replaceTo);
+  return srcText.replace(new RegExp("\\b" + target + "\\b"), replaceTo);
 };
 
 export const randomArrayShuffle = (array) => {

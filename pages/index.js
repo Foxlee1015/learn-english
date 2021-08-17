@@ -2,6 +2,7 @@ import Meta from "../components/Meta";
 import Header from "../components/Header";
 import LinkCard from "../components/common/LinkCard";
 import Homestyles from "../styles/pages/Home.module.css";
+import LikeCount from "../components/account/LikeCount";
 
 const cards = [
   {
@@ -19,7 +20,9 @@ const cards = [
     title: "My page",
     desc: "Check out my study list",
     href: "/account/likes",
-    actionText: "Go to My page",
+    actionText: "Go to My page!",
+    Component: LikeCount,
+    authRequired: true,
   },
 ];
 
