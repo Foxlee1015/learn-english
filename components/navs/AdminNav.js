@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-
+import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { deauthenticate } from "../../redux/actions/authActions";
 import { Menu } from "antd";
-import AdminNavStyle from "../../styles/components/AdminNav.module.css";
 
 const routes = [
   { key: "/", href: "/", text: "Home" },
@@ -17,6 +16,10 @@ const routes = [
   },
   { key: "/admin/idioms", href: "/admin/idioms", text: "Idioms" },
 ];
+
+const Container = styled.div`
+  width: 100%;
+`;
 
 const AdminNav = () => {
   const router = useRouter();
@@ -34,7 +37,7 @@ const AdminNav = () => {
   };
 
   return (
-    <div className={AdminNavStyle.container}>
+    <Container>
       <Menu
         onClick={(e) => setCurrent(e.key)}
         selectedKeys={[current]}
@@ -49,7 +52,7 @@ const AdminNav = () => {
           <button onClick={() => handleLogout()}>Logout</button>
         </Menu.Item>
       </Menu>
-    </div>
+    </Container>
   );
 };
 export default AdminNav;
