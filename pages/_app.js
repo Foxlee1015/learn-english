@@ -1,5 +1,8 @@
 import { Provider } from "react-redux";
 import { useStore } from "../redux";
+import GlobalStyle from "../styles/global-styles";
+import { ThemeProvider } from "../styles/themed-components";
+import theme from "../styles/theme";
 
 import ProtectedRoute from "../HOC/ProtectedRoute";
 import Layout from "../components/layouts/Layout";
@@ -7,7 +10,6 @@ import AdminLayout from "../components/layouts/AdminLayout";
 import AccountLayout from "../components/layouts/AccountLayout";
 import ErrorLayout from "../components/layouts/ErrorLayout";
 
-import "../styles/globals.css";
 import "../styles/styles.css";
 import { css } from "@emotion/react";
 
@@ -30,6 +32,13 @@ export default function MyApp({ Component, pageProps, router: { route } }) {
   };
 
   return (
-    <Provider store={store}>{getLayout(<Component {...pageProps} />)}</Provider>
+    <>
+      <GlobalStyle />
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          {getLayout(<Component {...pageProps} />)}
+        </ThemeProvider>
+      </Provider>
+    </>
   );
 }

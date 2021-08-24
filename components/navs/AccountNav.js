@@ -1,20 +1,27 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import styled from "styled-components";
 import Link from "next/link";
 import { Menu } from "antd";
-import AdminNavStyle from "../../styles/components/AdminNav.module.css";
 
 const routes = [
-  { 
-    href: "/", 
-    text: "Home" 
-  },{ 
-    href: "/account", 
-    text: "Mypage" 
-  },{
+  {
+    href: "/",
+    text: "Home",
+  },
+  {
+    href: "/account",
+    text: "Mypage",
+  },
+  {
     href: "/account/likes",
     text: "Study",
-  }];
+  },
+];
+
+const Container = styled.div`
+  width: 100%;
+`;
 
 const AccountNav = () => {
   const router = useRouter();
@@ -25,7 +32,7 @@ const AccountNav = () => {
   }, []);
 
   return (
-    <div className={AdminNavStyle.container}>
+    <Container>
       <Menu
         onClick={(e) => setCurrent(e.href)}
         selectedKeys={[current]}
@@ -37,7 +44,7 @@ const AccountNav = () => {
           </Menu.Item>
         ))}
       </Menu>
-    </div>
+    </Container>
   );
 };
 export default AccountNav;
