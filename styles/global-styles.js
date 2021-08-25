@@ -13,10 +13,15 @@ const GlobalStyle = createGlobalStyle`
     color: inherit;
     text-decoration: none;
   }
-  input, button {
-    background-color: transparent;
+  input,
+  button {
+    background: none;
+    color: inherit;
     border: none;
-    outline: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
   }
   h1, h2, h3, h4, h5, h6{
     font-family:'Maven Pro', sans-serif;

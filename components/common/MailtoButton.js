@@ -1,14 +1,19 @@
+import styled from "styled-components";
+
+const Button = styled.button`
+  textdecoration: "underline";
+`;
+
 const MailtoButton = ({ mailto = "", label = "" }) => {
   return (
-    <button
-      style={{ textDecoration: "underline" }}
+    <Button
       onClick={(e) => {
         window.location = mailto;
         e.preventDefault();
       }}
     >
       {label}
-    </button>
+    </Button>
   );
 };
 
