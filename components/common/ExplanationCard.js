@@ -31,7 +31,7 @@ const Container = styled.div`
 const InfoBox = styled.div`
   ${FlexCenterBox}
   justify-content: left;
-  margin-bottom: 20px;
+  margin-bottom: 8px;
 `;
 const Text = styled.span`
   margin: 0px 6px;
