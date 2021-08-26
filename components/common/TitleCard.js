@@ -8,6 +8,7 @@ const Container = styled.div`
 
 const Text = styled.h6`
   color: ${({ theme }) => theme.colors.common.dark};
+  margin-bottom: 10px;
 `;
 
 const TitleCard = ({ title }) => {

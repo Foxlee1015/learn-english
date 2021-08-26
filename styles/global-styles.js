@@ -27,7 +27,7 @@ const GlobalStyle = createGlobalStyle`
     font-family:'Maven Pro', sans-serif;
     font-weight: 700;
     line-height: 1.334;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
   }
   h1 {
     font-size : 50px;
@@ -65,7 +65,7 @@ const GlobalStyle = createGlobalStyle`
       font-size: 12px;
     }
     h1, h2, h3, h4, h5, h6{
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
     h1 {
       font-size : 40px;
@@ -100,7 +100,7 @@ const GlobalStyle = createGlobalStyle`
       font-size: 10px;
     }
     h1, h2, h3, h4, h5, h6{
-      margin-bottom: 15px;
+      margin-bottom: 12px;
     }
     h1 {
       font-size : 30px;

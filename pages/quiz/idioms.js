@@ -92,6 +92,7 @@ const Idioms = () => {
             <p key={sentense}>{sentense}</p>
           ))}
           buttons={[{ onClick: nextQuiz, text: "Next" }]}
+          setShow={setShowModal}
         />
       )}
     </div>

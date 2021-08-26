@@ -106,6 +106,7 @@ const PhrasalVerbs = () => {
             <p key={sentence}>{sentence}</p>
           ))}
           buttons={[{ onClick: nextQuiz, text: "Next" }]}
+          setShow={setShowModal}
         />
       )}
     </div>

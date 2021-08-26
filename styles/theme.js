@@ -38,6 +38,7 @@ const colors = {
   common: {
     white: "#fff",
     black: "#212121",
+    greyClear: "#00000073",
     greyLight: "#fafafa",
     grey: "#eeeeee",
     greyDark: "#757575",

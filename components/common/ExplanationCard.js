@@ -22,10 +22,8 @@ const setTitle = ({ title, subTitle, upperCase = true }) => {
 
 const Container = styled.div`
   color: #000000d9;
-  font-size: 14px;
   position: relative;
   border-radius: 2px;
-  padding: 10px;
   margin: 10px;
 `;
 const InfoBox = styled.div`
@@ -34,8 +32,8 @@ const InfoBox = styled.div`
   margin-bottom: 8px;
 `;
 const Text = styled.span`
-  margin: 0px 6px;
   padding: 0;
+  margin: 0;
 `;
 
 const ExplanationCard = ({
