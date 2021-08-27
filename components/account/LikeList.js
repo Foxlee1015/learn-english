@@ -43,10 +43,6 @@ const LikeList = () => {
     doFetchPhrasalVerbs(`users/phrasal-verbs`);
   };
 
-  useEffect(() => {
-    console.log(fetchPhrasalVerbs.data, fetchIdioms.data);
-  }, [fetchPhrasalVerbs, fetchIdioms]);
-
   return (
     <>
       <LikeCardHead title={"Phrasal verbs"} href={"/phrasalVerbs"} />
