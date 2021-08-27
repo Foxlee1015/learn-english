@@ -2,7 +2,6 @@ import Link from "next/link";
 import styled from "styled-components";
 
 const Button = styled.button`
-  cursor: pointer;
   margin: 0 10px;
   ${(props) => props.theme.media.tablet`
     margin: 0 8px;

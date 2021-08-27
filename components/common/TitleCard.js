@@ -1,21 +1,21 @@
-const style = {
-  container: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flexStart",
-  },
-  title: {
-    color: "#000000d9",
-    fontWeight: 700,
-    fontSize: 20,
-  },
-};
+import styled from "styled-components";
+import { FlexCenterBox } from "../../styles/common-styles";
+
+const Container = styled.div`
+  ${FlexCenterBox}
+  justify-content: flex-start;
+`;
+
+const Text = styled.h6`
+  color: ${({ theme }) => theme.colors.common.dark};
+  margin-bottom: 10px;
+`;
 
 const TitleCard = ({ title }) => {
   return (
-    <div style={style.container}>
-      <h3 style={style.title}>{title}</h3>
-    </div>
+    <Container>
+      <Text>{title}</Text>
+    </Container>
   );
 };
 

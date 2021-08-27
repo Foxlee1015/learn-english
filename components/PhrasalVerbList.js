@@ -2,11 +2,41 @@ import { useState, useEffect } from "react";
 import SelectItem from "./common/SelectItem";
 import ExplanationCard from "./common/ExplanationCard";
 import InputCheckbox from "./common/InputCheckbox";
-import styles from "../styles/pages/Verb.module.css";
 import useSelectItem from "../hooks/useSelectItem";
 import { createQueryParams } from "../utils/utils";
 import useInputSearch from "../hooks/useInputSearch";
 import useFetch from "../hooks/useFetch";
+import styled from "styled-components";
+
+const Container = styled.div`
+  width: 100%;
+`;
+
+const SelectWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 100%;
+  margin-top: 0.5rem;
+`;
+
+const Input = styled.input`
+  margin: 0;
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  min-width: 0;
+  padding: 4px 11px;
+  color: #000000d9;
+  font-size: 14px;
+  line-height: 1.5715;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #d9d9d9;
+  border-radius: 2px;
+  transition: all 0.3s;
+`;
 
 const setUniqueVerbList = (items) => {
   try {
@@ -94,9 +124,7 @@ const PhrasalVerb = ({ data }) => {
       const selectedVerb = verbs.items.find(
         (verb) => verb._id === verbs.selectedItem
       );
-      doFetchParticles(
-        `phrasal-verbs/${selectedVerb.verb.toLowerCase()}`
-      );
+      doFetchParticles(`phrasal-verbs/${selectedVerb.verb.toLowerCase()}`);
     }
   };
 
@@ -138,24 +166,22 @@ const PhrasalVerb = ({ data }) => {
   };
 
   return (
-    <div className={styles.wrapper}>
-      <input {...inputSearch} className={styles.input} />
-      <div>
-        <InputCheckbox
-          label="Search in definitions/sentences"
-          checked={searchFullText}
-          onChange={setSearchFullText}
-        />
-        <InputCheckbox
-          label="Search exact word if you get too many results"
-          checked={searchExactText}
-          onChange={setSearchExactText}
-        />
-      </div>
-      <div className={styles.flex}>
+    <Container>
+      <Input {...inputSearch} />
+      <InputCheckbox
+        label="Search in definitions/sentences"
+        checked={searchFullText}
+        onChange={setSearchFullText}
+      />
+      <InputCheckbox
+        label="Search exact word if you get too many results"
+        checked={searchExactText}
+        onChange={setSearchExactText}
+      />
+      <SelectWrapper>
         {<SelectItem {...verbs} loading={fetchVerbs.loading} />}
         {<SelectItem {...particles} loading={fetchParticles.loading} />}
-      </div>
+      </SelectWrapper>
       {verbs.selectedItem !== "" && particles.selectedItem !== "" && (
         <ExplanationCard
           {...cardData}
@@ -163,7 +189,7 @@ const PhrasalVerb = ({ data }) => {
           resource_id="phrasal_verb_id"
         />
       )}
-    </div>
+    </Container>
   );
 };
 
