@@ -9,10 +9,14 @@ import {
 import { createQueryParams } from "../../utils/utils";
 import Modal from "../../components/common/Modal";
 import DescCard from "../../components/common/DescCard";
-
-import quizStyles from "../../styles/pages/Quiz.module.css";
 import useFetch from "../../hooks/useFetch";
 import AnswerButtons from "../../components/common/AnswerButtons";
+import styled from "styled-components";
+
+const Title = styled.h5``;
+const Quiz = styled.div`
+  align-self: start;
+`;
 
 const Idioms = () => {
   const [fetchRandomIdiom, doFetchRandomIdioms] = useFetch([]);
@@ -73,13 +77,13 @@ const Idioms = () => {
   };
 
   return (
-    <div>
+    <>
       <Meta title="Idioms quiz" />
       <Header title="Idioms quiz" />
-      <div className={quizStyles.header}>
-        <h4>Pick an idiom meaning:</h4>
-      </div>
-      <DescCard data={definitions} title={"Definition"} />
+      <Quiz>
+        <Title>Pick an idiom meaning:</Title>
+        <DescCard data={definitions} title={"Definition"} />
+      </Quiz>
       <AnswerButtons
         answers={answers}
         clickedAnswers={clickedAnswers}
@@ -95,7 +99,7 @@ const Idioms = () => {
           setShow={setShowModal}
         />
       )}
-    </div>
+    </>
   );
 };
 

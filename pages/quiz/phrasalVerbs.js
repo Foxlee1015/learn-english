@@ -8,11 +8,16 @@ import {
 } from "../../utils/utils";
 import Modal from "../../components/common/Modal";
 import PuffLoader from "react-spinners/PuffLoader";
-import quizStyles from "../../styles/pages/Quiz.module.css";
 import useFetch from "../../hooks/useFetch";
 import DescCard from "../../components/common/DescCard";
 import SentenceCard from "../../components/common/SentenceCard";
 import AnswerButtons from "../../components/common/AnswerButtons";
+import styled from "styled-components";
+
+const Title = styled.h6``;
+const Quiz = styled.div`
+  align-self: start;
+`;
 
 const PhrasalVerbs = () => {
   const [fetchPhrasalVerb, doFetchPhrasalVerb] = useFetch([]);
@@ -80,25 +85,25 @@ const PhrasalVerbs = () => {
     <div>
       <Meta title="Phrasal Verb quiz" />
       <Header title="Phrasal Verb quiz" />
-      <div className={quizStyles.header}>
-        <h4>Pick a preposition or adverb for the blank</h4>
-      </div>
-      {fetchPhrasalVerb.loading && <PuffLoader size={20} />}
-      {Object.keys(phrasalVerb).length > 0 > 0 && (
-        <>
-          <DescCard data={phrasalVerb.definitions} title={"Definitions"} />
-          <SentenceCard
-            data={phrasalVerb.sentences}
-            title={"Questions"}
-            replaceToBlank={phrasalVerb.particle}
-          />
-          <AnswerButtons
-            answers={answers}
-            clickedAnswers={clickedAnswers}
-            onClick={checkAnswer}
-          />
-        </>
-      )}
+      <Quiz>
+        <Title>Pick a preposition or adverb for the blank</Title>
+        {fetchPhrasalVerb.loading && <PuffLoader size={20} />}
+        {Object.keys(phrasalVerb).length > 0 > 0 && (
+          <>
+            <DescCard data={phrasalVerb.definitions} title={"Definitions"} />
+            <SentenceCard
+              data={phrasalVerb.sentences}
+              title={"Questions"}
+              replaceToBlank={phrasalVerb.particle}
+            />
+            <AnswerButtons
+              answers={answers}
+              clickedAnswers={clickedAnswers}
+              onClick={checkAnswer}
+            />
+          </>
+        )}
+      </Quiz>
       {showModal && (
         <Modal
           header={`${phrasalVerb.verb}-${phrasalVerb.particle}`}
