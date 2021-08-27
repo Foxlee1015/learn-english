@@ -1,9 +1,32 @@
 import { useEffect, useState } from "react";
+import styled from "styled-components";
 import useFetch from "../../hooks/useFetch";
+import { LikeCardHead, LikeCardBody } from "../account";
 
-import LikeListStyles from "../../styles/components/LikeList.module.css";
-import LikeCardHead from "./LikeCardHead";
-import LikeCardBody from "./LikeCardBody";
+const Container = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 10px;
+  margin-bottom: 40px;
+  padding: 10px;
+
+  ${(props) => props.theme.media.desktop`
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 15px;
+    margin-bottom: 30px;
+  `}
+
+  ${(props) => props.theme.media.tablet`
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 15px;
+    margin-bottom: 30px;
+  `}
+  ${(props) => props.theme.media.phone`
+    grid-template-columns: repeat(1, 1fr);
+    grid-gap: 10px;
+    margin-bottom: 20px;
+  `}
+`;
 
 const LikeList = () => {
   const [fetchIdioms, doFetchIdioms] = useFetch({});
@@ -20,12 +43,16 @@ const LikeList = () => {
     doFetchPhrasalVerbs(`users/phrasal-verbs`);
   };
 
+  useEffect(() => {
+    console.log(fetchPhrasalVerbs.data, fetchIdioms.data);
+  }, [fetchPhrasalVerbs, fetchIdioms]);
+
   return (
     <>
       <LikeCardHead title={"Phrasal verbs"} href={"/phrasalVerbs"} />
       {fetchPhrasalVerbs.loading && <p>loading...</p>}
       {fetchPhrasalVerbs.data && fetchPhrasalVerbs.data.length > 0 && (
-        <div className={LikeListStyles.grid}>
+        <Container>
           {fetchPhrasalVerbs.data.map((item) => (
             <LikeCardBody
               key={item._id}
@@ -37,12 +64,12 @@ const LikeList = () => {
               refresh={refreshData}
             />
           ))}
-        </div>
+        </Container>
       )}
       <LikeCardHead title={"Idioms"} href={"/idioms"} />
       {fetchIdioms.loading && <p>loading...</p>}
       {fetchIdioms.data && fetchIdioms.data.length > 0 && (
-        <div className={LikeListStyles.grid}>
+        <Container>
           {fetchIdioms.data.map((item) => (
             <LikeCardBody
               key={item._id}
@@ -54,7 +81,7 @@ const LikeList = () => {
               refresh={refreshData}
             />
           ))}
-        </div>
+        </Container>
       )}
     </>
   );
