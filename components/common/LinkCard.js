@@ -66,7 +66,7 @@ const LinkCard = ({
 
   useEffect(() => {
     setDisabled(authRequired && !auth.loggedIn);
-  }, []);
+  }, [auth]);
 
   return (
     <Container disabled={disabled}>
