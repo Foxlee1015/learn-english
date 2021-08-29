@@ -11,6 +11,7 @@ import Modal from "./Modal";
 import Notification from "./Notification";
 import Tag from "./Tag";
 import TitleCard from "./TitleCard";
+import SentenceCard from "./SentenceCard";
 
 export {
   SelectItem,
@@ -26,4 +27,5 @@ export {
   Notification,
   Tag,
   TitleCard,
+  SentenceCard,
 };
