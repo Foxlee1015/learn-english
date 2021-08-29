@@ -16,8 +16,8 @@ const cards = [
   },
   { title: "Quiz", desc: "Prasal verbs / Idioms quiz", href: "/quiz" },
   {
-    title: "My page",
-    desc: "My study list",
+    title: "Study list",
+    desc: "Save your phrasal verbs and Idioms and Study anytime.",
     href: "/account/likes",
     actionText: "Go to My page",
     Component: LikeCount,

@@ -7,7 +7,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   min-width: 275px;
-  min-height: 200px;
+  min-height: 220px;
   padding: 10px;
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   background-color: ${({ theme }) => theme.colors.common.white};
@@ -18,18 +18,25 @@ const Container = styled.div`
   ${({ disabled }) =>
     disabled &&
     `
-    background-color: ${({ theme }) => theme.colors.common.greyLight};
+    background-color: ${({ theme }) => theme.colors.grey[200]};
     text-shadow: none;
     box-shadow: none;
   `};
 `;
 
-const Title = styled.h4`
+const Title = styled.h5`
   color: ${({ theme }) => theme.colors.common.black};
   align-self: center;
   :hover {
     color: ${({ theme }) => theme.colors.primary[700]};
   }
+  ${({ disabled }) =>
+    disabled &&
+    `
+    :hover {
+      color: ${({ theme }) => theme.colors.common.black};
+    }
+  `};
 `;
 
 const Text = styled.p``;
@@ -46,10 +53,11 @@ const LinkButton = styled.button`
   border-radius: 4px;
   letter-spacing: 0.02857em;
 
-  color: ${({ theme }) => theme.colors.common.black};
+  color: ${({ theme }) => theme.colors.grey[500]};
   :hover {
-    background-color: ${({ theme }) => theme.colors.common.greyLight};
+    background-color: ${({ theme }) => theme.colors.grey[50]};
     color: ${({ theme }) => theme.colors.primary[700]};
+    font-weight: 600;
   }
 `;
 
@@ -69,20 +77,28 @@ const LinkCard = ({
   }, [auth]);
 
   return (
-    <Container disabled={disabled}>
-      <Title>
-        <Link href={href}>{title}</Link>
-      </Title>
-      <Text>{desc}</Text>
-      {disabled ? <></> : Component && <Component />}
-      <LinkButton disabled={disabled}>
-        {disabled ? (
-          <Link href={"/member/signin"}>{"Login"}</Link>
-        ) : (
-          <Link href={href}>{actionText}</Link>
-        )}
-      </LinkButton>
-    </Container>
+    <>
+      {disabled ? (
+        <Container disabled>
+          <Title disabled>{title}</Title>
+          <Text>{desc}</Text>
+          <LinkButton disabled>
+            <Link href={"/member/signin"}>{"Login"}</Link>
+          </LinkButton>
+        </Container>
+      ) : (
+        <Container>
+          <Title>
+            <Link href={href}>{title}</Link>
+          </Title>
+          <Text>{desc}</Text>
+          {Component && <Component />}
+          <LinkButton>
+            <Link href={href}>{actionText}</Link>
+          </LinkButton>
+        </Container>
+      )}
+    </>
   );
 };
 
