@@ -125,7 +125,7 @@ const Join = ({}) => {
   };
 
   return (
-    <Container title={"Joint"}>
+    <Container title={"Join"}>
       <Input
         inputAttrs={username}
         label={"Username"}
