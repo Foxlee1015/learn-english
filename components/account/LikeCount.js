@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import useFetch from "../../hooks/useFetch";
+import { useFetch } from "../../hooks";
 import { createQueryParams } from "../../utils/utils";
 
 const LikeCount = () => {

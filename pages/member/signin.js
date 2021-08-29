@@ -3,11 +3,13 @@ import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 
 import { authenticate } from "../../redux/actions/authActions";
-import useInput from "../../hooks/useInput";
-import Input from "../../components/member/Input";
-import ErrorMessage from "../../components/member/ErrorMessage";
-
-import memberStyles from "../../styles/components/Member.module.css";
+import { useInput } from "../../hooks";
+import {
+  ErrorMessage,
+  MemberInput as Input,
+  MemberContainer as Container,
+  SubmitButton,
+} from "../../components/member";
 
 const Signin = ({}) => {
   const router = useRouter();
@@ -56,8 +58,7 @@ const Signin = ({}) => {
   };
 
   return (
-    <div className={memberStyles.contianer}>
-      <h2 className={memberStyles.title}>Signin</h2>
+    <Container title={"Signin"}>
       <Input inputAttrs={username} label={"Username"} />
       <Input
         inputAttrs={password}
@@ -65,15 +66,12 @@ const Signin = ({}) => {
         onKeyDown={handleKeyDown}
       />
       <ErrorMessage errors={passwordMsg.err} />
-      <button
-        type="button"
-        className={memberStyles.btn}
-        disabled={!openSubmit}
+      <SubmitButton
+        disabled={!openSubmit || loading}
         onClick={(e) => submit(e)}
-      >
-        {loading ? "loading..." : "Submit"}
-      </button>
-    </div>
+        text={loading ? "loading..." : "Submit"}
+      />
+    </Container>
   );
 };
 

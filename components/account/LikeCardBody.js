@@ -1,6 +1,5 @@
 import styled from "styled-components";
-import LikeButton from "../common/LikeButton";
-import DescCard from "../common/DescCard";
+import { LikeButton, DescCard } from "../common";
 
 const Actions = styled.div`
   display: flex;

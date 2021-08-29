@@ -6,11 +6,11 @@ import { FlexCenterBox } from "../../styles/common-styles";
 const Button = styled.button`
   ${FlexCenterBox}
   margin-right: 8px;
-`
+`;
 
 const style = {
-  marginBottom: 0
-}
+  marginBottom: 0,
+};
 
 const LikeButton = ({
   active,

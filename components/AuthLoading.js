@@ -1,22 +1,19 @@
 import PacmanLoader from "react-spinners/PacmanLoader";
+import styled from "styled-components";
 
-const styles = {
-  conatiner: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "flex-start",
-    padding: 20,
-  },
-};
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px;
+`;
 
 const AuthLoading = () => {
   return (
-    <div style={styles.conatiner}>
+    <Container>
       <h2>Authenticating...</h2>
-      <div>
-        <PacmanLoader color="#0070f3" />
-      </div>
-    </div>
+      <PacmanLoader color="#0070f3" />
+    </Container>
   );
 };
 

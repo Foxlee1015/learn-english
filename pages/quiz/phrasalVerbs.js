@@ -6,12 +6,14 @@ import {
   getRandomItems,
   createQueryParams,
 } from "../../utils/utils";
-import Modal from "../../components/common/Modal";
+import {
+  Modal,
+  DescCard,
+  SentenceCard,
+  AnswerButtons,
+} from "../../components/common";
 import PuffLoader from "react-spinners/PuffLoader";
-import useFetch from "../../hooks/useFetch";
-import DescCard from "../../components/common/DescCard";
-import SentenceCard from "../../components/common/SentenceCard";
-import AnswerButtons from "../../components/common/AnswerButtons";
+import { useFetch } from "../../hooks";
 import styled from "styled-components";
 
 const Title = styled.h6``;
