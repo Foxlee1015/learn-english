@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useFetch } from "../../hooks";
 import styled from "styled-components";
-import { AdminContentListContainer as Container } from "./AdminContentListContainer";
+import { AdminContentListContainer as Container } from "./common";
 
 const Button = styled.button`
   margin: 5px;

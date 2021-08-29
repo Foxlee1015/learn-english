@@ -1,6 +1,6 @@
 import { deleteResource } from "../../utils/apis";
 import styled from "styled-components";
-import { AdminContentListContainer as Container } from "./AdminContentListContainer";
+import { AdminContentListContainer as Container } from "./common";
 
 const Button = styled.button`
   margin: 5px;
