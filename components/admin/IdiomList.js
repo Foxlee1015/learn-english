@@ -1,5 +1,13 @@
 import { useEffect } from "react";
 import { useFetch } from "../../hooks";
+import styled from "styled-components";
+import { AdminContentListContainer as Container } from "./AdminContentListContainer";
+
+const Button = styled.button`
+  margin: 5px;
+  border: solid 1px black;
+  padding: 5px;
+`;
 
 const IdiomList = () => {
   const [fetchIdioms, doFetchIdioms] = useFetch([]);
@@ -9,23 +17,13 @@ const IdiomList = () => {
   }, []);
 
   return (
-    <div style={{ display: "flex", flexWrap: "wrap" }}>
+    <Container>
       {fetchIdioms.data &&
         fetchIdioms.data.length > 0 &&
         fetchIdioms.data.map((item) => (
-          <button
-            key={item._id}
-            style={{
-              margin: 5,
-              border: "solid 1px black",
-              padding: 5,
-              boxSizing: "border-box",
-            }}
-          >
-            {item.expression}
-          </button>
+          <Button key={item._id}>{item.expression}</Button>
         ))}
-    </div>
+    </Container>
   );
 };
 

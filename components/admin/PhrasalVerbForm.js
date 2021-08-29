@@ -3,7 +3,17 @@ import { Form, Input, Button, InputNumber, Switch } from "antd";
 import { AntFormList } from "./common";
 import { postPhrasalVerb } from "../../utils/apis";
 import { renameObjectKey, removeFalseElements } from "../../utils/utils";
-import AdminStyle from "../../styles/pages/admin/Admin.module.css";
+
+const InputBox = styled.span`
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+`;
+
+const BtnBox = styled.div`
+  display: flex;
+  justify-content: left;
+`;
 
 const initialValues = {
   verb: "",
@@ -168,7 +178,7 @@ const PhrasalVerbForm = ({
       >
         <Input onBlur={() => handleBlurParticle()} />
       </Form.Item>
-      <div className={AdminStyle.formSubContainer}>
+      <InputBox>
         <Form.Item
           name={"difficulty"}
           label="Difficulty"
@@ -179,15 +189,15 @@ const PhrasalVerbForm = ({
         <Form.Item label="Public" name={"isPublic"} valuePropName="checked">
           <Switch />
         </Form.Item>
-      </div>
+      </InputBox>
       <AntFormList name="definitions" />
       <AntFormList name="sentences" />
       <Form.Item>
-        <div className={AdminStyle.formItemSub}>
+        <BtnBox>
           <Button type="primary" htmlType="submit" loading={loading}>
             Submit
           </Button>
-        </div>
+        </BtnBox>
       </Form.Item>
     </Form>
   );

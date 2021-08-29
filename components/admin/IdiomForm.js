@@ -1,9 +1,20 @@
 import { useEffect, useState, useRef } from "react";
+import styled from "styled-components";
 import { Form, Input, Switch, Button, InputNumber } from "antd";
 import { AntFormList } from "./common";
 import { renameObjectKey, removeFalseElements } from "../../utils/utils";
-import AdminStyle from "../../styles/pages/admin/Admin.module.css";
 import { postIdiom } from "../../utils/apis";
+
+const InputBox = styled.span`
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+`;
+
+const BtnBox = styled.div`
+  display: flex;
+  justify-content: left;
+`;
 
 const initialValues = {
   expression: "",
@@ -66,7 +77,7 @@ const IdiomForm = () => {
       >
         <Input ref={inputRef} />
       </Form.Item>
-      <div className={AdminStyle.formSubContainer}>
+      <InputBox>
         <Form.Item
           name={"difficulty"}
           label="Difficulty"
@@ -77,15 +88,15 @@ const IdiomForm = () => {
         <Form.Item label="Public" name={"isPublic"} valuePropName="checked">
           <Switch />
         </Form.Item>
-      </div>
+      </InputBox>
       <AntFormList name="definitions" />
       <AntFormList name="sentences" />
       <Form.Item>
-        <div className={AdminStyle.formItemSub}>
+        <BtnBox>
           <Button type="primary" htmlType="submit" loading={loading}>
             Submit
           </Button>
-        </div>
+        </BtnBox>
       </Form.Item>
     </Form>
   );

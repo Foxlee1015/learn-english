@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-
 import { useInput } from "../../hooks";
-import memberStyles from "../../styles/components/Member.module.css";
 import { postNewUser } from "../../utils/apis";
-import ErrorMessage from "../../components/member/ErrorMessage";
-import Input from "../../components/member/Input";
+import {
+  ErrorMessage,
+  MemberInput as Input,
+  MemberContainer as Container,
+  SubmitButton,
+} from "../../components/member";
 
 const usernameErr =
   "Username must be 4~10 characters and contain only lower cases and digits.";
@@ -123,8 +125,7 @@ const Join = ({}) => {
   };
 
   return (
-    <div className={memberStyles.contianer}>
-      <h2 className={memberStyles.title}>Join</h2>
+    <Container title={"Joint"}>
       <Input
         inputAttrs={username}
         label={"Username"}
@@ -144,15 +145,12 @@ const Join = ({}) => {
       <ErrorMessage errors={passwordMsg.err} />
       <ErrorMessage errors={passwordConfirmMsg.err} />
       {joinResult !== "" && <ErrorMessage errors={[joinResult]} />}
-      <button
-        type="button"
-        className={memberStyles.btn}
-        disabled={!openSubmit}
+      <SubmitButton
+        disabled={!openSubmit || loading}
         onClick={(e) => submit(e)}
-      >
-        {loading ? "loading..." : "Submit"}
-      </button>
-    </div>
+        text={loading ? "loading..." : "Submit"}
+      />
+    </Container>
   );
 };
 

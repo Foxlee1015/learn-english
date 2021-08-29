@@ -1,13 +1,12 @@
 import { deleteResource } from "../../utils/apis";
+import styled from "styled-components";
+import { AdminContentListContainer as Container } from "./AdminContentListContainer";
 
-const style = {
-  btn: {
-    margin: 5,
-    border: "solid 1px black",
-    padding: 5,
-    boxSizing: "border-box",
-  },
-};
+const Button = styled.button`
+  margin: 5px;
+  border: solid 1px black;
+  padding: 5px;
+`;
 
 const PhrasalVerbList = ({
   data,
@@ -16,34 +15,32 @@ const PhrasalVerbList = ({
   refreshData,
 }) => {
   return (
-    <div style={{ display: "flex", flexWrap: "wrap" }}>
+    <Container>
       {data &&
         data.length > 0 &&
         data.map((item) => (
-          <div key={item._id} style={style.btn}>
+          <Button key={item._id}>
             <p>
               {selectedItem._id === item._id && "*"}
               {item.verb}-{item.particle} {item.is_public}
             </p>
-            <button
-              style={style.btn}
+            <Button
               onClick={() => {
                 setSelectedItem(item);
               }}
             >
               Edit
-            </button>
-            <button
-              style={style.btn}
+            </Button>
+            <Button
               onClick={() => {
                 deleteResource("phrasal-verbs", item._id, refreshData);
               }}
             >
               Delete
-            </button>
-          </div>
+            </Button>
+          </Button>
         ))}
-    </div>
+    </Container>
   );
 };
 

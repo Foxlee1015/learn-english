@@ -17,7 +17,7 @@ const Input = styled.input`
   transition: all 0.3s;
 `;
 
-const Input = ({
+const MemberInput = ({
   label = "",
   inputAttrs,
   onBlur = () => {},
@@ -35,4 +35,4 @@ const Input = ({
   );
 };
 
-export default Input;
+export default MemberInput;
