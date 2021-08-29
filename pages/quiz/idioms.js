@@ -1,16 +1,13 @@
 import { useEffect, useState } from "react";
-import Meta from "../../components/Meta";
-import Header from "../../components/Header";
+import { Meta, Header } from "../../components";
 import {
   randomElement,
   randomArrayShuffle,
   getRandomItems,
 } from "../../utils/utils";
 import { createQueryParams } from "../../utils/utils";
-import Modal from "../../components/common/Modal";
-import DescCard from "../../components/common/DescCard";
-import useFetch from "../../hooks/useFetch";
-import AnswerButtons from "../../components/common/AnswerButtons";
+import { Modal, DescCard, AnswerButtons } from "../../components/common";
+import { useFetch } from "../../hooks";
 import styled from "styled-components";
 
 const Title = styled.h5``;

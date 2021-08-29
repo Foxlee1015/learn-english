@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { Form, Input, Button, InputNumber, Switch } from "antd";
-import AntFormList from "./common/AntFormList";
+import { AntFormList } from "./common";
 import { postPhrasalVerb } from "../../utils/apis";
 import { renameObjectKey, removeFalseElements } from "../../utils/utils";
 import AdminStyle from "../../styles/pages/admin/Admin.module.css";

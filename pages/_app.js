@@ -5,10 +5,12 @@ import { ThemeProvider } from "../styles/themed-components";
 import theme from "../styles/theme";
 
 import ProtectedRoute from "../HOC/ProtectedRoute";
-import Layout from "../components/layouts/Layout";
-import AdminLayout from "../components/layouts/AdminLayout";
-import AccountLayout from "../components/layouts/AccountLayout";
-import ErrorLayout from "../components/layouts/ErrorLayout";
+import {
+  Layout,
+  AdminLayout,
+  AccountLayout,
+  ErrorLayout,
+} from "../components/layouts";
 import "../styles/styles.css";
 import { css } from "@emotion/react";
 

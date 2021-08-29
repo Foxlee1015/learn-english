@@ -1,19 +1,20 @@
 import styled from "styled-components";
 
-const Button = styled.button`
-  textdecoration: "underline";
+const Span = styled.span`
+  text-decoration: underline;
+  cursor: pointer;
 `;
 
 const MailtoButton = ({ mailto = "", label = "" }) => {
   return (
-    <Button
+    <Span
       onClick={(e) => {
         window.location = mailto;
         e.preventDefault();
       }}
     >
       {label}
-    </Button>
+    </Span>
   );
 };
 

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import LinkButton from "../common/LinkButton";
+import { LinkButton } from "../common";
 
 const Header = styled.div`
   width: 100%;

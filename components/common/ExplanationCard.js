@@ -1,13 +1,9 @@
 import styled from "styled-components";
-import useFetch from "../../hooks/useFetch";
+import { useFetch, useNotification } from "../../hooks";
 import { useEffect } from "react";
 import { createQueryParams } from "../../utils/utils";
 import PuffLoader from "react-spinners/PuffLoader";
-import LikeButton from "./LikeButton";
-import Notification from "./Notification";
-import useNotification from "../../hooks/useNotification";
-import DescCard from "./DescCard";
-import TitleCard from "./TitleCard";
+import { LikeButton, Notification, DescCard, TitleCard } from "../common";
 import { FlexCenterBox } from "../../styles/common-styles";
 
 const setTitle = ({ title, subTitle, upperCase = true }) => {

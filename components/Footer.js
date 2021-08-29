@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Link from "next/link";
-import MailtoButton from "./common/MailtoButton";
+import { MailtoButton } from "./common";
 import { FlexCenterBox } from "../styles/common-styles";
 
 const Container = styled.div`

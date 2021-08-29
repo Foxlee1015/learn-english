@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import useFetch from "../../hooks/useFetch";
+import { useFetch } from "../../hooks";
 import { LikeCardHead, LikeCardBody } from "../account";
 
 const Container = styled.div`

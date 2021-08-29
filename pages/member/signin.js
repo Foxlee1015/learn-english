@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 
 import { authenticate } from "../../redux/actions/authActions";
-import useInput from "../../hooks/useInput";
+import { useInput } from "../../hooks";
 import Input from "../../components/member/Input";
 import ErrorMessage from "../../components/member/ErrorMessage";
 

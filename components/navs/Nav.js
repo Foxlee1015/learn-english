@@ -6,7 +6,7 @@ import {
   reauthenticate,
   deauthenticate,
 } from "../../redux/actions/authActions";
-import LinkButton from "../common/LinkButton";
+import { LinkButton } from "../common";
 import { FlexCenterBox } from "../../styles/common-styles";
 
 const routes = [

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import useFetch from "../../hooks/useFetch";
+import { useFetch } from "../../hooks";
 
 const IdiomList = () => {
   const [fetchIdioms, doFetchIdioms] = useFetch([]);

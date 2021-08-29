@@ -1,8 +1,7 @@
 import styled from "styled-components";
-import Meta from "../components/Meta";
-import Header from "../components/Header";
-import LinkCard from "../components/common/LinkCard";
-import LikeCount from "../components/account/LikeCount";
+import { Meta, Header } from "../components";
+import { LinkCard } from "../components/common";
+import { LikeCount } from "../components/account";
 
 const cards = [
   {

@@ -1,11 +1,7 @@
 import { useState, useEffect } from "react";
-import SelectItem from "./common/SelectItem";
-import ExplanationCard from "./common/ExplanationCard";
-import InputCheckbox from "./common/InputCheckbox";
-import useSelectItem from "../hooks/useSelectItem";
+import { SelectItem, ExplanationCard, InputCheckbox } from "./common";
+import { useSelectItem, useInputSearch, useFetch } from "../hooks";
 import { createQueryParams } from "../utils/utils";
-import useInputSearch from "../hooks/useInputSearch";
-import useFetch from "../hooks/useFetch";
 import styled from "styled-components";
 
 const Container = styled.div`

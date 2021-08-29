@@ -1,8 +1,7 @@
-import PhrasalVerbForm from "../../components/admin/PhrasalVerbForm";
-import PhrasalVerbList from "../../components/admin/PhrasalVerbList";
+import { PhrasalVerbForm, PhrasalVerbList } from "../../components/admin";
 
 import AdminStyle from "../../styles/pages/admin/Admin.module.css";
-import useFormList from "../../hooks/useFormList";
+import { useFormList } from "../../hooks";
 
 const PhrasalVerbs = () => {
   const phrasalVerbFormList = useFormList("phrasal-verbs/");
