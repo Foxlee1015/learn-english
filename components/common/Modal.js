@@ -62,6 +62,16 @@ const Button = styled.button`
 const Close = styled.div`
   cursor: pointer;
   margin-left: 10px;
+  font-size: 30px;
+  ${(props) => props.theme.media.desktop`
+    font-size: 30px;
+  `}
+  ${(props) => props.theme.media.tablet`
+    font-size: 25px;
+  `}
+  ${(props) => props.theme.media.phone`
+    font-size: 20px;
+  `}
   ::before {
     content: "x";
     color: black;
