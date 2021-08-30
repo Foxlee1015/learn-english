@@ -18,7 +18,7 @@ const Container = styled.div`
   ${({ disabled }) =>
     disabled &&
     `
-    background-color: ${({ theme }) => theme.colors.grey[200]};
+    background-color: rgba(117,117,117,0.1);
     text-shadow: none;
     box-shadow: none;
   `};
