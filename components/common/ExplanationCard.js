@@ -1,13 +1,10 @@
-import CardStyle from "../../styles/components/ExplanationCard.module.css";
-import useFetch from "../../hooks/useFetch";
+import styled from "styled-components";
+import { useFetch, useNotification } from "../../hooks";
 import { useEffect } from "react";
 import { createQueryParams } from "../../utils/utils";
 import PuffLoader from "react-spinners/PuffLoader";
-import LikeButton from "./LikeButton";
-import Notification from "./Notification";
-import useNotification from "../../hooks/useNotification";
-import DescCard from "./DescCard";
-import TitleCard from "./TitleCard";
+import { LikeButton, Notification, DescCard, TitleCard } from "../common";
+import { FlexCenterBox } from "../../styles/common-styles";
 
 const setTitle = ({ title, subTitle, upperCase = true }) => {
   const mainText = upperCase ? title.toUpperCase() : title;
@@ -18,6 +15,22 @@ const setTitle = ({ title, subTitle, upperCase = true }) => {
   }
   return mainText;
 };
+
+const Container = styled.div`
+  color: #000000d9;
+  position: relative;
+  border-radius: 2px;
+  margin: 10px;
+`;
+const InfoBox = styled.div`
+  ${FlexCenterBox}
+  justify-content: left;
+  margin-bottom: 8px;
+`;
+const Text = styled.span`
+  padding: 0;
+  margin: 0;
+`;
 
 const ExplanationCard = ({
   title = "",
@@ -65,10 +78,10 @@ const ExplanationCard = ({
   };
 
   return (
-    <div className={CardStyle.container}>
+    <Container>
       <Notification {...notification} />
       <TitleCard title={setTitle({ title, subTitle })} />
-      <div className={CardStyle.likeBox}>
+      <InfoBox>
         {fetchLikes.loading ? (
           <PuffLoader size={20} />
         ) : (
@@ -83,13 +96,13 @@ const ExplanationCard = ({
               }}
               failCallback={showErrNotification}
             />
-            <p className={CardStyle.count}>{fetchLikes.data.count}</p>
+            <Text>{fetchLikes.data.count}</Text>
           </>
         )}
-      </div>
+      </InfoBox>
       <DescCard data={definitions} title={"Definition"} />
       <DescCard data={sentences} title={"Examples"} />
-    </div>
+    </Container>
   );
 };
 

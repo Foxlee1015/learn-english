@@ -1,12 +1,41 @@
 import { useState, useEffect } from "react";
-import SelectItem from "./common/SelectItem";
-import ExplanationCard from "./common/ExplanationCard";
-import InputCheckbox from "./common/InputCheckbox";
-import useSelectItem from "../hooks/useSelectItem";
-import styles from "../styles/pages/Idiom.module.css";
+import { SelectItem, ExplanationCard, InputCheckbox } from "./common";
+import { useSelectItem, useInputSearch, useFetch } from "../hooks";
 import { createQueryParams } from "../utils/utils";
-import useInputSearch from "../hooks/useInputSearch";
-import useFetch from "../hooks/useFetch";
+import styled from "styled-components";
+
+const Container = styled.div`
+  width: 100%;
+`;
+
+const SelectWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 0.5rem;
+
+  > * {
+    flex: 1;
+  }
+`;
+
+const Input = styled.input`
+  margin: 0;
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  min-width: 0;
+  padding: 4px 11px;
+  color: #000000d9;
+  font-size: 14px;
+  line-height: 1.5715;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #d9d9d9;
+  border-radius: 2px;
+  transition: all 0.3s;
+`;
 
 const IdiomList = ({ idiomList }) => {
   const idioms = useSelectItem(idiomList, "expression");
@@ -83,23 +112,21 @@ const IdiomList = ({ idiomList }) => {
   };
 
   return (
-    <div className={styles.wrapper}>
-      <input {...inputSearch} className={styles.input} />
-      <div>
-        <InputCheckbox
-          label="Search in definitions/sentences"
-          checked={searchFullText}
-          onChange={setSearchFullText}
-        />
-        <InputCheckbox
-          label="Search exact Idiom if you get too many results"
-          checked={searchExactText}
-          onChange={setSearchExactText}
-        />
-      </div>
-      <div className={[styles.strechChildBox]}>
+    <Container>
+      <Input {...inputSearch} />
+      <InputCheckbox
+        label="Search in definitions/sentences"
+        checked={searchFullText}
+        onChange={setSearchFullText}
+      />
+      <InputCheckbox
+        label="Search exact Idiom if you get too many results"
+        checked={searchExactText}
+        onChange={setSearchExactText}
+      />
+      <SelectWrapper>
         <SelectItem {...idioms} loading={fetchIdioms.loading} />
-      </div>
+      </SelectWrapper>
       {idioms.selectedItem !== "" && (
         <ExplanationCard
           {...cardData}
@@ -107,7 +134,7 @@ const IdiomList = ({ idiomList }) => {
           resource_id="idiom_id"
         />
       )}
-    </div>
+    </Container>
   );
 };
 

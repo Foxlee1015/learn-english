@@ -1,5 +1,12 @@
-import inputCheckboxStyles from "../../styles/components/InputCheckbox.module.css";
+import styled from "styled-components";
 import { Checkbox } from "antd";
+
+const Container = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+`;
 
 const InputCheckbox = ({
   label = "",
@@ -7,7 +14,7 @@ const InputCheckbox = ({
   onChange = () => {},
 }) => {
   return (
-    <div className={inputCheckboxStyles.container}>
+    <Container>
       <Checkbox
         checked={checked}
         value={checked}
@@ -15,7 +22,7 @@ const InputCheckbox = ({
       >
         {label}
       </Checkbox>
-    </div>
+    </Container>
   );
 };
 

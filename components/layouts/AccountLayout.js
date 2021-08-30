@@ -1,14 +1,31 @@
-import AccountNav from "../navs/AccountNav";
-import Footer from "../Footer";
-import accountLayoutstyles from "../../styles/components/AccountLayout.module.css";
+import styled from "styled-components";
+import { AccountNav } from "../navs";
+import { Footer } from "../../components";
+import { FlexColumnBox, ContainerPadding } from "../../styles/common-styles";
+
+const Container = styled.div`
+  ${FlexColumnBox}
+  ${ContainerPadding}
+  background: ${({ theme }) => theme.colors.grey[200]};
+  width: 100%;
+  min-height: 100vh;
+`;
+
+const Main = styled.main`
+  ${FlexColumnBox}
+  ${ContainerPadding}
+  background: ${({ theme }) => theme.colors.grey[50]};
+  width: 100%;
+  flex: 1;
+`;
 
 const AccountLayout = ({ children }) => {
   return (
     <>
       <AccountNav />
-      <div className={accountLayoutstyles.container}>
-        <main className={accountLayoutstyles.main}>{children}</main>
-      </div>
+      <Container>
+        <Main>{children}</Main>
+      </Container>
       <Footer />
     </>
   );

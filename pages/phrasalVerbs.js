@@ -1,11 +1,8 @@
-import Meta from "../components/Meta";
-import PhrasalVerbList from "../components/PhrasalVerbList";
-import Header from "../components/Header";
+import { Meta, Header, PhrasalVerbList } from "../components";
 import { server } from "../config";
 import { createQueryParams } from "../utils/utils";
 
 const phrasalVerbs = ({ data }) => {
-
   return (
     <>
       <Meta title="Phrasal Verb list" />
