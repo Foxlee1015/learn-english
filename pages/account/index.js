@@ -1,4 +1,4 @@
-import Likes from "./Likes";
+import Likes from "./likes";
 
 const Account = ({}) => {
   return (
