@@ -6,7 +6,7 @@ import { FlexColumnBox, ContainerPadding } from "../../styles/common-styles";
 const Container = styled.div`
   ${FlexColumnBox}
   ${ContainerPadding}
-  background: ${({ theme }) => theme.colors.common.grey};
+  background: ${({ theme }) => theme.colors.grey[200]};
   width: 100%;
   min-height: 100vh;
 `;
@@ -14,7 +14,7 @@ const Container = styled.div`
 const Main = styled.main`
   ${FlexColumnBox}
   ${ContainerPadding}
-  background: ${({ theme }) => theme.colors.common.greyLight};
+  background: ${({ theme }) => theme.colors.grey[50]};
   width: 100%;
   flex: 1;
 `;
