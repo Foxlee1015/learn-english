@@ -8,6 +8,16 @@ const Container = styled.div`
   margin: 10px 0;
 `;
 
+const CustomCheckbox = styled(Checkbox)`
+  .ant-checkbox-wrapper {
+    display: flex;
+    align-items: center;
+  }
+  span {
+    margin-bottom: 0px;
+  }
+`;
+
 const InputCheckbox = ({
   label = "",
   checked = false,
@@ -15,13 +25,13 @@ const InputCheckbox = ({
 }) => {
   return (
     <Container>
-      <Checkbox
+      <CustomCheckbox
         checked={checked}
         value={checked}
         onChange={(e) => onChange(e.target.checked)}
       >
         {label}
-      </Checkbox>
+      </CustomCheckbox>
     </Container>
   );
 };
