@@ -10,6 +10,10 @@ const routes = [
   { key: "/", href: "/", text: "Home" },
   { key: "/admin", href: "/admin", text: "Admin" },
   {
+    key: "/admin/accounts",
+    href: "/admin/accounts",
+    text: "Accounts",
+  },{
     key: "/admin/phrasalVerbs",
     href: "/admin/phrasalVerbs",
     text: "Phrasal verbs",

@@ -2,6 +2,8 @@ import styled from "styled-components";
 
 const Label = styled.span`
   align-self: flex-start;
+  margin-bottom: 0px;
+  margin-left: 4px;
 `;
 const Input = styled.input`
   margin: 10px 0px;

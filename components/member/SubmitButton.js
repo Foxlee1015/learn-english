@@ -1,3 +1,4 @@
+import React from "react";
 import styled from "styled-components";
 
 const Button = styled.button`
@@ -35,9 +36,13 @@ const Button = styled.button`
   }
 `;
 
-const SubmitButton = ({ onClick = () => {}, text = "", disabeled = false }) => {
+const SubmitButton = ({ onClick = () => {}, text = "", disabled = false }) => {
+
+  React.useEffect(()=>{
+    console.log(disabled)
+  },[])
   return (
-    <Button type="button" onClick={() => onClick()} disabeled={disabeled}>
+    <Button type="button" onClick={() => onClick()} disabled={disabled}>
       {text}
     </Button>
   );
