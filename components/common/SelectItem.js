@@ -1,6 +1,111 @@
 import { useEffect, useState } from "react";
-import styles from "../../styles/components/SelectItem.module.css";
-import LoadingIndicator from "./LoadingIndicator";
+import BarLoader from "react-spinners/BarLoader";
+import styled from "styled-components";
+import { FlexCenterBox } from "../../styles/common-styles";
+
+const Container = styled.div`
+  border: 1px solid #eaeaea;
+  border-radius: 10px;
+  width: 49%;
+  height: 140px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 10px;
+  ${FlexCenterBox}
+  justify-content: space-around;
+  ${(props) => props.theme.media.tablet`
+    width: 98%;
+    height: 80px;
+  `}
+`;
+
+const Item = styled.button`
+  display: inline-block;
+  height: 30px;
+  margin: 4px;
+  padding: 6px;
+  white-space: nowrap;
+  transition: all 0.3s;
+  font-weight: 300;
+  border: 1px solid #eaeaea;
+  color: #000000d9;
+
+  :hover {
+    color: #0070f3;
+  }
+
+  ${({ active }) =>
+    active &&
+    `
+    font-weight: 700;
+    opacity: 1;
+    margin: 2px;
+    padding: 4px;
+    background-color: #1890ff;
+    color: #fff;
+    :hover {
+      color: #fff;
+    }
+  `};
+`;
+
+const Scroll = styled.div`
+  ${FlexCenterBox}
+  flex-wrap: wrap;
+  height: 100%;
+  overflow-y: auto;
+
+  @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+    margin-right: -10px;
+    padding-top: 32px;
+    margin-top: -32px;
+    margin-bottom: -32px;
+    padding-bottom: 32px;
+
+    scrollbar-base-color: #efefef;
+    scrollbar-face-color: #666666;
+    scrollbar-3dlight-color: #666666;
+    scrollbar-highlight-color: #666666;
+    scrollbar-track-color: #efefef;
+    scrollbar-arrow-color: #666666;
+    scrollbar-shadow-color: #666666;
+    scrollbar-dark-shadow-color: #666666;
+
+    :after {
+      content: "";
+      height: 32px;
+      display: block;
+    }
+  }
+
+  @supports (-ms-ime-align: auto) {
+    margin-right: -10px;
+    padding-top: 16px;
+    margin-top: -16px;
+    margin-bottom: -16px;
+    padding-bottom: 16px;
+
+    :after {
+      content: "";
+      height: 16px;
+      display: block;
+    }
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: #efefef;
+    width: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #666666;
+    border: 1px solid transparent;
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+`;
 
 const stringSort = (sortKey) => (a, b) => {
   if (a[sortKey] < b[sortKey]) return -1;
@@ -8,7 +113,13 @@ const stringSort = (sortKey) => (a, b) => {
   return 0;
 };
 
-const SelectItem = ({ items, sortKey, selectedItem, setSelectedItem }) => {
+const SelectItem = ({
+  items,
+  sortKey,
+  selectedItem,
+  setSelectedItem,
+  loading,
+}) => {
   const [sortedItems, setSortedItems] = useState([]);
 
   useEffect(() => {
@@ -19,40 +130,36 @@ const SelectItem = ({ items, sortKey, selectedItem, setSelectedItem }) => {
   const selectFristElementIfNotExist = () => {
     if (
       selectedItem === "" ||
-      !sortedItems.find((item) => item[sortKey] == selectedItem)
+      !sortedItems.find((item) => item["_id"] == selectedItem)
     ) {
-      setSelectedItem(sortedItems[0][sortKey]);
+      setSelectedItem(sortedItems[0]["_id"]);
     }
   };
 
   useEffect(() => {
-    if (sortedItems.length === 0) {
-      setSelectedItem("");
-    } else {
+    if (sortedItems.length > 0) {
       selectFristElementIfNotExist();
     }
   }, [sortedItems]);
 
   return (
-    <div className={styles.scrollableContainer}>
-      <LoadingIndicator />
-      <div className={styles.scrollable}>
+    <Container>
+      <Scroll>
+        {sortedItems.length === 0 && loading && <BarLoader color="#0070f3" />}
         {sortedItems.length > 0 &&
           sortedItems.map((item) => (
-            <button
-              className={`${styles.item} ${
-                item[sortKey] === selectedItem && styles.checked
-              }`}
-              key={item[sortKey]}
+            <Item
+              active={item["_id"] === selectedItem}
+              key={item["_id"]}
               onClick={() => {
-                setSelectedItem(item[[sortKey]]);
+                setSelectedItem(item[["_id"]]);
               }}
             >
               {item[sortKey]}
-            </button>
+            </Item>
           ))}
-      </div>
-    </div>
+      </Scroll>
+    </Container>
   );
 };
 

@@ -1,29 +1,34 @@
-import Meta from "../components/Meta";
-import Header from "../components/Header";
-import IdiomList from "../components/IdiomList";
-import { useEffect } from "react";
+import { Meta, Header, IdiomList } from "../components";
 import { server } from "../config";
 
-const idioms = ({ idioms }) => {
+const idioms = ({ data }) => {
   return (
     <>
       <Meta title="Idiom list" />
       <Header title="Idioms" />
-      <IdiomList data={idioms} />
+      <IdiomList idiomList={data} />
     </>
   );
 };
 
 export const getStaticProps = async () => {
-  const res = await fetch(`${server}/api/idioms`);
-  const data = await res.json();
-  const idioms = data.result;
+  try {
+    const res = await fetch(`${server}/api/idioms`);
+    const data = await res.json();
+    const idioms = data.result;
 
-  return {
-    props: {
-      idioms,
-    },
-  };
+    return {
+      props: {
+        data: idioms,
+      },
+    };
+  } catch {
+    return {
+      props: {
+        data: [],
+      },
+    };
+  }
 };
 
 export default idioms;
