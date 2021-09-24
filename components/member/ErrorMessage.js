@@ -1,18 +1,16 @@
-const style = {
-  margin: "0px 10px",
-  color: "#ff7875",
-  fontSize: 10,
-  wordWrap: "break-word",
-  alignSelf: "flex-start",
-};
+import styled from "styled-components";
+
+const Text = styled.span`
+  color: #ff7875;
+  word-wrap: break-word,
+  align-self: flex-start,
+`;
 
 const ErrorMessage = ({ errors }) => {
   return (
     <>
       {errors.map((err) => (
-        <p style={style} key={err}>
-          {err}
-        </p>
+        <Text key={err}>{err}</Text>
       ))}
     </>
   );

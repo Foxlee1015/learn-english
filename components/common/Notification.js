@@ -12,7 +12,7 @@ const InnerBox = styled.div`
   display: inline-block;
   position: fixed;
   height: 32px;
-  background-color: ${({ theme }) => theme.colors.common.greyLight};
+  background-color: ${({ theme }) => theme.colors.grey[50]};
   border: 1px solid #f0f0f0;
   opacity: 0;
   left: 20px;

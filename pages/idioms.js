@@ -1,6 +1,4 @@
-import Meta from "../components/Meta";
-import Header from "../components/Header";
-import IdiomList from "../components/IdiomList";
+import { Meta, Header, IdiomList } from "../components";
 import { server } from "../config";
 
 const idioms = ({ data }) => {

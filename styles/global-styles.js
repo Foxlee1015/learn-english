@@ -30,31 +30,31 @@ const GlobalStyle = createGlobalStyle`
     margin-bottom: 20px;
   }
   h1 {
-    font-size : 50px;
+    font-size : 40px;
   }
   h2 {
-    font-size : 46px;
+    font-size : 36px;
   }
   h3 {
-    font-size : 42px;
+    font-size : 32px;
   }
   h4 {
-    font-size : 38px;
+    font-size : 28px;
   }
   h5 {
-    font-size : 34px;
+    font-size : 24px;
   }
   h6 {
-    font-size : 30px;
+    font-size : 20px;
   }
   p {
-    font-size : 18px;
+    font-size : 16px;
     font-weight: 500;
     line-height: 1.334;
     margin-bottom: 15px;
   }
   span {
-    font-size : 16px;
+    font-size : 14px;
     font-weight: 300;
     line-height: 1.334;
     margin-bottom: 15px;
@@ -62,70 +62,70 @@ const GlobalStyle = createGlobalStyle`
 
   @media only screen and (max-width: 768px) {
     body {
-      font-size: 12px;
+      font-size: 14px;
     }
     h1, h2, h3, h4, h5, h6{
       margin-bottom: 15px;
     }
     h1 {
-      font-size : 40px;
-    }
-    h2 {
       font-size : 36px;
     }
-    h3 {
+    h2 {
       font-size : 32px;
     }
-    h4 {
+    h3 {
       font-size : 28px;
     }
-    h5 {
+    h4 {
       font-size : 24px;
     }
-    h6 {
+    h5 {
       font-size : 20px;
     }
+    h6 {
+      font-size : 16px;
+    }
     p {
-      font-size: 16px;
+      font-size: 14px;
       margin-bottom: 12px;
     }
     span {
-      font-size: 14px;
+      font-size: 12px;
       margin-bottom: 12px;
     }
   }
 
   @media only screen and (max-width: 576px) {
     body {
-      font-size: 10px;
+      font-size: 12px;
     }
     h1, h2, h3, h4, h5, h6{
       margin-bottom: 12px;
     }
     h1 {
-      font-size : 30px;
+      font-size : 26px;
     }
     h2 {
-      font-size : 27px;
-    }
-    h3 {
       font-size : 24px;
     }
+    h3 {
+      font-size : 22px;
+    }
     h4 {
-      font-size : 21px;
+      font-size : 20px;
     }
     h5 {
       font-size : 18px;
     }
     h6 {
-      font-size : 15px;
+      font-size : 16px;
     }
     p {
-      font-size: 14px;
+      font-size: 12px;
       margin-bottom: 8px;
     }
     span {
-      font-size: 12px;
+      font-size: 10px;
       margin-bottom: 8px;
     }
   }

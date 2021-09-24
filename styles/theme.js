@@ -35,13 +35,20 @@ const colors = {
     800: "#1565c0",
     900: "#0d47a1",
   },
+  grey: {
+    25: "rgba(117,117,117,0.6)",
+    50: "#fafafa",
+    100: "#f5f5f5",
+    200: "#eeeeee",
+    300: "#e0e0e0",
+    400: "#bdbdbd",
+    500: "#9e9e9e",
+    600: "#757575",
+    700: "#616161",
+  },
   common: {
     white: "#fff",
     black: "#212121",
-    greyClear: "#00000073",
-    greyLight: "#fafafa",
-    grey: "#eeeeee",
-    greyDark: "#757575",
   },
 };
 

@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react";
-import Meta from "../../components/Meta";
-import Header from "../../components/Header";
+import { Meta, Header } from "../../components";
 import {
   randomElement,
   randomArrayShuffle,
   getRandomItems,
 } from "../../utils/utils";
 import { createQueryParams } from "../../utils/utils";
-import Modal from "../../components/common/Modal";
-import DescCard from "../../components/common/DescCard";
+import { Modal, DescCard, AnswerButtons } from "../../components/common";
+import { useFetch } from "../../hooks";
+import styled from "styled-components";
 
-import quizStyles from "../../styles/pages/Quiz.module.css";
-import useFetch from "../../hooks/useFetch";
-import AnswerButtons from "../../components/common/AnswerButtons";
+const Title = styled.h5``;
+const Quiz = styled.div`
+  align-self: start;
+`;
 
 const Idioms = () => {
   const [fetchRandomIdiom, doFetchRandomIdioms] = useFetch([]);
@@ -73,13 +74,13 @@ const Idioms = () => {
   };
 
   return (
-    <div>
+    <>
       <Meta title="Idioms quiz" />
       <Header title="Idioms quiz" />
-      <div className={quizStyles.header}>
-        <h4>Pick an idiom meaning:</h4>
-      </div>
-      <DescCard data={definitions} title={"Definition"} />
+      <Quiz>
+        <Title>Pick an idiom meaning:</Title>
+        <DescCard data={definitions} title={"Definition"} />
+      </Quiz>
       <AnswerButtons
         answers={answers}
         clickedAnswers={clickedAnswers}
@@ -95,7 +96,7 @@ const Idioms = () => {
           setShow={setShowModal}
         />
       )}
-    </div>
+    </>
   );
 };
 

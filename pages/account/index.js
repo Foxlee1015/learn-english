@@ -1,7 +1,10 @@
+import Likes from "./likes";
+
 const Account = ({}) => {
   return (
     <>
-      <h2>My Page</h2>
+      <h3>My Page</h3>
+      <Likes></Likes>
     </>
   );
 };
