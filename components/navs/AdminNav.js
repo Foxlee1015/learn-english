@@ -14,6 +14,11 @@ const routes = [
     href: "/admin/phrasalVerbs",
     text: "Phrasal verbs",
   },
+  {
+    key: "/admin/accounts",
+    href: "/admin/accounts",
+    text: "Accounts",
+  },
   { key: "/admin/idioms", href: "/admin/idioms", text: "Idioms" },
 ];
 
