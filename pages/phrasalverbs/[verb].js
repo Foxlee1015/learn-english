@@ -1,8 +1,8 @@
 
 import { server } from "../../config";
 import { DescCard } from "../../components/common";
-import { useState } from "react";
-import { useEffect } from "react";
+import { Meta } from "../../components";
+import { useState, useEffect } from "react";
 
 const Page = ({ phrasalVerbs }) => {
    const [selectedPhrasalVerb, setSelectedPhrasalVerb] = useState(null);
@@ -14,11 +14,14 @@ const Page = ({ phrasalVerbs }) => {
    }, [phrasalVerbs])
 
    return (<>
-      {phrasalVerbs.length > 0 && (
+      <Meta title={`Learn English - phrasal verb ${phrasalVerbs[0].verb} ${phrasalVerbs[0].particle}`} />
+      {selectedPhrasalVerb  && (
          <>
          <h5>{phrasalVerbs[0].verb}</h5>
          {phrasalVerbs.map((phrasalVerb) => (
-            <span key={phrasalVerb.particle} onClick={()=>{setSelectedPhrasalVerb(phrasalVerb)}}>{phrasalVerb.particle}</span>
+            <>
+               <span key={phrasalVerb.particle} onClick={()=>{setSelectedPhrasalVerb(phrasalVerb)}}>{phrasalVerb.particle}</span>
+            </>
          ))}
          {selectedPhrasalVerb && (
             <div key={selectedPhrasalVerb.particle}>

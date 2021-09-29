@@ -14,9 +14,9 @@ const Meta = ({ title, keywords, description }) => {
 };
 
 Meta.defaultProps = {
-  title: "Phrasal Verb",
-  keywords: "phrasal verb, verb, english",
-  description: "Learn phrasal verbs",
+  title: "Learn English",
+  keywords: "English, Phrasal verb, Idioms",
+  description: "Learn phrasal verbs and idioms",
 };
 
 export default Meta;
