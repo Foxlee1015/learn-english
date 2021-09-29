@@ -4,7 +4,7 @@ import { FlexCenterBox } from "../../styles/common-styles";
 
 const btnLinks = [
   { url: "/quiz/phrasalverb", text: "Phrasal Verbs" },
-  { url: "/quiz/idioms", text: "Idioms" },
+  { url: "/quiz/idiom", text: "Idioms" },
 ];
 
 const Container = styled.div`

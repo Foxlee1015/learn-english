@@ -12,7 +12,7 @@ const cards = [
   {
     title: "Idioms",
     desc: "An idiom is a phrase, saying, or a group of words with a metaphorical (not literal) meaning.",
-    href: "/idioms",
+    href: "/idiom",
   },
   { title: "Quiz", desc: "Prasal verbs / Idioms quiz", href: "/quiz" },
   {

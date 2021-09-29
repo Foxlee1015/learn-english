@@ -18,7 +18,7 @@ const routes = [
     href: "/admin/phrasalverb",
     text: "Phrasal verbs",
   },
-  { key: "/admin/idioms", href: "/admin/idioms", text: "Idioms" },
+  { key: "/admin/idiom", href: "/admin/idiom", text: "Idioms" },
 ];
 
 const Container = styled.div`
