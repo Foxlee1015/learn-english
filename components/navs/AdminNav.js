@@ -14,8 +14,8 @@ const routes = [
     href: "/admin/accounts",
     text: "Accounts",
   },{
-    key: "/admin/phrasalVerbs",
-    href: "/admin/phrasalVerbs",
+    key: "/admin/phrasalverb",
+    href: "/admin/phrasalverb",
     text: "Phrasal verbs",
   },
   { key: "/admin/idioms", href: "/admin/idioms", text: "Idioms" },

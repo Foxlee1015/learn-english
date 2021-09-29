@@ -45,7 +45,7 @@ const LikeList = () => {
 
   return (
     <>
-      <LikeCardHead title={"Phrasal verbs"} href={"/phrasalVerbs"} />
+      <LikeCardHead title={"Phrasal verbs"} href={"/phrasalverb"} />
       {fetchPhrasalVerbs.loading && <p>loading...</p>}
       {fetchPhrasalVerbs.data && fetchPhrasalVerbs.data.length > 0 && (
         <Container>
