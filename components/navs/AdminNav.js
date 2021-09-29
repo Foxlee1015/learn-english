@@ -14,11 +14,11 @@ const routes = [
     href: "/admin/accounts",
     text: "Accounts",
   },{
-    key: "/admin/phrasalverb",
-    href: "/admin/phrasalverb",
+    key: "/admin/phrasalverbs",
+    href: "/admin/phrasalverbs",
     text: "Phrasal verbs",
   },
-  { key: "/admin/idiom", href: "/admin/idiom", text: "Idioms" },
+  { key: "/admin/idioms", href: "/admin/idioms", text: "Idioms" },
 ];
 
 const Container = styled.div`

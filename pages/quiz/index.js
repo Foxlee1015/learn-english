@@ -3,8 +3,8 @@ import { useRouter } from "next/router";
 import { FlexCenterBox } from "../../styles/common-styles";
 
 const btnLinks = [
-  { url: "/quiz/phrasalverb", text: "Phrasal Verbs" },
-  { url: "/quiz/idiom", text: "Idioms" },
+  { url: "/quiz/phrasalverbs", text: "Phrasal Verbs" },
+  { url: "/quiz/idioms", text: "Idioms" },
 ];
 
 const Container = styled.div`
