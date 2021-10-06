@@ -72,6 +72,7 @@ const PhrasalVerbForm = ({
         oldKey: "isPublic",
         newKey: "is_public",
       });
+      values['isPublic'] = selectedItem["is_public"] === 1 ? true : false
       form.setFieldsValue({ ...values });
     } else {
       form.setFieldsValue({ ...initialValues });
@@ -87,6 +88,7 @@ const PhrasalVerbForm = ({
       const phrasalVerb = data.find(
         (item) => item.verb === verb && item.particle === particle
       );
+
       if (phrasalVerb) {
         const { _id, definitions, sentences, difficulty } = phrasalVerb;
         values = {
@@ -116,8 +118,9 @@ const PhrasalVerbForm = ({
     renamedData["definitions"] = removeFalseElements(
       renamedData["definitions"]
     );
+    renamedData["is_public"] = data["is_public"] ? 1 : 0
     renamedData["sentences"] = removeFalseElements(renamedData["sentences"]);
-    postPhrasalVerb(data, () => {
+    postPhrasalVerb(renamedData, () => {
       refreshForm();
     });
   };

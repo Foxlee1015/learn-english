@@ -37,7 +37,7 @@ const dictionaries = [
 const DictDesc = ({ src, data }) => {
   return (
     <>
-      {data.map(text => (<DictionaryDesc key={text}>{text}<DictionarySrcTag>{" -"}{src}</DictionarySrcTag></DictionaryDesc>))}
+      {data && data.map(text => (<DictionaryDesc key={text}>{text}<DictionarySrcTag>{" -"}{src}</DictionarySrcTag></DictionaryDesc>))}
     </>
   )
 }
