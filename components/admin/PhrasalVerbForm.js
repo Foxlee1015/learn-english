@@ -4,6 +4,7 @@ import { AntFormList } from "./common";
 import styled from "styled-components";
 import { postPhrasalVerb } from "../../utils/apis";
 import { renameObjectKey, removeFalseElements } from "../../utils/utils";
+import { PhrasalVerbDictionaries } from ".";
 
 const InputBox = styled.span`
   display: flex;
@@ -200,6 +201,7 @@ const PhrasalVerbForm = ({
           </Button>
         </BtnBox>
       </Form.Item>
+      <PhrasalVerbDictionaries data={selectedItem} />
     </Form>
   );
 };
