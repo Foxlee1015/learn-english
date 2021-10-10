@@ -1,37 +1,36 @@
 import { useEffect } from "react";
-import styled from "styled-components";
 import { PhrasalVerbDictionaries } from ".";
-import { useFetch, useSelectItem } from "../../hooks";
-import { createQueryParams } from "../../utils/utils";
+import { useSelectItem } from "../../hooks";
 import { SelectItem } from "../common";
 import { AdminContentListContainer as Container } from "./common";
 
 
 const PhrasalVerbList = ({
+  phrasalVerbs,
+  setPhrasalVerb
 }) => {
   const verbs = useSelectItem([], "verb");
   const particles = useSelectItem([], "particle");
 
-  const [fetchPhrasalVerbs, doFetchPhrasalVerbs] = useFetch([])
   useEffect(() => {
-    doFetchPhrasalVerbs(`phrasal-verbs/`);
-  }, [])
-
-  useEffect(() => {
-    const uniqueVerbs = [...new Map(fetchPhrasalVerbs.data.map(item =>
+    const uniqueVerbs = [...new Map(phrasalVerbs.data.map(item =>
       [item["verb"], item])).values()]
     verbs.setItems([...uniqueVerbs])
-  }, [fetchPhrasalVerbs.data])
+  }, [phrasalVerbs])
 
   useEffect(() => {
-    particles.setItems(fetchPhrasalVerbs.data.filter(item => item.verb === verbs.selectedItem.verb))
+    particles.setItems(phrasalVerbs.data.filter(item => item.verb === verbs.selectedItem.verb))
   }, [verbs.selectedItem])
+
+  useEffect(() => {
+    setPhrasalVerb({ ...particles.selectedItem })
+  }, [particles.selectedItem])
 
   return (
     <Container>
-      <SelectItem {...verbs} loading={fetchPhrasalVerbs.loading} />
+      <SelectItem {...verbs} loading={phrasalVerbs.loading} />
       <SelectItem {...particles} />
-      {particles.selectedItem && <PhrasalVerbDictionaries data={particles.selectedItem.dictionaries} />}
+      {particles.selectedItem && particles.selectedItem.dictionaries && <PhrasalVerbDictionaries data={particles.selectedItem.dictionaries} />}
     </Container>
   );
 };
