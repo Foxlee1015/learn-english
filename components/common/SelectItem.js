@@ -130,9 +130,9 @@ const SelectItem = ({
   const selectFristElementIfNotExist = () => {
     if (
       selectedItem === "" ||
-      !sortedItems.find((item) => item["_id"] == selectedItem)
+      !sortedItems.find((item) => item === selectedItem)
     ) {
-      setSelectedItem(sortedItems[0]["_id"]);
+      setSelectedItem(sortedItems[0]);
     }
   };
 
@@ -149,10 +149,10 @@ const SelectItem = ({
         {sortedItems.length > 0 &&
           sortedItems.map((item) => (
             <Item
-              active={item["_id"] === selectedItem}
+              active={item === selectedItem}
               key={item["_id"]}
               onClick={() => {
-                setSelectedItem(item[["_id"]]);
+                setSelectedItem(item);
               }}
             >
               {item[sortKey]}

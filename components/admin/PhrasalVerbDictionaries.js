@@ -15,33 +15,6 @@ const DictionaryDesc = styled.p`
   margin-bottom: 2px;
 `;
 
-const DictionarySrcTag = styled.span`
-`
-
-
-const dictionaries = [
-  {
-    'dict_key': "cambridge",
-    'src': 'Cambridge',
-  },
-  {
-    'dict_key': "merriam",
-    'src': 'Merriam',
-  },
-  {
-    'dict_key': "oxford",
-    'src': 'Oxford',
-  }
-]
-
-const DictDesc = ({ src, data }) => {
-  return (
-    <>
-      {data && data.map(text => (<DictionaryDesc key={text}>{text}<DictionarySrcTag>{" -"}{src}</DictionarySrcTag></DictionaryDesc>))}
-    </>
-  )
-}
-
 const PhrasalVerbDictionaries = ({
   data
 }) => {
@@ -50,17 +23,11 @@ const PhrasalVerbDictionaries = ({
     <DictionaryContainer>
       <DictionaryTitle>Dictionary</DictionaryTitle>
       <DictionarySubTitle>Definitions</DictionarySubTitle>
-      {dictionaries.map(({ src, dict_key }) => (
-        data[dict_key] && (
-          <DictDesc key={src} src={src} data={data[dict_key].definitions} />
-        )
-      ))}
+      {data.definitions && data.definitions.map((sentence, index) => (
+        <DictionaryDesc key={`${sentence}${index}`}>{sentence}</DictionaryDesc>))}
       <DictionarySubTitle>Examples</DictionarySubTitle>
-      {dictionaries.map(({ src, dict_key }) => (
-        data[dict_key] && (
-          <DictDesc key={src} src={src} data={data[dict_key].examples} />
-        )
-      ))}
+      {data.examples && data.examples.map((sentence, index) => (
+        <DictionaryDesc key={`${sentence}${index}`}>{sentence}</DictionaryDesc>))}
     </DictionaryContainer>
   );
 };

@@ -3,6 +3,7 @@ import { SelectItem, ExplanationCard, InputCheckbox } from "./common";
 import { useSelectItem, useInputSearch, useFetch } from "../hooks";
 import { createQueryParams } from "../utils/utils";
 import styled from "styled-components";
+import { PhrasalVerbDictionaries } from "./admin";
 
 const Container = styled.div`
   width: 100%;
@@ -49,7 +50,7 @@ const setUniqueVerbList = (items) => {
   }
 };
 
-const PhrasalVerb = ({ data }) => {
+const PhrasalVerbList = ({ data }) => {
   const verbs = useSelectItem(data, "verb");
   const [inputSearch, setInputSearchPlaceholder] = useInputSearch();
   const particles = useSelectItem([], "particle");
@@ -118,7 +119,7 @@ const PhrasalVerb = ({ data }) => {
       resetParticles();
     } else {
       const selectedVerb = verbs.items.find(
-        (verb) => verb._id === verbs.selectedItem
+        (verb) => verb._id === verbs.selectedItem._id
       );
       doFetchParticles(`phrasal-verbs/${selectedVerb.verb.toLowerCase()}`);
     }
@@ -184,9 +185,11 @@ const PhrasalVerb = ({ data }) => {
           resources="phrasal-verbs"
           resource_id="phrasal_verb_id"
         />
+
       )}
+      {cardData.dictionaries && <PhrasalVerbDictionaries data={cardData.dictionaries} />}
     </Container>
   );
 };
 
-export default PhrasalVerb;
+export default PhrasalVerbList;
