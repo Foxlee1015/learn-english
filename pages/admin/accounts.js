@@ -15,10 +15,6 @@ const Accounts = () => {
     doFetchUsers(`users/`);
   }, []);
 
-  useEffect(()=>{
-    console.log(fetchUsers.data);
-  },[fetchUsers.data])
-
   const columns = [
     {
       title: 'Id',
@@ -38,25 +34,25 @@ const Accounts = () => {
       dataIndex: 'user_type',
       // eslint-disable-next-line react/display-name
       render: user_type => (<Tag color={user_type === 0 ? 'geekblue' : 'green'}>
-                {user_type}
-              </Tag>)
+        {user_type}
+      </Tag>)
     },
     {
       title: 'Action',
       key: 'action',
       // eslint-disable-next-line react/display-name
-      render: () =><Space size="middle">
-                <a>Delete</a>
-              </Space>
+      render: () => <Space size="middle">
+        <a>Delete</a>
+      </Space>
     },
   ];
-  
+
   return (
     <Container>
-      {fetchUsers.data && 
+      {fetchUsers.data &&
         fetchUsers.data.length > 0 && (
           <Table rowKey="name" columns={columns} dataSource={fetchUsers.data} />
-      )}
+        )}
     </Container>
   );
 };

@@ -101,12 +101,12 @@ const PhrasalVerbList = ({ data }) => {
 
   const resetVerbs = () => {
     verbs.setItems([]);
-    verbs.setSelectedItem("");
+    verbs.setSelectedItem(null);
   };
 
   const resetParticles = () => {
     particles.setItems([]);
-    particles.setSelectedItem("");
+    particles.setSelectedItem(null);
   };
 
   const resetItems = () => {
@@ -115,7 +115,7 @@ const PhrasalVerbList = ({ data }) => {
   };
 
   const getParticles = () => {
-    if (verbs.items.length === 0 || verbs.selectedItem === "") {
+    if (verbs.items.length === 0 || !verbs.selectedItem) {
       resetParticles();
     } else {
       const selectedVerb = verbs.items.find(
@@ -130,9 +130,9 @@ const PhrasalVerbList = ({ data }) => {
   }, [fetchParticles.data]);
 
   const setPhrasalVerbInfo = async () => {
-    if (verbs.selectedItem !== "" && particles.selectedItem !== "") {
+    if (verbs.selectedItem && particles.selectedItem) {
       const selectedPhrasalVerb = particles.items.find(
-        (item) => item._id === particles.selectedItem
+        (item) => item.verb === particles.selectedItem.verb
       );
       if (selectedPhrasalVerb) {
         setCardData({
@@ -179,7 +179,7 @@ const PhrasalVerbList = ({ data }) => {
         {<SelectItem {...verbs} loading={fetchVerbs.loading} />}
         {<SelectItem {...particles} loading={fetchParticles.loading} />}
       </SelectWrapper>
-      {verbs.selectedItem !== "" && particles.selectedItem !== "" && (
+      {verbs.selectedItem && particles.selectedItem && (
         <ExplanationCard
           {...cardData}
           resources="phrasal-verbs"
@@ -187,7 +187,6 @@ const PhrasalVerbList = ({ data }) => {
         />
 
       )}
-      {cardData.dictionaries && <PhrasalVerbDictionaries data={cardData.dictionaries} />}
     </Container>
   );
 };

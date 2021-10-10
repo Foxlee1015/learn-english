@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 const useSelectItem = (data, sortKey) => {
   const [items, setItems] = useState([]);
-  const [selectedItem, setSelectedItem] = useState("");
+  const [selectedItem, setSelectedItem] = useState(null);
 
   useEffect(() => {
     if (data && data.length > 0) {
