@@ -21,15 +21,15 @@ const DictionarySrcTag = styled.span`
 
 const dictionaries = [
   {
-    'dict_key': "dict_cambridge",
+    'dict_key': "cambridge",
     'src': 'Cambridge',
   },
   {
-    'dict_key': "dict_merriam",
+    'dict_key': "merriam",
     'src': 'Merriam',
   },
   {
-    'dict_key': "dict_oxford",
+    'dict_key': "oxford",
     'src': 'Oxford',
   }
 ]
@@ -45,6 +45,7 @@ const DictDesc = ({ src, data }) => {
 const PhrasalVerbDictionaries = ({
   data
 }) => {
+  console.log(data)
   return (
     <DictionaryContainer>
       <DictionaryTitle>Dictionary</DictionaryTitle>

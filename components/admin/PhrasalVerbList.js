@@ -1,6 +1,7 @@
 import { deleteResource } from "../../utils/apis";
 import styled from "styled-components";
 import { AdminContentListContainer as Container } from "./common";
+import { useEffect, useState } from "react";
 
 const Button = styled.button`
   margin: 5px;
@@ -14,32 +15,22 @@ const PhrasalVerbList = ({
   setSelectedItem,
   refreshData,
 }) => {
+  const [verbs, setVerbs] = useState([])
+  useEffect(() => {
+    if (data && Array.isArray(data)) {
+      setVerbs([...new Set(data.map(item => item.verb))])
+    }
+  }, [data])
+
   return (
     <Container>
-      {data &&
-        data.length > 0 &&
-        data.map((item) => (
-          <Button key={item._id}>
-            <p>
-              {selectedItem._id === item._id && "*"}
-              {item.verb}-{item.particle} {item.is_public}
-            </p>
-            <Button
-              onClick={() => {
-                setSelectedItem(item);
-              }}
-            >
-              Edit
-            </Button>
-            <Button
-              onClick={() => {
-                deleteResource("phrasal-verbs", item._id, refreshData);
-              }}
-            >
-              Delete
-            </Button>
-          </Button>
-        ))}
+      {verbs.map(verb => (
+        <Button key={verb}
+          onClick={() => {
+            setSelectedItem(data.find(item => item.verb === verb));
+          }}
+        >{verb}</Button>
+      ))}
     </Container>
   );
 };

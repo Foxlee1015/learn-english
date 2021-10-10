@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { postPhrasalVerb } from "../../utils/apis";
 import { renameObjectKey, removeFalseElements } from "../../utils/utils";
 import { PhrasalVerbDictionaries } from ".";
+import { useFetch } from "../../hooks";
 
 const InputBox = styled.span`
   display: flex;
@@ -31,14 +32,14 @@ const validateMessages = {
 };
 
 const PhrasalVerbForm = ({
-  data,
-  selectedItem,
-  setSelectedItem,
-  refreshData,
+  verb,
+  setVerb,
+  particle,
+  setParticle
 }) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const [particles, setParticles] = useState([]);
+  const [fetchPhrasalVerbs, doFetchPhrasalVerbs] = useFetch([])
   const inputRef = useRef(null);
 
   const onFinish = (values) => {
@@ -56,14 +57,28 @@ const PhrasalVerbForm = ({
   };
 
   useEffect(() => {
-    inputRef.current.focus();
+    initForm()
   }, []);
 
-  const updateParticleList = () => {
+  const initForm = () => {
+    inputRef.current.focus();
+    form.setFieldsValue({ verb });
+  }
+
+  const handleBlurVerb = () => {
     const { verb } = form.getFieldValue();
-    const filtered = data.filter((item) => item.verb === verb);
-    setParticles([...filtered]);
+    setVerb(verb)
+    updateFormList();
   };
+
+  useEffect(() => {
+    doFetchPhrasalVerbs(`phrasal-verbs/${verb}`)
+    updateParticleList()
+  }, [verb])
+
+  useEffect(() => {
+
+  }, [fetchPhrasalVerbs.data])
 
   useEffect(() => {
     if (Object.keys(selectedItem).length > 0) {
@@ -72,7 +87,8 @@ const PhrasalVerbForm = ({
         oldKey: "isPublic",
         newKey: "is_public",
       });
-      values['isPublic'] = selectedItem["is_public"] === 1 ? true : false
+      values['isPublic'] = selectedItem["is_public"]
+      console.log(values)
       form.setFieldsValue({ ...values });
     } else {
       form.setFieldsValue({ ...initialValues });
@@ -90,15 +106,9 @@ const PhrasalVerbForm = ({
       );
 
       if (phrasalVerb) {
-        const { _id, definitions, sentences, difficulty } = phrasalVerb;
-        values = {
-          ...values,
-          _id,
-          definitions,
-          sentences,
-          difficulty,
-        };
+        values = { ...phrasalVerb }
         values.isPublic = phrasalVerb["is_public"] === 1 ? true : false;
+        console.log(values)
       }
     }
     setSelectedItem({ ...values });
@@ -125,19 +135,16 @@ const PhrasalVerbForm = ({
     });
   };
 
-  const handleBlurVerb = () => {
-    updateParticleList();
-    updateFormList();
-  };
 
   const handleBlurParticle = () => {
-    updateFormList();
+    form.setFieldsValue({ particle });
+    setParticle(particle)
   };
 
-  const handleClickParticle = (particle) => {
-    form.setFieldsValue({ particle });
-    updateFormList();
-  };
+  useEffect(() => {
+    updateFormList()
+  }, [particle])
+
 
   return (
     <Form
@@ -160,21 +167,6 @@ const PhrasalVerbForm = ({
           }}
         />
       </Form.Item>
-      {particles.length > 0 &&
-        particles.map((item) => (
-          <span
-            key={item._id}
-            style={{
-              margin: 5,
-              cursor: "pointer",
-            }}
-            onClick={() => {
-              handleClickParticle(item.particle);
-            }}
-          >
-            {item.particle}
-          </span>
-        ))}
       <Form.Item
         name={"particle"}
         label="Particle"
