@@ -1,6 +1,8 @@
 import IdiomForm from "./IdiomForm";
 import IdiomList from "./IdiomList";
-import PhrasalVerbForm from "./PhrasalVerbForm";
+import PhrasalVerbDetailForm from "./PhrasalVerbDetailForm";
+import PhrasalVerbDictionaries from "./PhrasalVerbDictionaries";
 import PhrasalVerbList from "./PhrasalVerbList";
+import VerbParticleForm from "./VerbParticleForm"
 
-export { IdiomForm, IdiomList, PhrasalVerbForm, PhrasalVerbList };
+export { IdiomForm, IdiomList, PhrasalVerbDetailForm, PhrasalVerbList, PhrasalVerbDictionaries, VerbParticleForm };

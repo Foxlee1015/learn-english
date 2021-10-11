@@ -3,6 +3,7 @@ import { SelectItem, ExplanationCard, InputCheckbox } from "./common";
 import { useSelectItem, useInputSearch, useFetch } from "../hooks";
 import { createQueryParams } from "../utils/utils";
 import styled from "styled-components";
+import { PhrasalVerbDictionaries } from "./admin";
 
 const Container = styled.div`
   width: 100%;
@@ -49,7 +50,7 @@ const setUniqueVerbList = (items) => {
   }
 };
 
-const PhrasalVerb = ({ data }) => {
+const PhrasalVerbList = ({ data }) => {
   const verbs = useSelectItem(data, "verb");
   const [inputSearch, setInputSearchPlaceholder] = useInputSearch();
   const particles = useSelectItem([], "particle");
@@ -100,12 +101,12 @@ const PhrasalVerb = ({ data }) => {
 
   const resetVerbs = () => {
     verbs.setItems([]);
-    verbs.setSelectedItem("");
+    verbs.setSelectedItem(null);
   };
 
   const resetParticles = () => {
     particles.setItems([]);
-    particles.setSelectedItem("");
+    particles.setSelectedItem(null);
   };
 
   const resetItems = () => {
@@ -114,11 +115,11 @@ const PhrasalVerb = ({ data }) => {
   };
 
   const getParticles = () => {
-    if (verbs.items.length === 0 || verbs.selectedItem === "") {
+    if (verbs.items.length === 0 || !verbs.selectedItem) {
       resetParticles();
     } else {
       const selectedVerb = verbs.items.find(
-        (verb) => verb._id === verbs.selectedItem
+        (verb) => verb._id === verbs.selectedItem._id
       );
       doFetchParticles(`phrasal-verbs/${selectedVerb.verb.toLowerCase()}`);
     }
@@ -129,9 +130,9 @@ const PhrasalVerb = ({ data }) => {
   }, [fetchParticles.data]);
 
   const setPhrasalVerbInfo = async () => {
-    if (verbs.selectedItem !== "" && particles.selectedItem !== "") {
+    if (verbs.selectedItem && particles.selectedItem) {
       const selectedPhrasalVerb = particles.items.find(
-        (item) => item._id === particles.selectedItem
+        (item) => item.verb === particles.selectedItem.verb
       );
       if (selectedPhrasalVerb) {
         setCardData({
@@ -178,15 +179,16 @@ const PhrasalVerb = ({ data }) => {
         {<SelectItem {...verbs} loading={fetchVerbs.loading} />}
         {<SelectItem {...particles} loading={fetchParticles.loading} />}
       </SelectWrapper>
-      {verbs.selectedItem !== "" && particles.selectedItem !== "" && (
+      {verbs.selectedItem && particles.selectedItem && (
         <ExplanationCard
           {...cardData}
           resources="phrasal-verbs"
           resource_id="phrasal_verb_id"
         />
+
       )}
     </Container>
   );
 };
 
-export default PhrasalVerb;
+export default PhrasalVerbList;

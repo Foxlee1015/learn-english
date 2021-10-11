@@ -6,7 +6,7 @@ import { FlexCenterBox } from "../../styles/common-styles";
 const Container = styled.div`
   border: 1px solid #eaeaea;
   border-radius: 10px;
-  width: 49%;
+  width: 100%;
   height: 140px;
   position: relative;
   overflow: hidden;
@@ -14,8 +14,7 @@ const Container = styled.div`
   ${FlexCenterBox}
   justify-content: space-around;
   ${(props) => props.theme.media.tablet`
-    width: 98%;
-    height: 80px;
+    height: 200px;
   `}
 `;
 
@@ -130,9 +129,9 @@ const SelectItem = ({
   const selectFristElementIfNotExist = () => {
     if (
       selectedItem === "" ||
-      !sortedItems.find((item) => item["_id"] == selectedItem)
+      !sortedItems.find((item) => item === selectedItem)
     ) {
-      setSelectedItem(sortedItems[0]["_id"]);
+      setSelectedItem(sortedItems[0]);
     }
   };
 
@@ -149,10 +148,10 @@ const SelectItem = ({
         {sortedItems.length > 0 &&
           sortedItems.map((item) => (
             <Item
-              active={item["_id"] === selectedItem}
+              active={item === selectedItem}
               key={item["_id"]}
               onClick={() => {
-                setSelectedItem(item[["_id"]]);
+                setSelectedItem(item);
               }}
             >
               {item[sortKey]}

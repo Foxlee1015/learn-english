@@ -36,11 +36,8 @@ const Button = styled.button`
   }
 `;
 
-const SubmitButton = ({ onClick = () => {}, text = "", disabled = false }) => {
+const SubmitButton = ({ onClick = () => { }, text = "", disabled = false }) => {
 
-  React.useEffect(()=>{
-    console.log(disabled)
-  },[])
   return (
     <Button type="button" onClick={() => onClick()} disabled={disabled}>
       {text}

@@ -46,8 +46,8 @@ export const postUserLike = async (
 
 export const postNewUser = async (
   user,
-  callback = () => {},
-  failCallack = () => {}
+  callback = () => { },
+  failCallack = () => { }
 ) => {
   const data = new FormData();
   data.append("name", user.name);

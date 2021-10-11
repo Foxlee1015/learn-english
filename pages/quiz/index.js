@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { FlexCenterBox } from "../../styles/common-styles";
 
 const btnLinks = [
-  { url: "/quiz/phrasalVerbs", text: "Phrasal Verbs" },
+  { url: "/quiz/phrasalverbs", text: "Phrasal Verbs" },
   { url: "/quiz/idioms", text: "Idioms" },
 ];
 

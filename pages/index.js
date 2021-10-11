@@ -7,7 +7,7 @@ const cards = [
   {
     title: "Phrasal verbs",
     desc: "A phrasal verb is the combination of two or three words from different grammatical categories – a verb and a particle, such as an adverb or a preposition – to form a single semantic unit on a lexical or syntactic level.",
-    href: "/phrasalVerbs",
+    href: "/phrasalverbs",
   },
   {
     title: "Idioms",

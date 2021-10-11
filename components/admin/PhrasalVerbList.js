@@ -1,45 +1,36 @@
-import { deleteResource } from "../../utils/apis";
-import styled from "styled-components";
+import { useEffect } from "react";
+import { PhrasalVerbDictionaries } from ".";
+import { useSelectItem } from "../../hooks";
+import { SelectItem } from "../common";
 import { AdminContentListContainer as Container } from "./common";
 
-const Button = styled.button`
-  margin: 5px;
-  border: solid 1px black;
-  padding: 5px;
-`;
 
 const PhrasalVerbList = ({
-  data,
-  selectedItem,
-  setSelectedItem,
-  refreshData,
+  phrasalVerbs,
+  setPhrasalVerb
 }) => {
+  const verbs = useSelectItem([], "verb");
+  const particles = useSelectItem([], "particle");
+
+  useEffect(() => {
+    const uniqueVerbs = [...new Map(phrasalVerbs.data.map(item =>
+      [item["verb"], item])).values()]
+    verbs.setItems([...uniqueVerbs])
+  }, [phrasalVerbs])
+
+  useEffect(() => {
+    particles.setItems(phrasalVerbs.data.filter(item => item.verb === verbs.selectedItem.verb))
+  }, [verbs.selectedItem])
+
+  useEffect(() => {
+    setPhrasalVerb({ ...particles.selectedItem })
+  }, [particles.selectedItem])
+
   return (
     <Container>
-      {data &&
-        data.length > 0 &&
-        data.map((item) => (
-          <Button key={item._id}>
-            <p>
-              {selectedItem._id === item._id && "*"}
-              {item.verb}-{item.particle} {item.is_public}
-            </p>
-            <Button
-              onClick={() => {
-                setSelectedItem(item);
-              }}
-            >
-              Edit
-            </Button>
-            <Button
-              onClick={() => {
-                deleteResource("phrasal-verbs", item._id, refreshData);
-              }}
-            >
-              Delete
-            </Button>
-          </Button>
-        ))}
+      <SelectItem {...verbs} loading={phrasalVerbs.loading} />
+      <SelectItem {...particles} />
+      {particles.selectedItem && particles.selectedItem.dictionaries && <PhrasalVerbDictionaries data={particles.selectedItem.dictionaries} />}
     </Container>
   );
 };
