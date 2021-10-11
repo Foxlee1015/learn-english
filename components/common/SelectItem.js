@@ -6,7 +6,7 @@ import { FlexCenterBox } from "../../styles/common-styles";
 const Container = styled.div`
   border: 1px solid #eaeaea;
   border-radius: 10px;
-  width: 49%;
+  width: 100%;
   height: 140px;
   position: relative;
   overflow: hidden;
@@ -14,8 +14,7 @@ const Container = styled.div`
   ${FlexCenterBox}
   justify-content: space-around;
   ${(props) => props.theme.media.tablet`
-    width: 98%;
-    height: 80px;
+    height: 200px;
   `}
 `;
 
