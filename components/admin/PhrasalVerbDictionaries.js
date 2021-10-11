@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { Button } from "antd";
 import { useEffect, useState } from "react";
+import { CopyTwoTone } from "@ant-design/icons";
 
 
 const DictionaryContainer = styled.div`
@@ -11,9 +12,25 @@ const DictionarySubTitle = styled.p`
   margin-bottom: 4px;
 `;
 
+const CopyIcon = styled(CopyTwoTone)`
+  margin-bottom: 0px;
+`
+
 const DictionaryDesc = styled.p`
-  margin-bottom: 2px;
+  font-size: 12px;
+  margin-bottom: 0px;
 `;
+
+
+const TextWithCopyIcon = ({ text }) => {
+  const handleClick = () => {
+    navigator.clipboard.writeText(text)
+  }
+
+  return (
+    <DictionaryDesc>{text}<CopyIcon onClick={() => handleClick()} /></DictionaryDesc>
+  )
+}
 
 const PhrasalVerbDictionaries = ({
   data
@@ -31,10 +48,10 @@ const PhrasalVerbDictionaries = ({
         <>
           <DictionarySubTitle>Definitions</DictionarySubTitle>
           {data.definitions && data.definitions.map((sentence, index) => (
-            <DictionaryDesc key={`${sentence}${index}`}>{sentence}</DictionaryDesc>))}
+            <TextWithCopyIcon key={`${sentence}${index}`} text={sentence} />))}
           <DictionarySubTitle>Examples</DictionarySubTitle>
           {data.examples && data.examples.map((sentence, index) => (
-            <DictionaryDesc key={`${sentence}${index}`}>{sentence}</DictionaryDesc>))}
+            <TextWithCopyIcon key={`${sentence}${index}`} text={sentence} />))}
         </>
       )}
     </DictionaryContainer>
