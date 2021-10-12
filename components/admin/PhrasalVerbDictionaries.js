@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Button } from "antd";
 import { useEffect, useState } from "react";
 import { CopyTwoTone } from "@ant-design/icons";
-
+import { capitalizeFirstLetter } from "../../utils/utils";
 
 const DictionaryContainer = styled.div`
   margin-bottom: 10px;
@@ -24,11 +24,11 @@ const DictionaryDesc = styled.p`
 
 const TextWithCopyIcon = ({ text }) => {
   const handleClick = () => {
-    navigator.clipboard.writeText(text)
+    navigator.clipboard.writeText(capitalizeFirstLetter(text))
   }
 
   return (
-    <DictionaryDesc>{text}<CopyIcon onClick={() => handleClick()} /></DictionaryDesc>
+    <DictionaryDesc>{capitalizeFirstLetter(text)}<CopyIcon onClick={() => handleClick()} /></DictionaryDesc>
   )
 }
 
@@ -42,7 +42,7 @@ const PhrasalVerbDictionaries = ({
   return (
     <DictionaryContainer>
       <Button type="primary" onClick={() => setShow(!show)} >
-        Show Definitions and Examples from dictionaries
+        {show ? "Hide" : "Show"} Definitions and Examples from dictionaries
       </Button>
       {show && (
         <>
