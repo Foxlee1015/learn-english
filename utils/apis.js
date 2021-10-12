@@ -1,5 +1,6 @@
 import Cookies from "universal-cookie";
 import { server } from "../config";
+import { createQueryParams } from "./utils";
 
 const checkIfSessionExists = () => {
   const cookies = new Cookies();
@@ -93,11 +94,14 @@ export const postPhrasalVerb = async (data, callback) => {
   }
 };
 
-export const deleteResource = async (resource, _id, callback) => {
+export const deletePhrasalVerb = async (_id, callback) => {
   if (!checkIfSessionExists()) {
     return;
   }
-  const res = await fetch(`${server}/api/${resource}/?_id=${_id}`, {
+  const params = createQueryParams({
+    _id
+  })
+  const res = await fetch(`${server}/api/phrasal-verbs/?${params}`, {
     headers: setHeaders(),
     method: "DELETE",
   });
