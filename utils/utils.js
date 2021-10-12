@@ -61,3 +61,12 @@ export const removeFalseElements = (array) => {
   const flasyValues = [null, undefined, ""];
   return array.filter((item) => !flasyValues.includes(item));
 };
+
+
+export const capitalizeFirstLetter = (string) => {
+  try {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  } catch {
+    return string
+  }
+}
