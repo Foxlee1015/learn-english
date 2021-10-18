@@ -30,8 +30,7 @@ const PhrasalVerbs = () => {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    const params = createQueryParams({ only_particle: 1 });
-    doFetchParticles(`phrasal-verbs/?${params}`);
+    doFetchParticles(`particles/`);
   }, []);
 
   const getRandomVerb = async () => {
