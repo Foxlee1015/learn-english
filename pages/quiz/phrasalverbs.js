@@ -34,8 +34,8 @@ const PhrasalVerbs = () => {
   }, []);
 
   const getRandomVerb = async () => {
-    const params = createQueryParams({ random_count: 1 });
-    doFetchPhrasalVerb(`phrasal-verbs/?${params}`);
+    const params = createQueryParams({ count: 1 });
+    doFetchPhrasalVerb(`phrasal-verbs/random?${params}`);
   };
 
   const nextQuiz = () => {
