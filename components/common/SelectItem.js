@@ -7,15 +7,11 @@ const Container = styled.div`
   border: 1px solid #eaeaea;
   border-radius: 10px;
   width: 100%;
-  height: 140px;
   position: relative;
   overflow: hidden;
   margin-bottom: 10px;
   ${FlexCenterBox}
   justify-content: space-around;
-  ${(props) => props.theme.media.tablet`
-    height: 200px;
-  `}
 `;
 
 const Item = styled.button`
@@ -48,11 +44,24 @@ const Item = styled.button`
   `};
 `;
 
+
+const SelectItems = styled.div`
+  ${FlexCenterBox}
+  flex-wrap: wrap;
+  height: 100%;
+  padding: 10px;
+`
+
 const Scroll = styled.div`
   ${FlexCenterBox}
   flex-wrap: wrap;
   height: 100%;
   overflow-y: auto;
+  padding: 10px;
+  height: 140px;
+  ${(props) => props.theme.media.tablet`
+    height: 200px;
+  `}
 
   @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
     margin-right: -10px;
@@ -112,12 +121,21 @@ const stringSort = (sortKey) => (a, b) => {
   return 0;
 };
 
+const SelectBox = ({
+  Component,
+  children
+}) => {
+  return <Component>{children}</Component>
+}
+
+
 const SelectItem = ({
   items,
   sortKey,
   selectedItem,
   setSelectedItem,
   loading,
+  isScrollable = true,
 }) => {
   const [sortedItems, setSortedItems] = useState([]);
 
@@ -143,7 +161,7 @@ const SelectItem = ({
 
   return (
     <Container>
-      <Scroll>
+      <SelectBox Component={isScrollable ? Scroll : SelectItems}>
         {sortedItems.length === 0 && loading && <BarLoader color="#0070f3" />}
         {sortedItems.length > 0 &&
           sortedItems.map((item) => (
@@ -157,7 +175,7 @@ const SelectItem = ({
               {item[sortKey]}
             </Item>
           ))}
-      </Scroll>
+      </SelectBox>
     </Container>
   );
 };

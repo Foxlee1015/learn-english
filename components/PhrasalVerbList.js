@@ -177,7 +177,7 @@ const PhrasalVerbList = ({ data }) => {
       />
       <SelectWrapper>
         {<SelectItem {...verbs} loading={fetchVerbs.loading} />}
-        {<SelectItem {...particles} loading={fetchParticles.loading} />}
+        {<SelectItem {...particles} loading={fetchParticles.loading} isScrollable={false} />}
       </SelectWrapper>
       {verbs.selectedItem && particles.selectedItem && (
         <ExplanationCard
