@@ -35,7 +35,7 @@ const Page = ({ phrasalVerbs }) => {
 };
 
 export async function getStaticPaths() {
-   const res = await fetch(`${server}/api/verbs/`);
+   const res = await fetch(`${server}/api/phrasal-verbs/`);
    const data = await res.json()
 
    const paths = data.result.map((verb) => ({
@@ -46,7 +46,8 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-   const res = await fetch(`${server}/api/phrasal-verbs/?search_key=${params.verb}&exact=1`);
+   const phrasalVerb = `${params['verb']}-${params['particle'].replaceAll(" ", "-")}`
+   const res = await fetch(`${server}/api/phrasal-verbs/?${phrasalVerb}`);
    const data = await res.json()
 
    return { props: { phrasalVerbs: data.result } }

@@ -1,6 +1,5 @@
 import { Meta, Header, PhrasalVerbList } from "../components";
 import { server } from "../config";
-import { createQueryParams } from "../utils/utils";
 
 const phrasalverb = ({ data }) => {
   return (

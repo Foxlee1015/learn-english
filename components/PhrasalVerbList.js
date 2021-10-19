@@ -55,7 +55,6 @@ const PhrasalVerbList = ({ data }) => {
   const [inputSearch, setInputSearchPlaceholder] = useInputSearch();
   const particles = useSelectItem([], "particle");
   const [fetchVerbs, doFetchVerbs] = useFetch([]);
-  const [fetchParticles, doFetchParticles] = useFetch([]);
   const [cardData, setCardData] = useState({});
   const [searchFullText, setSearchFullText] = useState(false);
   const [searchExactText, setSearchExactText] = useState(false);
@@ -75,6 +74,7 @@ const PhrasalVerbList = ({ data }) => {
   }, [verbs.items, verbs.selectedItem]);
 
   useEffect(() => {
+    console.log("???")
     setPhrasalVerbInfo();
   }, [verbs.selectedItem, particles.selectedItem]);
 
@@ -118,21 +118,15 @@ const PhrasalVerbList = ({ data }) => {
     if (verbs.items.length === 0 || !verbs.selectedItem) {
       resetParticles();
     } else {
-      const selectedVerb = verbs.items.find(
-        (verb) => verb._id === verbs.selectedItem._id
-      );
-      doFetchParticles(`phrasal-verbs/${selectedVerb.verb.toLowerCase()}`);
+      const verbParticles = verbs.items.filter(item => item.verb === verbs.selectedItem.verb)
+      particles.setItems([...verbParticles]);
     }
   };
-
-  useEffect(() => {
-    particles.setItems([...fetchParticles.data]);
-  }, [fetchParticles.data]);
 
   const setPhrasalVerbInfo = async () => {
     if (verbs.selectedItem && particles.selectedItem) {
       const selectedPhrasalVerb = particles.items.find(
-        (item) => item.verb === particles.selectedItem.verb
+        (item) => item.particle === particles.selectedItem.particle
       );
       if (selectedPhrasalVerb) {
         setCardData({
@@ -147,8 +141,11 @@ const PhrasalVerbList = ({ data }) => {
   };
 
   useEffect(() => {
-    const uniqueVerbs = setUniqueVerbList(fetchVerbs.data);
-    verbs.setItems([...uniqueVerbs]);
+    if (fetchVerbs.data.length > 0) {
+      verbs.setItems([...fetchVerbs.data]);
+    } else {
+      verbs.setItems([]);
+    }
   }, [fetchVerbs.data]);
 
   const getVerbs = async () => {
@@ -177,7 +174,7 @@ const PhrasalVerbList = ({ data }) => {
       />
       <SelectWrapper>
         {<SelectItem {...verbs} loading={fetchVerbs.loading} />}
-        {<SelectItem {...particles} loading={fetchParticles.loading} isScrollable={false} />}
+        {<SelectItem {...particles} isScrollable={false} />}
       </SelectWrapper>
       {verbs.selectedItem && particles.selectedItem && (
         <ExplanationCard
