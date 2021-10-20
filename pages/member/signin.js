@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { authenticate } from "../../redux/actions/authActions";
 import { useInput } from "../../hooks";
@@ -11,8 +11,9 @@ import {
   SubmitButton,
 } from "../../components/member";
 
-const Signin = ({}) => {
+const Signin = ({ }) => {
   const router = useRouter();
+  const auth = useSelector((state) => state.auth);
   const [username, _] = useInput("username", "username", "text");
   const [password, passwordMsg] = useInput("password", "password", "password");
   const [openSubmit, setOpenSubmit] = useState(false);
@@ -25,6 +26,15 @@ const Signin = ({}) => {
     }
     return false;
   };
+
+  useEffect(() => {
+    if (auth.is_admin === 1) {
+      router.push("/admin")
+    } else if (auth.loggedIn) {
+      router.push("/")
+    }
+
+  }, [auth])
 
   useEffect(() => {
     if (validateValues()) {
