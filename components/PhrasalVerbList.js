@@ -144,11 +144,10 @@ const PhrasalVerbList = ({ }) => {
       const selectedPhrasalVerb = particles.items.find(
         (item) => item.particle === particles.selectedItem.particle
       );
+      console.log(selectedPhrasalVerb)
       if (selectedPhrasalVerb) {
         setCardData({
-          ...selectedPhrasalVerb,
-          title: selectedPhrasalVerb.verb,
-          subTitle: selectedPhrasalVerb.particle,
+          ...selectedPhrasalVerb
         });
       } else {
         setCardData({});

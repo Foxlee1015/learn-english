@@ -1,3 +1,4 @@
+import Link from "next/link";
 import styled from "styled-components";
 import { FlexCenterBox } from "../../styles/common-styles";
 
@@ -10,11 +11,11 @@ const Text = styled.h6`
   color: ${({ theme }) => theme.colors.common.dark};
   margin-bottom: 10px;
 `;
-
-const TitleCard = ({ title }) => {
+const TitleCard = ({ title, link }) => {
   return (
     <Container>
-      <Text>{title}</Text>
+      <Text>
+        <Link href={link}>{title}</Link></Text>
     </Container>
   );
 };

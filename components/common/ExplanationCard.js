@@ -6,14 +6,8 @@ import PuffLoader from "react-spinners/PuffLoader";
 import { LikeButton, Notification, DescCard, TitleCard } from "../common";
 import { FlexCenterBox } from "../../styles/common-styles";
 
-const setTitle = ({ title, subTitle, upperCase = true }) => {
-  const mainText = upperCase ? title.toUpperCase() : title;
-
-  if (subTitle !== "") {
-    const subText = upperCase ? subTitle.toUpperCase() : subTitle;
-    return `${mainText}-${subText}`;
-  }
-  return mainText;
+const setTitle = (title) => {
+  return title ? title.toUpperCase() : ""
 };
 
 const Container = styled.div`
@@ -33,8 +27,7 @@ const Text = styled.span`
 `;
 
 const ExplanationCard = ({
-  title = "",
-  subTitle = "",
+  phrasal_verb,
   definitions = [],
   sentences = [],
   _id,
@@ -80,7 +73,9 @@ const ExplanationCard = ({
   return (
     <Container>
       <Notification {...notification} />
-      <TitleCard title={setTitle({ title, subTitle })} />
+      {phrasal_verb && (
+        <TitleCard title={setTitle(phrasal_verb)} link={`phrasalverbs/${phrasal_verb.replace(" ", "-")}`} />
+      )}
       <InfoBox>
         {fetchLikes.loading ? (
           <PuffLoader size={20} />

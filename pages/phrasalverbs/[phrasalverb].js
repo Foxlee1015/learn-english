@@ -2,35 +2,18 @@
 import { server } from "../../config";
 import { DescCard } from "../../components/common";
 import { Meta } from "../../components";
-import { useState, useEffect } from "react";
 
-const Page = ({ phrasalVerbs }) => {
-   const [selectedPhrasalVerb, setSelectedPhrasalVerb] = useState(null);
-
-   useEffect(() => {
-      if (phrasalVerbs.length > 0) {
-         setSelectedPhrasalVerb(phrasalVerbs[0])
-      }
-   }, [phrasalVerbs])
+const Page = ({ phrasalVerb }) => {
+   console.log(phrasalVerb)
 
    return (<>
-      <Meta title={`Learn English - phrasal verb ${phrasalVerbs[0].verb} ${phrasalVerbs[0].particle}`} />
-      {selectedPhrasalVerb && (
-         <>
-            <h5>{phrasalVerbs[0].verb}</h5>
-            {phrasalVerbs.map((phrasalVerb) => (
-               <>
-                  <span key={phrasalVerb.particle} onClick={() => { setSelectedPhrasalVerb(phrasalVerb) }}>{phrasalVerb.particle}</span>
-               </>
-            ))}
-            {selectedPhrasalVerb && (
-               <div key={selectedPhrasalVerb.particle}>
-                  <DescCard data={selectedPhrasalVerb.definitions} title={"Definition"} />
-                  <DescCard data={selectedPhrasalVerb.sentences} title={"Examples"} />
-               </div>
-            )}
-         </>
-      )}
+      <Meta title={`Learn English - phrasal verb ${phrasalVerb.phrasal_verb}`} />
+      <h5>{phrasalVerb.phrasal_verb.toUpperCase()}</h5>
+      <div>
+         <DescCard data={phrasalVerb.definitions} title={"Definition"} />
+         <DescCard data={phrasalVerb.sentences} title={"Examples"} />
+      </div>
+
    </>);
 };
 
@@ -52,8 +35,9 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }) {
    const res = await fetch(`${server}/api/phrasal-verbs/${params.phrasalverb}`);
    const data = await res.json()
+   console.log(data)
 
-   return { props: { phrasalVerbs: data.result } }
+   return { props: { phrasalVerb: data.result[0] } }
 }
 
 export default Page
