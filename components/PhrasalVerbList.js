@@ -42,27 +42,26 @@ const setUniqueVerbList = (items) => {
       uniqueVerbs.add(item.verb.toLowerCase());
     }
 
-    return Array.from(uniqueVerbs).map((item, index) => {
-      return { _id: index, verb: item };
+    return Array.from(uniqueVerbs).map((item) => {
+      return { verb: item };
     });
   } catch {
     return [];
   }
 };
 
-const PhrasalVerbList = ({ data }) => {
-  const verbs = useSelectItem(data, "verb");
+const PhrasalVerbList = ({ }) => {
+  const verbs = useSelectItem([], "verb");
   const [inputSearch, setInputSearchPlaceholder] = useInputSearch();
   const particles = useSelectItem([], "particle");
   const [fetchVerbs, doFetchVerbs] = useFetch([]);
+  const [fetchPhrasalVerbs, doFetchPhrasalVerbs] = useFetch([]);
   const [cardData, setCardData] = useState({});
   const [searchFullText, setSearchFullText] = useState(false);
   const [searchExactText, setSearchExactText] = useState(false);
 
   useEffect(() => {
-    if (data && data.length === 0) {
-      getVerbs();
-    }
+    getVerbs();
   }, []);
 
   useEffect(() => {
@@ -70,13 +69,30 @@ const PhrasalVerbList = ({ data }) => {
   }, [searchFullText, searchExactText]);
 
   useEffect(() => {
-    getParticles();
+    setParticles()
   }, [verbs.items, verbs.selectedItem]);
 
   useEffect(() => {
-    console.log("???")
-    setPhrasalVerbInfo();
-  }, [verbs.selectedItem, particles.selectedItem]);
+    if (verbs.selectedItem && particles.selectedItem) {
+      const phrasalVerb = `${verbs.selectedItem.verb}-${particles.selectedItem.particle}`.replace(" ", "-")
+      doFetchPhrasalVerbs(`phrasal-verbs/${phrasalVerb}`);
+      setPhrasalVerbInfo();
+    }
+  }, [particles.selectedItem]);
+
+
+  useEffect(() => {
+    if (fetchPhrasalVerbs.data.length > 0) {
+      setCardData({
+        ...fetchPhrasalVerbs.data[0],
+        title: fetchPhrasalVerbs.data[0].verb,
+        subTitle: fetchPhrasalVerbs.data[0].particle,
+      });
+    } else {
+      setCardData({});
+    }
+  }, [fetchPhrasalVerbs.data]);
+
 
   useEffect(() => {
     resetItems();
@@ -114,11 +130,11 @@ const PhrasalVerbList = ({ data }) => {
     resetParticles();
   };
 
-  const getParticles = () => {
+  const setParticles = () => {
     if (verbs.items.length === 0 || !verbs.selectedItem) {
       resetParticles();
     } else {
-      const verbParticles = verbs.items.filter(item => item.verb === verbs.selectedItem.verb)
+      const verbParticles = fetchVerbs.data.filter(item => item.verb === verbs.selectedItem.verb)
       particles.setItems([...verbParticles]);
     }
   };
@@ -142,7 +158,7 @@ const PhrasalVerbList = ({ data }) => {
 
   useEffect(() => {
     if (fetchVerbs.data.length > 0) {
-      verbs.setItems([...fetchVerbs.data]);
+      verbs.setItems(setUniqueVerbList(fetchVerbs.data));
     } else {
       verbs.setItems([]);
     }

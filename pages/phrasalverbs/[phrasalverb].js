@@ -38,8 +38,8 @@ export async function getStaticPaths() {
    const res = await fetch(`${server}/api/phrasal-verbs/`);
    const data = await res.json()
 
-   const paths = data.result.map(({ verb, particle }) => {
-      const phrasalverb = `${verb}-${particle.replace(" ", "-")}`
+   const paths = data.result.map(({ phrasal_verb }) => {
+      const phrasalverb = `${phrasal_verb.replace(" ", "-")}`
       return ({
          params: { phrasalverb },
       })

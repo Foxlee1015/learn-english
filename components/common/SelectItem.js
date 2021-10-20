@@ -164,10 +164,10 @@ const SelectItem = ({
       <SelectBox Component={isScrollable ? Scroll : SelectItems}>
         {sortedItems.length === 0 && loading && <BarLoader color="#0070f3" />}
         {sortedItems.length > 0 &&
-          sortedItems.map((item) => (
+          sortedItems.map((item, index) => (
             <Item
-              active={item === selectedItem}
-              key={item["_id"]}
+              active={selectedItem && item[sortKey] === selectedItem[sortKey]}
+              key={index}
               onClick={() => {
                 setSelectedItem(item);
               }}
