@@ -109,3 +109,20 @@ export const deletePhrasalVerb = async (_id, callback) => {
     callback();
   }
 };
+
+
+export const deleteIdiom = async (_id, callback) => {
+  if (!checkIfSessionExists()) {
+    return;
+  }
+  const params = createQueryParams({
+    _id
+  })
+  const res = await fetch(`${server}/api/idioms/?${params}`, {
+    headers: setHeaders(),
+    method: "DELETE",
+  });
+  if (res.status === 200) {
+    callback();
+  }
+};

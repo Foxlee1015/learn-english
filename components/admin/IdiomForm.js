@@ -3,7 +3,8 @@ import styled from "styled-components";
 import { Form, Input, Switch, Button, InputNumber } from "antd";
 import { AntFormList } from "./common";
 import { renameObjectKey, removeFalseElements } from "../../utils/utils";
-import { postIdiom } from "../../utils/apis";
+import { postIdiom, deleteIdiom } from "../../utils/apis";
+import { Modal } from "../common";
 
 const InputBox = styled.span`
   display: flex;
@@ -28,9 +29,10 @@ const validateMessages = {
   required: "${label} is required!",
 };
 
-const IdiomForm = ({ selectedIdiom, setSelectdIdiom }) => {
+const IdiomForm = ({ selectedIdiom, setSelectdIdiom, refresh }) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false)
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -74,47 +76,72 @@ const IdiomForm = ({ selectedIdiom, setSelectdIdiom }) => {
     postIdiom(renamedValues, () => {
       form.resetFields();
       setLoading(false);
+      setSelectdIdiom(null);
+      refresh();
       inputRef.current.focus();
     });
   };
 
+  const deleteHandler = () => {
+    const { _id } = selectedIdiom
+    deleteIdiom(_id, () => {
+      setShowModal(false)
+      setSelectdIdiom(null);
+      refresh();
+    })
+  }
+
   return (
-    <Form
-      form={form}
-      name="nest-messages"
-      onFinish={onFinish}
-      initialValues={initialValues}
-      validateMessages={validateMessages}
-    >
-      <Form.Item
-        name={"expression"}
-        label="Expression"
-        rules={[{ required: true }]}
+    <>
+      <Form
+        form={form}
+        name="nest-messages"
+        onFinish={onFinish}
+        initialValues={initialValues}
+        validateMessages={validateMessages}
       >
-        <Input ref={inputRef} />
-      </Form.Item>
-      <InputBox>
         <Form.Item
-          name={"difficulty"}
-          label="Difficulty"
-          rules={[{ type: "number", min: 1, max: 5 }]}
+          name={"expression"}
+          label="Expression"
+          rules={[{ required: true }]}
         >
-          <InputNumber />
+          <Input ref={inputRef} />
         </Form.Item>
-        <Form.Item label="Public" name={"isPublic"} valuePropName="checked">
-          <Switch />
+        <InputBox>
+          <Form.Item
+            name={"difficulty"}
+            label="Difficulty"
+            rules={[{ type: "number", min: 1, max: 5 }]}
+          >
+            <InputNumber />
+          </Form.Item>
+          <Form.Item label="Public" name={"isPublic"} valuePropName="checked">
+            <Switch />
+          </Form.Item>
+        </InputBox>
+        <AntFormList name="definitions" />
+        <AntFormList name="sentences" />
+        <Form.Item>
+          <BtnBox>
+            <Button type="primary" htmlType="submit" loading={loading}>
+              Submit
+            </Button>
+          </BtnBox>
         </Form.Item>
-      </InputBox>
-      <AntFormList name="definitions" />
-      <AntFormList name="sentences" />
-      <Form.Item>
-        <BtnBox>
-          <Button type="primary" htmlType="submit" loading={loading}>
-            Submit
-          </Button>
-        </BtnBox>
-      </Form.Item>
-    </Form>
+      </Form>
+      {selectedIdiom && (<Button type="primary" onClick={() => { setShowModal(true) }}>
+        Delete
+      </Button>)}
+      {showModal && (
+        <Modal
+          header={selectedIdiom.expression}
+          main={`Do you want to delete ${selectedIdiom.expression}?`}
+          buttons={[{ onClick: deleteHandler, text: "Delete" }]}
+          setShow={setShowModal}
+        />
+      )}
+
+    </>
   );
 };
 export default IdiomForm;
