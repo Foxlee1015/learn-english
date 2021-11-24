@@ -101,8 +101,9 @@ const IdiomList = ({ idiomList }) => {
   };
 
   const setIdiomInfo = async () => {
+    console.log(idioms, idioms.selectedItem)
     const selectedIdiom = idioms.items.find(
-      (item) => item._id === idioms.selectedItem
+      (item) => item._id === idioms.selectedItem._id
     );
     if (selectedIdiom) {
       setCardData({ ...selectedIdiom, title: selectedIdiom.expression });

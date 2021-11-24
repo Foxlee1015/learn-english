@@ -28,7 +28,7 @@ const validateMessages = {
   required: "${label} is required!",
 };
 
-const IdiomForm = () => {
+const IdiomForm = ({ selectedIdiom, setSelectdIdiom }) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const inputRef = useRef(null);
@@ -41,6 +41,22 @@ const IdiomForm = () => {
     setLoading(true);
     addIdiom(values);
   };
+
+  useEffect(() => {
+    if (selectedIdiom) {
+      form.setFieldsValue({
+        expression: selectedIdiom.expression,
+        difficulty: selectedIdiom.level || 1,
+        isPublic: selectedIdiom.is_public || 0,
+        definitions: selectedIdiom["definitions"] || [],
+        sentences: selectedIdiom["sentences"] || []
+      });
+    } else {
+      form.setFieldsValue({
+        ...initialValues
+      });
+    }
+  }, [selectedIdiom])
 
   const addIdiom = async (values) => {
     const renamedValues = renameObjectKey({
