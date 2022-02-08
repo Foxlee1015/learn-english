@@ -12,7 +12,7 @@ import { FlexCenterBox } from "../../styles/common-styles";
 const routes = [
   { href: "/", text: "Home" },
   { href: "/phrasalverbs", text: "Phrasal verbs" },
-  { href: "/idioms", text: "Idioms" },
+  // { href: "/idioms", text: "Idioms" },
   { href: "/quiz", text: "Quiz" },
 ];
 
