@@ -62,7 +62,7 @@ const LikeList = () => {
           ))}
         </Container>
       )}
-      <LikeCardHead title={"Idioms"} href={"/idioms"} />
+      {/* <LikeCardHead title={"Idioms"} href={"/idioms"} />
       {fetchIdioms.loading && <p>loading...</p>}
       {fetchIdioms.data && fetchIdioms.data.length > 0 && (
         <Container>
@@ -78,7 +78,7 @@ const LikeList = () => {
             />
           ))}
         </Container>
-      )}
+      )} */}
     </>
   );
 };
