@@ -9,11 +9,11 @@ const cards = [
     desc: "A phrasal verb is the combination of two or three words from different grammatical categories – a verb and a particle, such as an adverb or a preposition – to form a single semantic unit on a lexical or syntactic level.",
     href: "/phrasalverbs",
   },
-  {
-    title: "Idioms",
-    desc: "An idiom is a phrase, saying, or a group of words with a metaphorical (not literal) meaning.",
-    href: "/idioms",
-  },
+  // {
+  //   title: "Idioms",
+  //   desc: "An idiom is a phrase, saying, or a group of words with a metaphorical (not literal) meaning.",
+  //   href: "/idioms",
+  // },
   { title: "Quiz", desc: "Prasal verbs / Idioms quiz", href: "/quiz" },
   {
     title: "Study list",
