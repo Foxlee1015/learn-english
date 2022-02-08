@@ -4,8 +4,6 @@ import { DescCard } from "../../components/common";
 import { Meta } from "../../components";
 
 const Page = ({ phrasalVerb }) => {
-   console.log(phrasalVerb)
-
    return (<>
       <Meta title={`Learn English - phrasal verb ${phrasalVerb.phrasal_verb}`} />
       <h5>{phrasalVerb.phrasal_verb.toUpperCase()}</h5>
@@ -35,7 +33,6 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }) {
    const res = await fetch(`${server}/api/phrasal-verbs/${params.phrasalverb}`);
    const data = await res.json()
-   console.log(data)
 
    return { props: { phrasalVerb: data.result[0] } }
 }

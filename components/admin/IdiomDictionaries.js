@@ -39,7 +39,6 @@ const IdiomDictionaries = ({
 
   useEffect(() => {
     setShow(false)
-    console.log(data)
   }, [data])
 
   return data ? (

@@ -44,7 +44,7 @@ const ExplanationCard = ({
       doFetchLikes(`${resources}/likes?${params}`);
     }
   };
-
+  
   useEffect(() => {
     updateLikes();
   }, [_id]);
@@ -61,11 +61,6 @@ const ExplanationCard = ({
     } else {
       notiText = "Saved in likes";
     }
-    notiText = `${notiText} - ${setTitle({
-      title,
-      subTitle,
-      upperCase: false,
-    })}`;
     notification.setText(notiText);
     notification.setOpen(true);
   };
