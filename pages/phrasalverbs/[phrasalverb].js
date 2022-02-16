@@ -16,7 +16,7 @@ const Page = ({ phrasalVerb }) => {
 };
 
 export async function getStaticPaths() {
-   const res = await fetch(`${server}/api/phrasal-verbs/`);
+   const res = await fetch(`${server}/phrasal-verbs/`);
    const data = await res.json()
 
    const paths = data.result.map(({ phrasal_verb }) => {
@@ -31,7 +31,7 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-   const res = await fetch(`${server}/api/phrasal-verbs/${params.phrasalverb}`);
+   const res = await fetch(`${server}/phrasal-verbs/${params.phrasalverb}`);
    const data = await res.json()
 
    return { props: { phrasalVerb: data.result[0] } }

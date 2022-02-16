@@ -10,7 +10,7 @@ const useFetch = (initialValue) => {
   const [error, setError] = useState(null);
 
   const setEndpoint = (endpoint) => {
-    setUrl(`${server}/api/${endpoint}`);
+    setUrl(`${server}/${endpoint}`);
   };
 
   useEffect(() => {

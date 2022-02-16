@@ -31,7 +31,7 @@ export const postUserLike = async (
     failCallback("Please login first");
     return;
   }
-  const res = await fetch(`${server}/api/${resources}/likes`, {
+  const res = await fetch(`${server}/${resources}/likes`, {
     body: JSON.stringify(data),
     headers: setHeaders(),
     method: "POST",
@@ -54,7 +54,7 @@ export const postNewUser = async (
   data.append("name", user.name);
   data.append("password", user.password);
   data.append("password_confirm", user.password_confirm);
-  const res = await fetch(`${server}/api/users/`, {
+  const res = await fetch(`${server}/users/`, {
     body: data,
     method: "POST",
   });
@@ -70,7 +70,7 @@ export const postIdiom = async (data, callback) => {
   if (!checkIfSessionExists()) {
     return;
   }
-  const res = await fetch(`${server}/api/idioms/`, {
+  const res = await fetch(`${server}/idioms/`, {
     body: JSON.stringify(data),
     headers: setHeaders(),
     method: "POST",
@@ -84,7 +84,7 @@ export const postPhrasalVerb = async (data, callback) => {
   if (!checkIfSessionExists()) {
     return;
   }
-  const res = await fetch(`${server}/api/phrasal-verbs/`, {
+  const res = await fetch(`${server}/phrasal-verbs/`, {
     body: JSON.stringify(data),
     headers: setHeaders(),
     method: "POST",
@@ -101,7 +101,7 @@ export const deletePhrasalVerb = async (_id, callback) => {
   const params = createQueryParams({
     _id
   })
-  const res = await fetch(`${server}/api/phrasal-verbs/?${params}`, {
+  const res = await fetch(`${server}/phrasal-verbs/?${params}`, {
     headers: setHeaders(),
     method: "DELETE",
   });
@@ -118,7 +118,7 @@ export const deleteIdiom = async (_id, callback) => {
   const params = createQueryParams({
     _id
   })
-  const res = await fetch(`${server}/api/idioms/?${params}`, {
+  const res = await fetch(`${server}/idioms/?${params}`, {
     headers: setHeaders(),
     method: "DELETE",
   });

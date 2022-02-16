@@ -4,7 +4,7 @@ import Cookies from "universal-cookie";
 
 export const authenticate =
   (user, successCallback, failCallback, finishCallback) => (dispatch) => {
-    fetch(`${server}/api/sessions/`, {
+    fetch(`${server}/sessions/`, {
       body: JSON.stringify(user),
       headers: {
         "Content-Type": "application/json",
@@ -46,7 +46,7 @@ export const reauthenticate =
     const cookies = new Cookies();
     const session = cookies.get("EID_SES");
     if (session) {
-      fetch(`${server}/api/sessions/validate`, {
+      fetch(`${server}/sessions/validate`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: session,
@@ -75,7 +75,7 @@ export const deauthenticate = () => (dispatch) => {
   const cookies = new Cookies();
   const session = cookies.get("EID_SES");
   cookies.remove("EID_SES", { path: "/" });
-  fetch(`${server}/api/sessions/`, {
+  fetch(`${server}/sessions/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: session,
